@@ -8,7 +8,7 @@ export class AdminAuthThunk {
 
         async (payload, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
-                const { data } = await CsApiManager.get(`/auth/session`);
+                const { data } = await CsApiManager.get(`/admin/auth/session`);
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -23,7 +23,7 @@ export class AdminAuthThunk {
 
         async (payload: { email: string, password: string }, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
-                const { data } = await CsApiManager.post(`/auth/login`, payload);
+                const { data } = await CsApiManager.post(`/admin/auth/login`, payload);
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -38,7 +38,7 @@ export class AdminAuthThunk {
 
         async (payload, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
-                const { data } = await CsApiManager.get(`/auth/logout`);
+                const { data } = await CsApiManager.get(`/admin/auth/logout`);
 
                 return fulfillWithValue(data)
             } catch (error: any) {

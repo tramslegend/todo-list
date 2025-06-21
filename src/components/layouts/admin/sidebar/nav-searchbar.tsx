@@ -30,8 +30,8 @@ export default function CsSearchbar({ ...props }: React.ComponentProps<"div">) {
     };
 
     return (
-        <div className='flex items-center relative' {...props} >
-            <Input value={value} onChange={e => handleSearch(e.target.value)} placeholder='Search...' className='w-sm ' />
+        <div className='flex items-center relative w-full h-full ' {...props} >
+            <Input value={value} onChange={e => handleSearch(e.target.value)} placeholder='Search...' className='w-full h-full' />
             {value ?
                 <button onClick={() => handleSearch('')} className='absolute top-1/4 right-2 text-muted-foreground rounded'><X size={17} /></button>
                 :

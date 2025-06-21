@@ -123,7 +123,7 @@ export default function page() {
 
     return (
         <>
-            <AdminSettingsHeader title='Public Profile'>
+            <AdminSettingsHeader title='Account Settings'>
             </AdminSettingsHeader>
 
             <div className='px-3 py-2'>

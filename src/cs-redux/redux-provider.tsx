@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import { CsCreateStore } from './store'
 
 
-export default function CsAdminReduxProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function CsReduxProvider({ children }: Readonly<{ children: React.ReactNode }>) {
     const storeRef = useRef<ReturnType<typeof CsCreateStore> | null>(null)
 
     if (!storeRef.current) {

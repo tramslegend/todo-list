@@ -5,7 +5,6 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { PasswordInput } from '@/components/ui/password-input'
-import BaseLoader from '@/components/utils/loader'
 import { CsRoleItem } from '@/components/utils/role'
 import { useCsDispatch, useCsSelector } from '@/cs-redux'
 import AdminAccountSlice from '@/cs-redux/slices/admin/admin-account.slice'

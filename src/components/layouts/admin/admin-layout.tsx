@@ -35,6 +35,7 @@ import { useEffect } from "react"
 import { useCsDispatch } from "@/cs-redux"
 import CsNavUser2 from "./sidebar/nav-user2"
 import { AdminAuthThunk } from "@/cs-redux/thunks/admin/admin-auth.thunk"
+import { ThemeToggle } from "@/components/theme/ThemeToggle"
 
 
 
@@ -100,11 +101,14 @@ export default function CsAdminLayout({ children, }: Readonly<{ children: React.
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
 
-            <CsSearchbar />
+            <div className="w-sm h-8">
+              <CsSearchbar />
+            </div>
           </div>
 
           <div className="grow flex items-center justify-end mx-3 gap-x-3">
-            <Button className='' variant="outline" size="icon"><Bell /></Button>
+            <Button className='rounded-full' variant="outline" size="icon"><Bell /></Button>
+            <ThemeToggle />
             <CsNavUser2 />
           </div>
         </header>

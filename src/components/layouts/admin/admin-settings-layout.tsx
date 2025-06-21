@@ -10,14 +10,10 @@ interface CsSettingsMenuItem {
 }
 
 const CsSettingsMenu: CsSettingsMenuItem[] = [
+
     {
-        label: 'Appearance',
-        url: '/admin/settings/appearance',
-        icon: Palette,
-    },
-    {
-        label: 'Public Profile',
-        url: '/admin/settings/profile',
+        label: 'Account Settings',
+        url: '/admin/settings/account',
         icon: CircleUserRound,
     },
     {

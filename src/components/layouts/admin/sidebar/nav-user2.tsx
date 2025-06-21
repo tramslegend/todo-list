@@ -50,8 +50,8 @@ export default function CsNavUser2() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button className='' variant="outline" size="icon">
-                    <Avatar className="h-full w-full rounded-lg">
+                <Button className='rounded-full' variant="outline" size="icon">
+                    <Avatar className="h-full w-full rounded-full">
                         <AvatarImage src={authAdmin?.avatar} alt={authAdmin?.name} />
                         <AvatarFallback className="rounded-lg"><User size={15} /></AvatarFallback>
                     </Avatar>
