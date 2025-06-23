@@ -4,14 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input";
 import { TypographyH3, TypographyP, } from "@/components/ui/typography"
-import { useCsSelector } from "@/cs-redux";
+import { useCsDispatch, useCsSelector } from "@/cs-redux";
+import { UserAccountThunk } from "@/cs-redux/thunks/app/user-account.thunk";
+import { UserAuthThunk } from "@/cs-redux/thunks/app/user-auth.thunk";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function DisplayName() {
+    const dispatch = useCsDispatch();
     const { authUser } = useCsSelector(state => state.userAuth);
+    const { loading } = useCsSelector(state => state.userAccount);
     const [name, setName] = useState<string>('');
-
 
     useEffect(() => {
         if (authUser?.name) {
@@ -21,10 +24,16 @@ export default function DisplayName() {
 
 
     async function onSave() {
-        if (!name) return toast.error('Enter display name');
+        if (name.length < 3 || name.length > 35) return toast.error('Display name must be 3 to 35 characters');
 
-        console.log(name)
-
+        const res = await dispatch(UserAccountThunk.updateName({ name }));
+        if (res.payload.message) {
+            toast.success(res.payload.message);
+            dispatch(UserAuthThunk.session());
+        }
+        else if (res.payload.error) {
+            toast.error(res.payload.error);
+        }
     }
 
     return (

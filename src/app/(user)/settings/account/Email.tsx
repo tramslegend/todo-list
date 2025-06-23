@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input";
 import { TypographyH3, TypographyP, TypographySmall, } from "@/components/ui/typography"
-import { useCsSelector } from "@/cs-redux";
+import { useCsDispatch, useCsSelector } from "@/cs-redux";
 import { PROJECT_NAME } from "@/root.config";
-import { BadgeCheckIcon, Ellipsis, Plus } from "lucide-react";
+import { BadgeCheckIcon, Ellipsis, Plus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -23,33 +23,77 @@ import {
 import { Label } from "@/components/ui/label";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
+import { UserAccountThunk } from "@/cs-redux/thunks/app/user-account.thunk";
+import { UserAuthThunk } from "@/cs-redux/thunks/app/user-auth.thunk";
 
 export default function Email() {
+    const dispatch = useCsDispatch();
     const { authUser } = useCsSelector(state => state.userAuth);
+    const { loading } = useCsSelector(state => state.userAccount);
+
     const [email, setEmail] = useState<string>('');
     const [otp, setOtp] = useState<string>('');
     const [token, setToken] = useState<string>('');
     const [open, setOpen] = useState<boolean>(false)
-    let loading;
+
 
 
     async function onAddEmail() {
         if (!email) return toast.error('Enter email address');
-        setToken('k')
-        console.log(email)
+
+        const res = await dispatch(UserAccountThunk.addEmail({ email }));
+        if (res.payload.message) {
+            toast.success(res.payload.message);
+            setToken(res.payload.token)
+        }
+        else if (res.payload.error) {
+            toast.error(res.payload.error);
+        }
 
     }
 
     async function onVerify() {
         if (!otp || otp.length !== 6) return toast.error('Enter OTP');
-        setToken('')
-        setOpen(false)
-        console.log(email)
 
+        const res = await dispatch(UserAccountThunk.addEmailVerify({ otp, token }));
+        if (res.payload.message) {
+            toast.success(res.payload.message);
+            setToken('')
+            setOpen(false)
+            dispatch(UserAuthThunk.session());
+        }
+        else if (res.payload.error) {
+            toast.error(res.payload.error);
+        }
+    }
+
+
+    async function onUpdatePrimaryEmail(email: string) {
+
+        const res = await dispatch(UserAccountThunk.updatePrimaryEmail({ email }));
+        if (res.payload.message) {
+            toast.success(res.payload.message);
+            dispatch(UserAuthThunk.session());
+        }
+        else if (res.payload.error) {
+            toast.error(res.payload.error);
+        }
+    }
+
+
+    async function onDeleteEmail(email: string) {
+
+        const res = await dispatch(UserAccountThunk.removeEmail({ email }));
+        if (res.payload.message) {
+            toast.success(res.payload.message);
+            dispatch(UserAuthThunk.session());
+        }
+        else if (res.payload.error) {
+            toast.error(res.payload.error);
+        }
     }
 
     useEffect(() => {
-
         if (!open) {
             setEmail('')
             setOtp('')
@@ -68,12 +112,12 @@ export default function Email() {
                             <div key={`email_878${i}`} className="border rounded px-5 py-3 flex items-center gap-3">
                                 <div className="flex items-center gap-3 grow">
                                     <p className="font-semibold">{e.address}</p>
-                                    {e.primary &&
+                                    {e?.primary &&
                                         <Badge variant="secondary" className="bg-green-500 text-white dark:bg-green-600" >
                                             Primary
                                         </Badge>
                                     }
-                                    {e.verified &&
+                                    {e?.verified &&
                                         <Badge variant="secondary" className="bg-blue-500 text-white dark:bg-blue-600" >
                                             <BadgeCheckIcon />
                                             Verified
@@ -81,7 +125,10 @@ export default function Email() {
                                     }
                                 </div>
 
-                                <Button size={'icon'} variant={'ghost'}><Ellipsis /></Button>
+                                <div className="space-x-3">
+                                    {!e?.primary && <Button onClick={() => { onUpdatePrimaryEmail(e.address) }} disabled={e?.primary} size={'sm'} variant={'ghost'}>Set as Primary</Button>}
+                                    <Button onClick={() => { onDeleteEmail(e.address) }} disabled={e?.primary} size={'icon'} variant={'ghost'}><Trash className="text-red-800" /></Button>
+                                </div>
                             </div>
                         ))
                     }
