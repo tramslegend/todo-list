@@ -62,7 +62,7 @@ export async function middleware(req: NextRequest) {
 
 
         // ============================= APP/USER  =============================
-        if (protectedRoutes.includes(pathName) || pathName === '/auth/signup' || pathName === '/auth/login') {
+        if (protectedRoutes.includes(pathName) || pathName === '/auth/signup' || pathName === '/auth/login' || pathName === '/') {
             // console.log('MW - App', pathName)
             const url = `${process.env.NEXT_PUBLIC_BASE_API}/app/auth/session`;
             const sessionKey = _cookies.get('session')?.value;
@@ -78,6 +78,10 @@ export async function middleware(req: NextRequest) {
 
             // Authorized
             if ((pathName === '/auth/signup' || pathName === '/auth/login') && authUser && isValid) {
+                return NextResponse.redirect(new URL(`/dashboard`, req.nextUrl));
+            }
+
+            if (pathName === '/' && authUser && isValid) {
                 return NextResponse.redirect(new URL(`/dashboard`, req.nextUrl));
             }
 
@@ -101,6 +105,7 @@ export async function middleware(req: NextRequest) {
 // See "Matching Paths" below to learn more
 export const config = {
     matcher: [
+        '/',
         '/auth/:path*',
         '/admin/:path*',
         ...protectedRoutes
