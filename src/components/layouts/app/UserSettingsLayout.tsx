@@ -45,7 +45,7 @@ export default function UserSettingsLayout({ children }: Readonly<{ children: Re
                 </Container>
             </div>
 
-            <Container className="flex gap-3 overflow-visible relative w-full mt-3">
+            <Container className="flex gap-3 overflow-visible relative w-full mt-7">
                 <div className='w-60 sticky top-16 '>
                     {
                         NavItems.map((item, i) => (

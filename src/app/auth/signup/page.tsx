@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Images } from "@/constants/image";
+import { CsImages } from "@/constants/image";
 import { PROJECT_NAME } from "@/root.config";
 import { MoveLeft } from "lucide-react";
 import React, { useState } from "react";

@@ -10,16 +10,6 @@ import { PROJECT_NAME } from "@/root.config";
 import { BadgeCheckIcon, Ellipsis, Plus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
