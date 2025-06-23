@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 export default function page() {
-    const { authAdmin } = useCsSelector(state => state.auth);
+    const { authAdmin } = useCsSelector(state => state.adminAuth);
     const adminAccount = useCsSelector(state => state.adminAccount);
     const dispatch = useCsDispatch();
 

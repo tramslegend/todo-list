@@ -35,7 +35,7 @@ export default function CsNavUser2() {
     const dispatch = useCsDispatch();
     const router = useRouter()
 
-    const { authAdmin } = useCsSelector(state => state.auth)
+    const { authAdmin } = useCsSelector(state => state.adminAuth)
 
 
     async function logoutUser() {

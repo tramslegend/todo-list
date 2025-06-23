@@ -1,11 +1,11 @@
 // api/ApiManager.ts
 import axios, { AxiosInstance } from 'axios';
 
-const CsApiManager: AxiosInstance = axios.create({
+const ApiManager: AxiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_BASE_API,
     withCredentials: true,
     headers: {
     },
 });
 
-export default CsApiManager;
+export default ApiManager;

@@ -26,6 +26,8 @@ export async function middleware(req: NextRequest) {
 
         // ============================= ADMIN  =============================
         if (pathName.startsWith('/admin') || pathName === '/auth/login/admin') {
+            console.log('MW - Admin', pathName)
+
             const url = `${process.env.NEXT_PUBLIC_BASE_API}/admin/auth/session`;
             const sessionKey = _cookies.get('ski')?.value;
 
@@ -57,8 +59,10 @@ export async function middleware(req: NextRequest) {
                 return NextResponse.redirect(new URL(`/auth/login/admin`, req.nextUrl));
             }
         }
+
+
         // ============================= APP/USER  =============================
-        else {
+        if (protectedRoutes.includes(pathName) || pathName === '/auth/signup' || pathName === '/auth/login') {
             // console.log('MW - App', pathName)
             const url = `${process.env.NEXT_PUBLIC_BASE_API}/app/auth/session`;
             const sessionKey = _cookies.get('session')?.value;
@@ -66,10 +70,21 @@ export async function middleware(req: NextRequest) {
             const res = await fetch(url, {
                 method: "GET",
                 headers: {
-                    "x-session": sessionKey!,
+                    "x-session-key": sessionKey!,
                     "Content-Type": "application/json",
                 },
             });
+            const { authUser, isValid } = await res.json();
+
+            // Authorized
+            if ((pathName === '/auth/signup' || pathName === '/auth/login') && authUser && isValid) {
+                return NextResponse.redirect(new URL(`/dashboard`, req.nextUrl));
+            }
+
+            // Unauthorized
+            if (protectedRoutes.includes(pathName) && (!authUser || !isValid)) {
+                return NextResponse.redirect(new URL(`/auth/login`, req.nextUrl));
+            }
         }
 
 

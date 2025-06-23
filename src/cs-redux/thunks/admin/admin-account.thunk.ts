@@ -1,4 +1,4 @@
-import CsApiManager from "@/configs/api.config";
+import ApiManager from "@/configs/api.config";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export default class AdminAccountThunk {
@@ -8,7 +8,7 @@ export default class AdminAccountThunk {
 
         async (payload: { name: string; email: string; password: string; roles: string[]; phone?: string; }, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
-                const { data } = await CsApiManager.post(`/admin/account/create`, payload);
+                const { data } = await ApiManager.post(`/admin/account/create`, payload);
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -21,7 +21,7 @@ export default class AdminAccountThunk {
 
         async (payload: { name?: string; phone?: string; avatar?: string }, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
-                const { data } = await CsApiManager.patch(`/admin/account/update/self/details`, payload);
+                const { data } = await ApiManager.patch(`/admin/account/update/self/details`, payload);
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -35,7 +35,7 @@ export default class AdminAccountThunk {
 
         async (payload: { email: string }, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
-                const { data } = await CsApiManager.post(`/admin/account/verify/self/email`, payload);
+                const { data } = await ApiManager.post(`/admin/account/verify/self/email`, payload);
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -49,7 +49,7 @@ export default class AdminAccountThunk {
 
         async (payload: { email: string; otp: string; }, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
-                const { data } = await CsApiManager.patch(`/admin/account/update/self/email`, payload);
+                const { data } = await ApiManager.patch(`/admin/account/update/self/email`, payload);
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -63,7 +63,7 @@ export default class AdminAccountThunk {
 
         async (payload: { password: string; newPassword: string }, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
-                const { data } = await CsApiManager.patch(`/admin/account/update/self/password`, payload);
+                const { data } = await ApiManager.patch(`/admin/account/update/self/password`, payload);
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -78,7 +78,7 @@ export default class AdminAccountThunk {
 
         async (payload, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
-                const { data } = await CsApiManager.get(`/admin/account/get/all`);
+                const { data } = await ApiManager.get(`/admin/account/get/all`);
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -92,7 +92,7 @@ export default class AdminAccountThunk {
 
         async (payload: { id: string }, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
-                const { data } = await CsApiManager.get(`/admin/account/get/user/${payload.id}`);
+                const { data } = await ApiManager.get(`/admin/account/get/user/${payload.id}`);
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -108,7 +108,7 @@ export default class AdminAccountThunk {
         async (payload: { id: string; body: { name?: string; phone?: string; avatar?: string } }, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
 
-                const { data } = await CsApiManager.patch(`/admin/account/update/details/${payload.id}`, payload.body);
+                const { data } = await ApiManager.patch(`/admin/account/update/details/${payload.id}`, payload.body);
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -124,7 +124,7 @@ export default class AdminAccountThunk {
         async (payload: { id: string; email: string; }, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
 
-                const { data } = await CsApiManager.patch(`/admin/account/update/email/${payload.id}`, { email: payload.email });
+                const { data } = await ApiManager.patch(`/admin/account/update/email/${payload.id}`, { email: payload.email });
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -139,7 +139,7 @@ export default class AdminAccountThunk {
         async (payload: { id: string; password: string; }, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
 
-                const { data } = await CsApiManager.patch(`/admin/account/update/password/${payload.id}`, { password: payload.password });
+                const { data } = await ApiManager.patch(`/admin/account/update/password/${payload.id}`, { password: payload.password });
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -155,7 +155,7 @@ export default class AdminAccountThunk {
         async (payload: { id: string; roles: string[]; }, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
 
-                const { data } = await CsApiManager.patch(`/admin/account/update/roles/${payload.id}`, { roles: payload.roles });
+                const { data } = await ApiManager.patch(`/admin/account/update/roles/${payload.id}`, { roles: payload.roles });
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -170,7 +170,7 @@ export default class AdminAccountThunk {
         async (payload: { id: string }, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
 
-                const { data } = await CsApiManager.patch(`/admin/account/archive/${payload.id}`);
+                const { data } = await ApiManager.patch(`/admin/account/archive/${payload.id}`);
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -185,7 +185,7 @@ export default class AdminAccountThunk {
         async (payload: { id: string }, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
 
-                const { data } = await CsApiManager.patch(`/admin/account/unarchive/${payload.id}`);
+                const { data } = await ApiManager.patch(`/admin/account/unarchive/${payload.id}`);
 
                 return fulfillWithValue(data)
             } catch (error: any) {
@@ -199,7 +199,7 @@ export default class AdminAccountThunk {
         async (payload: { id: string }, { getState, rejectWithValue, fulfillWithValue }) => {
             try {
 
-                const { data } = await CsApiManager.delete(`/admin/account/delete/${payload.id}`);
+                const { data } = await ApiManager.delete(`/admin/account/delete/${payload.id}`);
 
                 return fulfillWithValue(data)
             } catch (error: any) {

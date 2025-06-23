@@ -20,7 +20,7 @@ export default function AdminUserProfileView() {
     const dispatch = useCsDispatch();
     const router = useRouter();
     const { adminUser, notFound, loading } = useCsSelector(state => state.adminAccount);
-    const { authAdmin } = useCsSelector(state => state.auth);
+    const { authAdmin } = useCsSelector(state => state.adminAuth);
 
     useEffect(() => {
         if (id) dispatch(AdminAccountThunk.GetById({ id }));

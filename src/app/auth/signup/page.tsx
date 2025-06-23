@@ -17,15 +17,21 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import OAuthButtons from "@/components/utils/OAuthButtons";
+import { useCsDispatch, useCsSelector } from "@/cs-redux";
+import { UserAuthThunk } from "@/cs-redux/thunks/app/user-auth.thunk";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
 
+    const dispatch = useCsDispatch();
+    const router = useRouter();
+    const { loading } = useCsSelector(state => state.userAuth);
 
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [otp, setOtp] = useState<string>('');
     const [token, setToken] = useState<string>('');
-    const [hasAccount, hasNoAccount] = useState<boolean>(false);
+    const [hasAccount, setHasAccount] = useState<boolean>(false);
 
     async function onSignUp(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -33,9 +39,16 @@ export default function SignupPage() {
         else if (!email) return toast.error("Enter Email Address");
 
         // Dispatch Signup
+        const res = await dispatch(UserAuthThunk.signup({ name, email }));
+        if (res.payload.message) {
+            setToken(res.payload.token)
+            setHasAccount(res.payload.hasAccount)
+            router.push(`/auth/signup?token=${res.payload.token}`);
+        }
+        else if (res.payload.error) {
+            toast.error(res.payload.error)
+        }
 
-        // Check response
-        setToken('secret-token');
     }
 
     async function verifyEmailSignup(e: React.FormEvent<HTMLFormElement>) {
@@ -44,10 +57,13 @@ export default function SignupPage() {
         else if (!token) return toast.error("Something went wrong. Please try again!");
 
         // Dispatch Verify Signup
-
-        // Check response
-        // navigate('/dashboard');
-        console.log(otp)
+        const res = await dispatch(UserAuthThunk.verifySignup({ otp, token }));
+        if (res.payload.message) {
+            router.replace('/dashboard');
+        }
+        else if (res.payload.error) {
+            toast.error(res.payload.error)
+        }
 
     }
 
@@ -63,7 +79,7 @@ export default function SignupPage() {
                         <form onSubmit={onSignUp} className="space-y-3">
                             <Input value={name} onChange={e => setName(e.target.value)} type="text" required placeholder="Full Name" />
                             <Input value={email} onChange={e => setEmail(e.target.value)} type="email" required placeholder="Email Address" />
-                            <Button type="submit" className="w-full" >Continue with Email</Button>
+                            <Button type="submit" className="w-full" disabled={loading}>{loading ? "Processing..." : "Sign Up with Email"}</Button>
                         </form>
 
                         <Separator />
@@ -87,7 +103,7 @@ export default function SignupPage() {
                                         <InputOTPSlot index={5} />
                                     </InputOTPGroup>
                                 </InputOTP>
-                                <Button type="submit" className="mt-5 w-full" >Log in with Email</Button>
+                                <Button type="submit" className="mt-5 w-full" disabled={loading}>{loading ? "Processing..." : "Verify"}</Button>
                             </form>
                             <div className="flex items-center justify-center ">
                                 <button onClick={() => setToken('')} className="cursor-pointer text-blue-500 flex items-center gap-2 border-b border-b-transparent hover:border-b-blue-500" ><MoveLeft className="mt-1" size={15} /><span>Back</span></button>

@@ -18,16 +18,20 @@ import { BellIcon, LayoutDashboardIcon, LogOut, Settings, User } from 'lucide-re
 import { toast } from 'sonner'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useCsDispatch } from "@/cs-redux"
-import { useState } from "react"
+import { useCsDispatch, useCsSelector } from "@/cs-redux"
+import { useEffect, useState } from "react"
+import { UserAuthThunk } from "@/cs-redux/thunks/app/user-auth.thunk"
 
 export default function UserRootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
     const dispatch = useCsDispatch();
     const router = useRouter();
 
-    const [user, setUser] = useState<{ name: string; avatar?: string; email: string }>({ name: 'Sam', email: 'sam@codingsamrat.com', })
+    const { authUser } = useCsSelector(state => state.userAuth);
 
 
+    useEffect(() => {
+        dispatch(UserAuthThunk.session())
+    }, [dispatch])
 
 
     return (
@@ -62,8 +66,8 @@ export default function UserRootLayout({ children }: Readonly<{ children: React.
                                     <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
 
                                         <div className="grid flex-1 text-left text-sm leading-tight">
-                                            <span className="truncate font-semibold">{user?.name}</span>
-                                            <span className="truncate text-xs">{user?.email}</span>
+                                            <span className="truncate font-semibold">{authUser?.name}</span>
+                                            <span className="truncate text-xs">{authUser?.primaryEmail}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -82,7 +86,7 @@ export default function UserRootLayout({ children }: Readonly<{ children: React.
                                         Home Page
                                         <MenubarShortcut><Home /></MenubarShortcut>
                                     </MenubarItem> */}
-                                <MenubarItem variant='destructive' onClick={() => toast.error('Method not implemented')}>
+                                <MenubarItem variant='destructive' onClick={() => { dispatch(UserAuthThunk.logout()); router.replace('/auth/login') }}>
                                     Logout <MenubarShortcut><LogOut /></MenubarShortcut>
                                 </MenubarItem>
 
