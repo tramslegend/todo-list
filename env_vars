@@ -1,0 +1,6 @@
+# This is a sample env file.
+# Rename this file as .env and assign values of variables.
+# All variables are required 
+
+# Base API...
+NEXT_PUBLIC_BASE_API =
