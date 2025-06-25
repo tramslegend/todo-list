@@ -96,6 +96,18 @@ const UserAccountSlice = createSlice({
                 state.loading = false;
                 state.notFound = true;
             })
+
+        builder
+            .addCase(UserAccountThunk.delete.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(UserAccountThunk.delete.fulfilled, (state, _) => {
+                state.loading = false;
+            })
+            .addCase(UserAccountThunk.delete.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+            })
     }
 });
 

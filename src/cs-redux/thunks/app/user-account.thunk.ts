@@ -88,4 +88,18 @@ export class UserAccountThunk {
         }
     )
 
+    static delete = createAsyncThunk(
+        "UserAccountThunk/delete",
+
+        async (_, { rejectWithValue, fulfillWithValue }) => {
+            try {
+                const { data } = await ApiManager.delete(`/app/account/delete`);
+
+                return fulfillWithValue(data)
+            } catch (error: any) {
+                return rejectWithValue(error.response.data);
+            }
+        }
+    )
+
 }

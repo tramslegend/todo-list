@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card"
 import { TypographyH3, TypographyP, } from "@/components/ui/typography"
-import { useCsSelector } from "@/cs-redux";
+import { useCsDispatch, useCsSelector } from "@/cs-redux";
 import { PROJECT_NAME } from "@/root.config";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -19,9 +19,13 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { UserAccountThunk } from "@/cs-redux/thunks/app/user-account.thunk";
+import { useRouter } from "next/navigation";
 
 
 export default function DeleteAccount() {
+    const dispatch = useCsDispatch();
+    const router = useRouter();
     const { authUser } = useCsSelector(state => state.userAuth);
 
     const [open, setOpen] = useState<boolean>(false)
@@ -33,8 +37,14 @@ export default function DeleteAccount() {
 
     async function onDelete() {
 
-
-        console.log('Account deleted', authUser?._id)
+        const res = await dispatch(UserAccountThunk.delete());
+        if (res.payload.message) {
+            toast.success(res.payload.message);
+            router.replace('/');
+        }
+        else if (res.payload.error) {
+            toast.error(res.payload.error);
+        }
     }
 
 
