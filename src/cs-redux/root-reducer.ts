@@ -5,6 +5,7 @@ import AdminAuthSlice from "./slices/admin/admin-auth.slice";
 import UserAuthSlice from "./slices/app/user-auth.slice";
 import UserAccountSlice from "./slices/app/user-account.slice";
 import ClientSlice from "./slices/app/crm/client.slice";
+import ServiceSlice from "./slices/app/crm/service.slice";
 
 const CsRootReducer = combineReducers({
     global: GlobalSlice.reducer,
@@ -14,6 +15,7 @@ const CsRootReducer = combineReducers({
     userAccount: UserAccountSlice.reducer,
 
     client: ClientSlice.reducer,
+    service: ServiceSlice.reducer,
 })
 
 export type CsRootState = ReturnType<typeof CsRootReducer>;

@@ -16,20 +16,21 @@ import { IClientModel } from "@/types/crm/client.type"
 import { MoveRight } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 export default function CrmClientsPage() {
     const router = useRouter()
     const dispatch = useCsDispatch();
-
+    const [page, setPage] = useState<number>(1)
+    const [limit, setLimit] = useState<number>(40)
 
     const { allClient } = useCsSelector(state => state.client);
     const { query } = useCsSelector(state => state.global);
 
 
     useEffect(() => {
-        dispatch(ClientThunk.getAll({ page: 1, limit: 40, query }))
-    }, [dispatch, query])
+        dispatch(ClientThunk.getAll({ page, limit, query }))
+    }, [dispatch, limit, page, query])
 
     return (
         <div>
