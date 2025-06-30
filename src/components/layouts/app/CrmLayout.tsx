@@ -1,10 +1,28 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import { Filter, LayoutDashboard, Users } from "lucide-react";
+import { ChevronDown, Filter, LayoutDashboard, Settings, Users } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import CsSearchbar from "../admin/sidebar/nav-searchbar";
 import Container from "@/components/utils/Container";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+    Menubar,
+    MenubarContent,
+    MenubarItem,
+    MenubarMenu,
+    MenubarSeparator,
+    MenubarShortcut,
+    MenubarTrigger,
+} from "@/components/ui/menubar"
+import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
+
 
 const NavItems = [
     {
@@ -39,9 +57,10 @@ const NavItems = [
     },
 
 ]
+
 export default function CrmLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
     const pathname = usePathname();
-
+    const router = useRouter()
 
     return (
         <div>
@@ -64,9 +83,22 @@ export default function CrmLayout({ children }: Readonly<{ children: React.React
                 <div className='h-full flex items-center gap-3'>
                     <div className='grow h-8 max-w-xs w-xs'><CsSearchbar /></div>
                     <div className='flex items-center gap-3'>
-                        <Button size={'icon'} variant={'outline'}> <Filter /></Button>
-                        <Button size={'icon'} variant={'outline'}> <LayoutDashboard /></Button>
-                        <Button className="rounded" size={'sm'} > Create New</Button>
+                        {/* <Button size={'icon'} variant={'outline'}> <Filter /></Button>
+                        <Button size={'icon'} variant={'outline'}> <LayoutDashboard /></Button> */}
+
+                        <DropdownMenu >
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" size={'sm'}>New <ChevronDown /></Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className=" space-y-1 py-2">
+                                {/* <DropdownMenuLabel>Appearance</DropdownMenuLabel> */}
+                                {/* <DropdownMenuSeparator /> */}
+                                <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/clients/new')}>Client</DropdownMenuItem>
+                                <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/projects/new')}>Project</DropdownMenuItem>
+                                <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/services/new')}>Service</DropdownMenuItem>
+                                <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/invoices/new')}>Invoice</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </div>
             </div>

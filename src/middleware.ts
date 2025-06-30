@@ -2,18 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-const protectedRoutes = [
-    '/dashboard',
-    '/clients',
-    '/projects',
-    '/services',
-    '/invoices',
-    '/transactions',
-    '/settings/account',
-    '/settings/authentication',
-    '/settings/billing',
-    '/settings/invoices',
-]
+
 
 export async function middleware(req: NextRequest) {
     try {
@@ -62,7 +51,20 @@ export async function middleware(req: NextRequest) {
 
 
         // ============================= APP/USER  =============================
-        if (protectedRoutes.includes(pathName) || pathName === '/auth/signup' || pathName === '/auth/login' || pathName === '/') {
+
+        const authPath = pathName === '/auth/signup' || pathName === '/auth/login';
+        const protectedPath =
+            pathName.startsWith('/dashboard') ||
+            pathName.startsWith('/clients') ||
+            pathName.startsWith('/projects') ||
+            pathName.startsWith('/services') ||
+            pathName.startsWith('/invoices') ||
+            pathName.startsWith('/transactions') ||
+            pathName.startsWith('/archive') ||
+            pathName.startsWith('/settings');
+
+
+        if (protectedPath || authPath || pathName === '/') {
             // console.log('MW - App', pathName)
             const url = `${process.env.NEXT_PUBLIC_BASE_API}/app/auth/session`;
             const sessionKey = _cookies.get('session')?.value;
@@ -77,7 +79,7 @@ export async function middleware(req: NextRequest) {
             const { authUser, isValid } = await res.json();
 
             // Authorized
-            if ((pathName === '/auth/signup' || pathName === '/auth/login') && authUser && isValid) {
+            if (authPath && authUser && isValid) {
                 return NextResponse.redirect(new URL(`/dashboard`, req.nextUrl));
             }
 
@@ -86,7 +88,7 @@ export async function middleware(req: NextRequest) {
             }
 
             // Unauthorized
-            if (protectedRoutes.includes(pathName) && (!authUser || !isValid)) {
+            if (protectedPath && (!authUser || !isValid)) {
                 return NextResponse.redirect(new URL(`/auth/login`, req.nextUrl));
             }
         }
@@ -108,6 +110,15 @@ export const config = {
         '/',
         '/auth/:path*',
         '/admin/:path*',
-        ...protectedRoutes
+
+        '/dashboard/:path*',
+        '/clients/:path*',
+        '/projects/:path*',
+        '/services/:path*',
+        '/invoices/:path*',
+        '/transactions/:path*',
+
+        '/archive/:path*',
+        '/settings/:path*',
     ]
 }

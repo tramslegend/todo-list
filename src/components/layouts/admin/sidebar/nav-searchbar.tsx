@@ -8,7 +8,7 @@ import React, { useState } from 'react'
 
 export default function CsSearchbar({ ...props }: React.ComponentProps<"div">) {
     const dispatch = useCsDispatch();
-    const { searchQuery } = useCsSelector(state => state.global);
+    const { query } = useCsSelector(state => state.global);
 
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
     const [value, setValue] = useState('');
