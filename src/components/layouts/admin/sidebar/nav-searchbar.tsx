@@ -37,7 +37,6 @@ export default function CsSearchbar({ ...props }: React.ComponentProps<"div">) {
                 :
                 <button className='absolute top-1/4 right-2 text-muted-foreground rounded ' ><Search size={17} /></button>
             }
-
         </div>
     )
 }

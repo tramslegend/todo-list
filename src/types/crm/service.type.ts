@@ -1,9 +1,19 @@
-import { CrmServiceUnitType } from "@/constants/crm.constant";
+import { CrmUnitsType } from "@/constants/crm.constant";
+
+export interface IServicesItem {
+    name: string;
+    slug: string;
+    description?: string;
+    quantity: number;
+    unit: CrmUnitsType;
+    basePrice: number;
+    totalAmount: number;
+}
 
 export interface INewService {
     name: string;
     description?: string;
-    unit: CrmServiceUnitType;
+    unit: CrmUnitsType;
     basePrice: number;
 }
 
@@ -13,7 +23,7 @@ export interface IServiceModel {
     name: string;
     slug: string;
     description?: string;
-    unit: CrmServiceUnitType;
+    unit: CrmUnitsType;
     basePrice: number;
 
     createdAt?: Date;

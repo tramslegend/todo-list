@@ -27,7 +27,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { CrmServiceUnit, CrmServiceUnitType } from "@/constants/crm.constant"
+import { CrmUnits, CrmUnitsType } from "@/constants/crm.constant"
 import { CsUtils } from "@/cs-toolkit"
 import { toast } from "sonner"
 import ServiceSlice from "@/cs-redux/slices/app/crm/service.slice"
@@ -135,7 +135,7 @@ export default function CrmServiceForm() {
                             </div>
                             <div className="grid gap-3">
                                 <Label htmlFor="description-1">Unit</Label>
-                                <Select value={formData.unit} onValueChange={(value: CrmServiceUnitType) => setFormData({ ...formData, unit: value })}>
+                                <Select value={formData.unit} onValueChange={(value: CrmUnitsType) => setFormData({ ...formData, unit: value })}>
                                     <SelectTrigger className="w-[180px]">
                                         <SelectValue placeholder="Select the Unit" />
                                     </SelectTrigger>
@@ -143,7 +143,7 @@ export default function CrmServiceForm() {
                                         <SelectGroup>
                                             <SelectLabel>Units</SelectLabel>
                                             {
-                                                Object.values(CrmServiceUnit).map((value: CrmServiceUnitType, i: number) => (
+                                                Object.values(CrmUnits).map((value: CrmUnitsType, i: number) => (
                                                     <SelectItem key={`unit_${value}_${i + 7834}`} value={value}>{CsUtils.capitalizeFirst(value)}</SelectItem>
                                                 ))
                                             }

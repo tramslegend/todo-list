@@ -61,19 +61,27 @@ export type CrmClientSourceType = typeof CrmClientSource[keyof typeof CrmClientS
 
 
 
-// Items ---
-export const CrmServiceUnit = {
+// Units ---
+export const CrmUnits = {
     HOUR: 'hour',
     DAY: 'day',
-    MONTH: 'month',
-    YEAR: 'year',
-    PROJECT: 'project',
-    FEATURE: 'feature',
+    WEEK: 'week',
+    ITEM: 'item',
     FIXED: 'fixed',
 } as const;
 
-export type CrmServiceUnitType = typeof CrmServiceUnit[keyof typeof CrmServiceUnit];
+export type CrmUnitsType = typeof CrmUnits[keyof typeof CrmUnits];
 
+export function getUnitLabel(unit: string): string {
+    switch (unit) {
+        case CrmUnits.HOUR: return 'Per Hour';
+        case CrmUnits.DAY: return 'Per Day';
+        case CrmUnits.WEEK: return 'Per Week';
+        case CrmUnits.ITEM: return 'Per Item';
+        case CrmUnits.FIXED: return '(Fixed)';
+        default: return unit;
+    }
+}
 
 
 // Transaction ---
