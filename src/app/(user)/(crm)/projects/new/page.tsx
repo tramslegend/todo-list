@@ -7,7 +7,7 @@ import { INewProject } from '@/types/crm/project.type'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import ClientIdSelector from '../../ClientIdSelector'
 import DatePicker from '@/components/utils/DatePicker'
-import ServiceItemsForm from '@/components/service-selector/ServiceItemsForm'
+import InvoiceItemsForm from '@/components/item-selector/InvoiceItemsForm'
 import DatePicker2 from '@/components/utils/DatePicker2'
 
 
@@ -17,7 +17,7 @@ const defaultValue: INewProject = {
     startDate: new Date(),
     dueDate: new Date(),
     note: '',
-    services: []
+    items: []
 }
 
 export default function CrmNewProjectPage() {
@@ -68,8 +68,8 @@ export default function CrmNewProjectPage() {
                     </div>
                 </div>
                 <div className='space-y-1.5'>
-                    <Label htmlFor="Services-1">Services</Label>
-                    <ServiceItemsForm services={formData.services} setServices={(services) => setFormData({ ...formData, services })} />
+                    <Label htmlFor="Items-1">Items</Label>
+                    <InvoiceItemsForm items={formData.items} setItems={(items) => setFormData({ ...formData, items })} />
                 </div>
 
             </div>

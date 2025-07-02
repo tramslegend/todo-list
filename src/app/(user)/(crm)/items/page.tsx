@@ -11,13 +11,13 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { useCsDispatch, useCsSelector } from "@/cs-redux"
-import { ServiceThunk } from "@/cs-redux/thunks/app/crm/service.thunk"
-import { IServiceModel } from "@/types/crm/service.type"
+import { ItemThunk } from "@/cs-redux/thunks/app/crm/item.thunk"
+import { IItemModel } from "@/types/crm/item.type"
 import { EllipsisVertical, MoveRight } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Suspense, useEffect, useState } from "react"
-import CrmServiceForm from "./ServiceForm"
+import CrmItemForm from "./ItemForm"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -38,7 +38,7 @@ import { toast } from "sonner"
 
 
 
-export default function CrmServicesPage() {
+export default function CrmItemsPage() {
     const router = useRouter()
     const dispatch = useCsDispatch();
     const [page, setPage] = useState<number>(1)
@@ -46,12 +46,12 @@ export default function CrmServicesPage() {
     const [idToDelete, setIdToDelete] = useState<string | null>(null)
 
 
-    const { allService } = useCsSelector(state => state.service);
+    const { allItem } = useCsSelector(state => state.item);
     const { query } = useCsSelector(state => state.global);
 
 
     useEffect(() => {
-        dispatch(ServiceThunk.getAll({ page, limit, query }))
+        dispatch(ItemThunk.getAll({ page, limit, query }))
     }, [dispatch, limit, page, query])
 
 
@@ -59,7 +59,7 @@ export default function CrmServicesPage() {
         if (!idToDelete) return toast.error('Something went wrong! Try again later.')
 
         // Delete...
-        const { payload } = await dispatch(ServiceThunk.delete({ id: idToDelete! }));
+        const { payload } = await dispatch(ItemThunk.delete({ id: idToDelete! }));
 
         if (payload.message) {
             toast.success(payload.message);
@@ -73,9 +73,9 @@ export default function CrmServicesPage() {
 
     return (
         <div>
-            <Suspense><CrmServiceForm /></Suspense>
+            <Suspense><CrmItemForm /></Suspense>
             <Table>
-                <TableCaption>{allService?.data.length ? "A list of your services" : <>No service available, <Link className="text-blue-600" href={'/services?open=true'}>Create Now</Link></>}</TableCaption>
+                <TableCaption>{allItem?.data.length ? "A list of your items" : <>No item available, <Link className="text-blue-600" href={'/items?open=true'}>Create Now</Link></>}</TableCaption>
                 <TableHeader>
                     <TableRow>
                         <TableHead className="w-[50px]">##</TableHead>
@@ -86,14 +86,14 @@ export default function CrmServicesPage() {
                         <TableHead className="text-right w-[100px]">Action</TableHead>
                     </TableRow>
                 </TableHeader>
-                {allService && <TableBody>
-                    {allService.data?.map((service: IServiceModel, i: number) => (
-                        <TableRow key={`service_${i + 7863456}`}>
+                {allItem && <TableBody>
+                    {allItem.data?.map((item: IItemModel, i: number) => (
+                        <TableRow key={`item_${i + 7863456}`}>
                             <TableCell className="font-medium w-[50px]">{(i + 1).toString().padStart(2, '0')}</TableCell>
-                            <TableCell>{service.name}</TableCell>
-                            <TableCell>{service.description}</TableCell>
-                            <TableCell>{service.unit}</TableCell>
-                            <TableCell>{service.basePrice}</TableCell>
+                            <TableCell>{item.name}</TableCell>
+                            <TableCell>{item.description}</TableCell>
+                            <TableCell>{item.unit}</TableCell>
+                            <TableCell>{item.basePrice}</TableCell>
                             <TableCell className="text-right w-[100px] flex items-center justify-end">
 
                                 <DropdownMenu >
@@ -103,8 +103,8 @@ export default function CrmServicesPage() {
                                     <DropdownMenuContent align="end" className=" space-y-1 py-2">
                                         {/* <DropdownMenuLabel>Appearance</DropdownMenuLabel> */}
                                         {/* <DropdownMenuSeparator /> */}
-                                        <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push(`/services?open=true&id=${service._id}`)}>Edit</DropdownMenuItem>
-                                        <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => setIdToDelete(service._id)}>Delete</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push(`/items?open=true&id=${item._id}`)}>Edit</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => setIdToDelete(item._id)}>Delete</DropdownMenuItem>
 
                                     </DropdownMenuContent>
                                 </DropdownMenu>
@@ -114,7 +114,7 @@ export default function CrmServicesPage() {
                                         <DialogHeader>
                                             <DialogTitle>Are you absolutely sure?</DialogTitle>
                                             <DialogDescription>
-                                                This action cannot be undone. This will permanently delete service from our servers.
+                                                This action cannot be undone. This will permanently delete item from our servers.
                                             </DialogDescription>
                                         </DialogHeader>
                                         <DialogFooter>

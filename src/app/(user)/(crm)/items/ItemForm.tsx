@@ -14,8 +14,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useCsDispatch, useCsSelector } from "@/cs-redux"
-import { ServiceThunk } from "@/cs-redux/thunks/app/crm/service.thunk"
-import { INewService } from "@/types/crm/service.type"
+import { ItemThunk } from "@/cs-redux/thunks/app/crm/item.thunk"
+import { INewItem } from "@/types/crm/item.type"
 import { useRouter, useSearchParams } from "next/navigation"
 import { ChangeEvent, useEffect, useState } from "react"
 import {
@@ -30,17 +30,17 @@ import {
 import { CrmUnits, CrmUnitsType } from "@/constants/crm.constant"
 import { CsUtils } from "@/cs-toolkit"
 import { toast } from "sonner"
-import ServiceSlice from "@/cs-redux/slices/app/crm/service.slice"
+import ItemSlice from "@/cs-redux/slices/app/crm/item.slice"
 
 
-const defaultValue: INewService = {
+const defaultValue: INewItem = {
     name: "",
     description: "",
     unit: "fixed",
     basePrice: 0
 }
 
-export default function CrmServiceForm() {
+export default function CrmItemForm() {
     const searchParams = useSearchParams()
     const router = useRouter()
     const dispatch = useCsDispatch();
@@ -48,30 +48,30 @@ export default function CrmServiceForm() {
     const open = searchParams.get('open');
     const id = searchParams.get('id');
 
-    const { service } = useCsSelector(state => state.service);
-    const [formData, setFormData] = useState<INewService>(defaultValue)
+    const { item } = useCsSelector(state => state.item);
+    const [formData, setFormData] = useState<INewItem>(defaultValue)
 
 
     useEffect(() => {
-        if (id) dispatch(ServiceThunk.getById({ id }))
+        if (id) dispatch(ItemThunk.getById({ id }))
     }, [dispatch, id])
 
     useEffect(() => {
-        if (id && service) {
+        if (id && item) {
             setFormData({
-                name: service.name,
-                description: service.description,
-                basePrice: service.basePrice,
-                unit: service.unit,
+                name: item.name,
+                description: item.description,
+                basePrice: item.basePrice,
+                unit: item.unit,
             })
         }
-    }, [dispatch, id, service])
+    }, [dispatch, id, item])
 
 
     function onOpenChange() {
-        dispatch(ServiceSlice.actions.clearService({}));
+        dispatch(ItemSlice.actions.clearItem({}));
         setFormData(defaultValue);
-        router.push('/services');
+        router.push('/items');
     }
 
 
@@ -90,14 +90,14 @@ export default function CrmServiceForm() {
 
         // Dispatch
         let res;
-        if (id && service) {
-            res = await dispatch(ServiceThunk.update({ id, data: formData }))
+        if (id && item) {
+            res = await dispatch(ItemThunk.update({ id, data: formData }))
         } else {
-            res = await dispatch(ServiceThunk.create(formData))
+            res = await dispatch(ItemThunk.create(formData))
         }
 
         if (res.payload.message) {
-            router.push('/services');
+            router.push('/items');
             toast.success(res.payload.message);
             setFormData(defaultValue);
         }
@@ -114,9 +114,9 @@ export default function CrmServiceForm() {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>{id ? "Update Service" : "Add New Service"}</DialogTitle>
+                        <DialogTitle>{id ? "Update Item" : "Add New Item"}</DialogTitle>
                         <DialogDescription>
-                            Fill the details for the service
+                            Fill the details for the item
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-5">
@@ -126,12 +126,12 @@ export default function CrmServiceForm() {
                         </div>
                         <div className="grid gap-3">
                             <Label htmlFor="description-1">Description</Label>
-                            <Input id="description-1" name="description" type="text" value={formData.description} onChange={handleOnChange} placeholder="Describe the service (Optional)" />
+                            <Input id="description-1" name="description" type="text" value={formData.description} onChange={handleOnChange} placeholder="Describe the item (Optional)" />
                         </div>
                         <div className="grid gap-3 grid-cols-2">
                             <div className="grid gap-3">
                                 <Label htmlFor="basePrice-1">Base Price</Label>
-                                <Input id="basePrice-1" name="basePrice" type="number" value={formData.basePrice === 0 ? "" : formData.basePrice} onChange={handleOnChange} placeholder="Base price of service" />
+                                <Input id="basePrice-1" name="basePrice" type="number" value={formData.basePrice === 0 ? "" : formData.basePrice} onChange={handleOnChange} placeholder="Base price of item" />
                             </div>
                             <div className="grid gap-3">
                                 <Label htmlFor="description-1">Unit</Label>
@@ -157,7 +157,7 @@ export default function CrmServiceForm() {
                         <DialogClose asChild>
                             <Button size={'sm'} variant="outline">Cancel</Button>
                         </DialogClose>
-                        <Button onClick={onSubmit} size={'sm'} >{id ? "Update" : "Add Service"}</Button>
+                        <Button onClick={onSubmit} size={'sm'} >{id ? "Update" : "Add Item"}</Button>
                     </DialogFooter>
                 </DialogContent>
             </form>

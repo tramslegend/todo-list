@@ -41,8 +41,8 @@ const NavItems = [
         icon: LayoutDashboard,
     },
     {
-        title: "Services",
-        url: "/services",
+        title: "Items",
+        url: "/items",
         icon: LayoutDashboard,
     },
     {
@@ -95,7 +95,7 @@ export default function CrmLayout({ children }: Readonly<{ children: React.React
                                 {/* <DropdownMenuSeparator /> */}
                                 <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/clients/new')}>Client</DropdownMenuItem>
                                 <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/projects/new')}>Project</DropdownMenuItem>
-                                <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/services?open=true')}>Service</DropdownMenuItem>
+                                <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/items?open=true')}>Item</DropdownMenuItem>
                                 <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/invoices/new')}>Invoice</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>

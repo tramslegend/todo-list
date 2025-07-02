@@ -1,9 +1,9 @@
 "use client"
 
 import { useCsDispatch, useCsSelector } from "@/cs-redux";
-import { ServiceThunk } from "@/cs-redux/thunks/app/crm/service.thunk";
+import { ItemThunk } from "@/cs-redux/thunks/app/crm/item.thunk";
 import { ChangeEvent, useEffect, useState } from "react";
-import { INewService, IServiceModel } from "@/types/crm/service.type";
+import { INewItem, IItemModel } from "@/types/crm/item.type";
 import { TypographyH3, TypographyP, TypographySmall } from "../ui/typography";
 import SearchInput from "@/components/utils/SearchInput";
 import { Button } from "../ui/button";
@@ -23,29 +23,29 @@ import {
 } from "@/components/ui/select"
 import { CrmUnits, CrmUnitsType, getUnitLabel } from "@/constants/crm.constant";
 
-const defaultValue: INewService = {
+const defaultValue: INewItem = {
     name: "",
     description: "",
     unit: "fixed",
     basePrice: 0
 }
 
-export default function ServiceSelector({ service, setService }: { service?: IServiceModel; setService: ((service: IServiceModel) => void) }) {
+export default function ItemSelector({ item, setItem }: { item?: IItemModel; setItem: ((item: IItemModel) => void) }) {
     const dispatch = useCsDispatch();
-    const { allService } = useCsSelector((state) => state.service);
+    const { allItem } = useCsSelector((state) => state.item);
 
 
-    const [newService, setNewService] = useState<boolean>(false)
+    const [newItem, setNewItem] = useState<boolean>(false)
     const [page, setPage] = useState<number>(1)
     const [query, setQuery] = useState<string>('')
-    const [formData, setFormData] = useState<INewService>(defaultValue)
+    const [formData, setFormData] = useState<INewItem>(defaultValue)
 
     useEffect(() => {
-        dispatch(ServiceThunk.getAll({ page, limit: 100, query }))
+        dispatch(ItemThunk.getAll({ page, limit: 100, query }))
     }, [dispatch, page, query])
 
 
-    // New Service
+    // New Item
     function handleOnChange(e: ChangeEvent<HTMLInputElement>) {
         setFormData({
             ...formData,
@@ -60,12 +60,12 @@ export default function ServiceSelector({ service, setService }: { service?: ISe
 
 
         // Dispatch
-        const res = await dispatch(ServiceThunk.create(formData))
+        const res = await dispatch(ItemThunk.create(formData))
 
         if (res.payload.message) {
             toast.success(res.payload.message);
             setFormData(defaultValue);
-            setNewService(false)
+            setNewItem(false)
         }
         else if (res.payload.error) {
             toast.error(res.payload.error);
@@ -76,20 +76,20 @@ export default function ServiceSelector({ service, setService }: { service?: ISe
 
     return (
         <div>
-            <TypographyH3 className="mb-3">{newService ? "Add New Service" : "Select Service"}</TypographyH3>
+            <TypographyH3 className="mb-3">{newItem ? "Add New Item" : "Select Item"}</TypographyH3>
 
-            {!newService ?
+            {!newItem ?
                 <div>
                     <div className="h-8 mb-3 flex gap-3">
                         <SearchInput setQuery={(q) => setQuery(q)} />
-                        <Button size={'sm'} onClick={() => setNewService(true)}>New</Button>
+                        <Button size={'sm'} onClick={() => setNewItem(true)}>New</Button>
                     </div>
                     <div className="grid max-h-[20rem] overflow-y-auto">
-                        {allService?.data.map((service: IServiceModel, i: number) => (
-                            <div className="mb-3 cursor-pointer bg-accent/30 hover:bg-accent/50  px-3 py-1 rounded-lg" key={`service_${service._id}${i + 9786}`} onClick={() => { setService(service) }}>
-                                <TypographyP className='font-bold'>{service.name}</TypographyP>
-                                {service.description && <><TypographyP className='text-muted-foreground text-[12px]'>{service.description}</TypographyP></>}
-                                <TypographyP className='text-muted-foreground text-[12px] font-semibold mt-1'>{CURRENCY} {service.basePrice} {getUnitLabel(service.unit)}</TypographyP>
+                        {allItem?.data.map((item: IItemModel, i: number) => (
+                            <div className="mb-3 cursor-pointer bg-accent/30 hover:bg-accent/50  px-3 py-1 rounded-lg" key={`item_${item._id}${i + 9786}`} onClick={() => { setItem(item) }}>
+                                <TypographyP className='font-bold'>{item.name}</TypographyP>
+                                {item.description && <><TypographyP className='text-muted-foreground text-[12px]'>{item.description}</TypographyP></>}
+                                <TypographyP className='text-muted-foreground text-[12px] font-semibold mt-1'>{CURRENCY} {item.basePrice} {getUnitLabel(item.unit)}</TypographyP>
                             </div>
                         ))}
                     </div>
@@ -103,12 +103,12 @@ export default function ServiceSelector({ service, setService }: { service?: ISe
                         </div>
                         <div className="grid gap-3">
                             <Label htmlFor="description-1">Description</Label>
-                            <Input id="description-1" name="description" type="text" value={formData.description} onChange={handleOnChange} placeholder="Describe the service (Optional)" />
+                            <Input id="description-1" name="description" type="text" value={formData.description} onChange={handleOnChange} placeholder="Describe the item (Optional)" />
                         </div>
                         <div className="grid gap-3 grid-cols-2">
                             <div className="grid gap-3">
                                 <Label htmlFor="basePrice-1">Base Price</Label>
-                                <Input id="basePrice-1" name="basePrice" type="number" value={formData.basePrice === 0 ? "" : formData.basePrice} onChange={handleOnChange} placeholder="Base price of service" />
+                                <Input id="basePrice-1" name="basePrice" type="number" value={formData.basePrice === 0 ? "" : formData.basePrice} onChange={handleOnChange} placeholder="Base price of item" />
                             </div>
                             <div className="grid gap-3">
                                 <Label htmlFor="description-1">Unit</Label>
@@ -131,7 +131,7 @@ export default function ServiceSelector({ service, setService }: { service?: ISe
                         </div>
                     </div>
                     <div className="mt-5 space-x-3">
-                        <Button onClick={() => { setNewService(false); setFormData(defaultValue) }} size={'sm'} variant="outline">Cancel</Button>
+                        <Button onClick={() => { setNewItem(false); setFormData(defaultValue) }} size={'sm'} variant="outline">Cancel</Button>
                         <Button onClick={onSubmit} size={'sm'} >Submit</Button>
                     </div>
                 </div>

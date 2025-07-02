@@ -57,7 +57,7 @@ export async function middleware(req: NextRequest) {
             pathName.startsWith('/dashboard') ||
             pathName.startsWith('/clients') ||
             pathName.startsWith('/projects') ||
-            pathName.startsWith('/services') ||
+            pathName.startsWith('/items') ||
             pathName.startsWith('/invoices') ||
             pathName.startsWith('/transactions') ||
             pathName.startsWith('/archive') ||
@@ -114,7 +114,7 @@ export const config = {
         '/dashboard/:path*',
         '/clients/:path*',
         '/projects/:path*',
-        '/services/:path*',
+        '/items/:path*',
         '/invoices/:path*',
         '/transactions/:path*',
 

@@ -1,12 +1,12 @@
 import ApiManager from "@/configs/api.config";
-import { INewService } from "@/types/crm/service.type";
+import { INewItem } from "@/types/crm/item.type";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export class ServiceThunk {
+export class ItemThunk {
     static create = createAsyncThunk(
-        "ServiceThunk/create",
+        "ItemThunk/create",
 
-        async (payload: INewService, { rejectWithValue, fulfillWithValue }) => {
+        async (payload: INewItem, { rejectWithValue, fulfillWithValue }) => {
             try {
                 const { data } = await ApiManager.post(`/app/crm/item/create`, payload);
 
@@ -19,9 +19,9 @@ export class ServiceThunk {
 
 
     static update = createAsyncThunk(
-        "ServiceThunk/update",
+        "ItemThunk/update",
 
-        async (payload: { id: string; data: INewService }, { rejectWithValue, fulfillWithValue }) => {
+        async (payload: { id: string; data: INewItem }, { rejectWithValue, fulfillWithValue }) => {
             try {
                 const { data } = await ApiManager.patch(`/app/crm/item/update/${payload.id}`, payload.data);
 
@@ -34,7 +34,7 @@ export class ServiceThunk {
 
 
     static getAll = createAsyncThunk(
-        "ServiceThunk/getAll",
+        "ItemThunk/getAll",
 
         async (payload: { page: number, limit: number, query?: string }, { rejectWithValue, fulfillWithValue }) => {
             try {
@@ -55,7 +55,7 @@ export class ServiceThunk {
 
 
     static getById = createAsyncThunk(
-        "ServiceThunk/getById",
+        "ItemThunk/getById",
 
         async (payload: { id: string }, { rejectWithValue, fulfillWithValue }) => {
             try {
@@ -70,7 +70,7 @@ export class ServiceThunk {
 
 
     static delete = createAsyncThunk(
-        "ServiceThunk/delete",
+        "ItemThunk/delete",
 
         async (payload: { id: string }, { rejectWithValue, fulfillWithValue }) => {
             try {

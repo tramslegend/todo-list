@@ -1,5 +1,5 @@
 import { CrmProjectPriorityType, CrmProjectStatusType, CrmUnitsType } from "@/constants/crm.constant";
-import { IServicesItem } from "./service.type";
+import { IInvoiceItem } from "./item.type";
 
 
 
@@ -7,7 +7,7 @@ export interface INewProject {
     clientId: string;
     name: string;
     description?: string;
-    services: IServicesItem[];
+    items: IInvoiceItem[];
     startDate?: Date;
     dueDate?: Date;
     note?: string;
@@ -23,7 +23,7 @@ export interface IProjectModel {
     status: CrmProjectStatusType;
     priority?: CrmProjectPriorityType;
     totalAmount: number;
-    services: IServicesItem[];
+    items: IInvoiceItem[];
     startDate?: Date;
     dueDate?: Date;
     completedAt?: Date;
