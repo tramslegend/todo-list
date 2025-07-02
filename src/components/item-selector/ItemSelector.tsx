@@ -84,7 +84,7 @@ export default function ItemSelector({ item, setItem }: { item?: IItemModel; set
                         <SearchInput setQuery={(q) => setQuery(q)} />
                         <Button size={'sm'} onClick={() => setNewItem(true)}>New</Button>
                     </div>
-                    <div className="grid max-h-[20rem] overflow-y-auto">
+                    <div className="grid max-h-[20rem] min-h-[20rem] overflow-y-auto">
                         {allItem?.data.map((item: IItemModel, i: number) => (
                             <div className="mb-3 cursor-pointer bg-accent/30 hover:bg-accent/50  px-3 py-1 rounded-lg" key={`item_${item._id}${i + 9786}`} onClick={() => { setItem(item) }}>
                                 <TypographyP className='font-bold'>{item.name}</TypographyP>
