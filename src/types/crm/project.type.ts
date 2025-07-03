@@ -7,9 +7,9 @@ export interface INewProject {
     clientId: string;
     name: string;
     description?: string;
-    items: IInvoiceItem[];
-    startDate?: Date;
-    dueDate?: Date;
+    startDate: Date;
+    dueDate: Date;
+    priority: CrmProjectPriorityType;
     note?: string;
 }
 
@@ -21,14 +21,14 @@ export interface IProjectModel {
     description?: string;
 
     status: CrmProjectStatusType;
-    priority?: CrmProjectPriorityType;
-    totalAmount: number;
-    items: IInvoiceItem[];
-    startDate?: Date;
-    dueDate?: Date;
+    priority: CrmProjectPriorityType;
+    startDate: Date;
+    dueDate: Date;
     completedAt?: Date;
 
     note?: string;
+    isArchived: boolean;
+    archivedAt: Date;
 
     createdAt?: Date;
     updatedAt?: Date;

@@ -118,10 +118,7 @@ const ProjectSlice = createSlice({
             })
             .addCase(ProjectThunk.archive.fulfilled, (state, { payload }) => {
                 state.loading = false;
-
-                if (state.allProject) {
-                    state.allProject.data = state.allProject.data.filter(project => project._id !== payload.project._id);
-                }
+                state.project = payload.project;
 
             })
             .addCase(ProjectThunk.archive.rejected, (state, _) => {
@@ -136,6 +133,7 @@ const ProjectSlice = createSlice({
             })
             .addCase(ProjectThunk.restore.fulfilled, (state, { payload }) => {
                 state.loading = false;
+                state.project = payload.project;
             })
             .addCase(ProjectThunk.restore.rejected, (state, _) => {
                 state.loading = false;

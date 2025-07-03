@@ -2,19 +2,20 @@
 
 // Project ---
 export const CrmProjectStatus = {
-    PENDING: 'pending',
-    IN_PROGRESS: 'in_progress',
-    COMPLETED: 'completed',
-    CANCELLED: 'cancelled',
+    DRAFT: 'Draft',
+    PENDING: 'Pending',
+    IN_PROGRESS: 'In Progress',
+    COMPLETED: 'Completed',
+    CANCELLED: 'Cancelled',
 } as const;
 
 export type CrmProjectStatusType = typeof CrmProjectStatus[keyof typeof CrmProjectStatus];
 
 export const CrmProjectPriority = {
-    LOW: 'low',
-    MEDIUM: 'medium',
-    HIGH: 'high',
-    NA: 'na',
+    HIGH: 'High',
+    MEDIUM: 'Medium',
+    LOW: 'Low',
+    NA: 'NA',
 } as const;
 
 export type CrmProjectPriorityType = typeof CrmProjectPriority[keyof typeof CrmProjectPriority];
@@ -23,11 +24,12 @@ export type CrmProjectPriorityType = typeof CrmProjectPriority[keyof typeof CrmP
 
 // Invoice
 export const CrmInvoiceStatus = {
-    DRAFT: 'draft',
-    SENT: 'sent',
-    PARTIAL: 'partial',
-    PAID: 'paid',
-    CANCELLED: 'cancelled',
+    DRAFT: 'Draft',
+    SENT: 'Sent',
+    PARTIAL: 'Partial',
+    PAID: 'Paid',
+    UNPAID: 'Unpaid',
+    CANCELLED: 'Cancelled',
 } as const;
 
 export type CrmInvoiceStatusType = typeof CrmInvoiceStatus[keyof typeof CrmInvoiceStatus];

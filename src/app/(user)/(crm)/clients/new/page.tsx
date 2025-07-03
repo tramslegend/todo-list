@@ -74,11 +74,9 @@ export default function CrmAddClientPage() {
         if (payload.message) {
             toast.success(payload.message);
             form.reset()
-            if (id && client) {
-                router.back();
-            } else {
-                setNewClientList([payload.client, ...newClientList]);
-            }
+            router.replace(`/clients/${payload.client._id}`);
+            if (!id) setNewClientList([payload.client, ...newClientList]);
+
         }
         else if (payload.error) {
             toast.error(payload.error);

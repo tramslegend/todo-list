@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/dialog"
 import ItemSelector from './ItemSelector';
 import { toast } from 'sonner';
-import { TypographyH3, TypographyH4, TypographyP } from '../ui/typography';
+import { TypographyH3, TypographyH4, TypographyP } from '@/components/ui/typography';
 import { CURRENCY } from '@/root.config';
 import { getUnitLabel } from '@/constants/crm.constant';
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 
 export default function InvoiceItemsForm({ items, setItems, }: { items: IInvoiceItem[]; setItems: ((items: IInvoiceItem[]) => void) }) {
@@ -81,6 +81,7 @@ export default function InvoiceItemsForm({ items, setItems, }: { items: IInvoice
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle></DialogTitle>
+                        <DialogDescription></DialogDescription>
                     </DialogHeader>
                     <ItemSelector setItem={onSelectItem} />
                 </DialogContent>

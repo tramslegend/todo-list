@@ -90,6 +90,7 @@ const ClientSlice = createSlice({
             })
             .addCase(ClientThunk.archive.fulfilled, (state, { payload }) => {
                 state.loading = false;
+                state.client = payload.client;
             })
             .addCase(ClientThunk.archive.rejected, (state, _) => {
                 state.loading = false;
@@ -102,6 +103,7 @@ const ClientSlice = createSlice({
             })
             .addCase(ClientThunk.restore.fulfilled, (state, { payload }) => {
                 state.loading = false;
+                state.client = payload.client;
             })
             .addCase(ClientThunk.restore.rejected, (state, _) => {
                 state.loading = false;

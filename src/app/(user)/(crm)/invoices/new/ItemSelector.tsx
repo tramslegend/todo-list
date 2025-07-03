@@ -4,14 +4,14 @@ import { useCsDispatch, useCsSelector } from "@/cs-redux";
 import { ItemThunk } from "@/cs-redux/thunks/app/crm/item.thunk";
 import { ChangeEvent, useEffect, useState } from "react";
 import { INewItem, IItemModel } from "@/types/crm/item.type";
-import { TypographyH3, TypographyP, TypographySmall } from "../ui/typography";
+import { TypographyH3, TypographyP, TypographySmall } from "../../../../../components/ui/typography";
 import SearchInput from "@/components/utils/SearchInput";
-import { Button } from "../ui/button";
+import { Button } from "../../../../../components/ui/button";
 import { CURRENCY } from "@/root.config";
 import { CsUtils } from "@/cs-toolkit";
 import { toast } from "sonner";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { Label } from "../../../../../components/ui/label";
+import { Input } from "../../../../../components/ui/input";
 import {
     Select,
     SelectContent,
