@@ -1,6 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Filter, LayoutDashboard, Settings, Users } from "lucide-react";
+import { ArrowLeftRight, BriefcaseBusiness, ChevronDown, LayoutDashboard, ScrollText, Shapes, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import CsSearchbar from "../admin/sidebar/nav-searchbar";
@@ -8,8 +8,6 @@ import Container from "@/components/utils/Container";
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
@@ -38,22 +36,22 @@ const NavItems = [
     {
         title: "Projects",
         url: "/projects",
-        icon: LayoutDashboard,
+        icon: BriefcaseBusiness,
     },
     {
         title: "Items",
         url: "/items",
-        icon: LayoutDashboard,
+        icon: Shapes,
     },
     {
         title: "Invoices",
         url: "/invoices",
-        icon: LayoutDashboard,
+        icon: ScrollText,
     },
     {
         title: "Transactions",
         url: "/transactions",
-        icon: LayoutDashboard,
+        icon: ArrowLeftRight,
     },
 
 ]

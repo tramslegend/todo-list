@@ -61,7 +61,7 @@ export default function CrmNewProjectPage() {
 
 
     useEffect(() => {
-        if (project) {
+        if (id && project) {
             setFormData(
                 {
                     name: project.name,
@@ -73,8 +73,10 @@ export default function CrmNewProjectPage() {
                     note: project.note,
                 }
             )
+        } else {
+            setFormData(defaultValue)
         }
-    }, [project])
+    }, [id, project])
 
 
     async function onSubmit() {

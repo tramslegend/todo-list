@@ -18,6 +18,8 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import ProjectStatus from "./ProjectStatus"
+import { CrmProjectPriority } from "@/constants/crm.constant"
+import ProjectPriority from "./ProjectPriority"
 
 export default function CrmProjectsPage() {
     const router = useRouter()
@@ -58,9 +60,9 @@ export default function CrmProjectsPage() {
                                     ? `${project.description.slice(0, 35).trim()} ...`
                                     : project.description}
                             </TableCell>
-                            <TableCell className="text-center">{new Date(project.startDate!)?.toLocaleDateString('en-US')}</TableCell>
-                            <TableCell className="text-center">{new Date(project.dueDate!)?.toLocaleDateString('en-US')}</TableCell>
-                            <TableCell className="text-center">{project.priority}</TableCell>
+                            <TableCell className="text-center">{new Date(project.startDate!)?.toLocaleDateString('en-GB')}</TableCell>
+                            <TableCell className="text-center">{new Date(project.dueDate!)?.toLocaleDateString('en-GB')}</TableCell>
+                            <TableCell className="text-center">{project.priority !== CrmProjectPriority.NA && <ProjectPriority id={project._id} priority={project.priority} />}</TableCell>
                             <TableCell><ProjectStatus id={project._id} status={project.status} /></TableCell>
                             <TableCell className="text-right  flex items-center justify-end">
                                 <Button variant={'ghost'} onClick={() => { router.push(`/projects/${project._id}`) }}><MoveRight /></Button>
