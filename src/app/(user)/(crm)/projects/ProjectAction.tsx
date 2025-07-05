@@ -38,7 +38,7 @@ export default function ProjectAction({ project }: { project: IProjectModel, }) 
 
         if (payload.message) {
             toast.success(payload.message);
-            router.back();
+            router.replace('/projects')
         }
         else if (payload.error) {
             toast.error(payload.error);

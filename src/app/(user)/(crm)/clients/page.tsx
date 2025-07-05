@@ -17,6 +17,7 @@ import { MoveRight } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import ClientAction from "./ClientAction"
 
 export default function CrmClientsPage() {
     const router = useRouter()
@@ -59,9 +60,10 @@ export default function CrmClientsPage() {
                                     ? `${client.address.slice(0, 35)}...`
                                     : client.address}
                             </TableCell>
-                            <TableCell>{client.companyName ? client.companyName : "Individual"}</TableCell>
+                            <TableCell className={`${client.isIndividual && "text-muted-foreground"}`}>{client.companyName ? client.companyName : "Individual"}</TableCell>
                             <TableCell className="text-right w-[100px] flex items-center justify-end">
                                 <Button variant={'ghost'} onClick={() => { router.push(`/clients/${client._id}`) }}><MoveRight /></Button>
+                                <ClientAction client={client} />
                             </TableCell>
                         </TableRow>
                     ))}

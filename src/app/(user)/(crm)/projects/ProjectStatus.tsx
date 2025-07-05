@@ -27,7 +27,7 @@ import { useCsDispatch } from "@/cs-redux";
 import { ProjectThunk } from "@/cs-redux/thunks/app/crm/project.thunk";
 import { IProjectModel } from "@/types/crm/project.type";
 
-export default function ProjectStatus({ project }: { project: IProjectModel }) {
+export default function ProjectStatus({ project, disabled = false }: { project: IProjectModel; disabled?: boolean }) {
     const dispatch = useCsDispatch();
 
     const [open, setOpen] = useState<boolean>(false)
@@ -73,7 +73,7 @@ export default function ProjectStatus({ project }: { project: IProjectModel }) {
     return (
 
         <>
-            <button onClick={() => setOpen(true)} className={`border  text-xs px-3 py-1 rounded-full text-center cursor-pointer ${color}`}>
+            <button onClick={() => setOpen(true)} className={`border  text-xs px-3 py-1 rounded-full text-center cursor-pointer ${color}`} disabled={disabled}>
                 {project.status}
             </button>
             {project.status === CrmProjectStatus.COMPLETED && <span className="text-[11px] mt-1 text-muted-foreground block">{(new Date(project.completedAt!)).toLocaleDateString('en-GB')}</span>}

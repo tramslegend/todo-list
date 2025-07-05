@@ -36,6 +36,7 @@ export default function CrmNewProjectPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
+    const clientId = searchParams.get('client');
 
     const { project, loading } = useCsSelector(state => state.project);
 
@@ -53,8 +54,12 @@ export default function CrmNewProjectPage() {
 
     useEffect(() => {
         if (id && (!project || project._id !== id)) dispatch(ProjectThunk.getById({ id }))
-
     }, [dispatch, id, project])
+
+
+    useEffect(() => {
+        if (clientId) setFormData({ ...defaultValue, clientId })
+    }, [clientId])
 
 
     useEffect(() => {
@@ -71,9 +76,10 @@ export default function CrmNewProjectPage() {
                 }
             )
         } else {
-            setFormData(defaultValue)
+            if (clientId) setFormData({ ...defaultValue, clientId })
+            else setFormData(defaultValue)
         }
-    }, [id, project])
+    }, [clientId, id, project])
 
 
     async function onSubmit() {
@@ -116,8 +122,8 @@ export default function CrmNewProjectPage() {
                         <Input id="description-1" name="description" type="text" value={formData.description} onChange={handleOnChange} placeholder="Project description (Optional)" />
                     </div>
                     <div className='space-y-1.5'>
-                        <Label htmlFor="description-1">Client</Label>
-                        <ClientIdSelector disabled={id !== null || undefined} clientId={formData.clientId} setClientId={(id: string) => setFormData({ ...formData, clientId: id })} />
+                        <Label htmlFor="-1">Client</Label>
+                        <ClientIdSelector disabled={typeof id === 'string' || typeof clientId === 'string'} clientId={formData.clientId} setClientId={(id: string) => setFormData({ ...formData, clientId: id })} />
                     </div>
                 </div>
 
@@ -138,7 +144,7 @@ export default function CrmNewProjectPage() {
 
                 <div className="grid grid-cols-3 gap-3 items-start">
                     <div className='space-y-1.5 '>
-                        <Label htmlFor="startDate-1">Priority</Label>
+                        <Label htmlFor="Priority-1">Priority</Label>
                         <Select value={formData.priority} onValueChange={(v: CrmProjectPriorityType) => setFormData({ ...formData, priority: v })}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Priority" />

@@ -28,7 +28,7 @@ import { ProjectThunk } from "@/cs-redux/thunks/app/crm/project.thunk";
 import { IProjectModel } from "@/types/crm/project.type";
 
 
-export default function ProjectPriority({ project }: { project: IProjectModel }) {
+export default function ProjectPriority({ project, disabled = false }: { project: IProjectModel; disabled?: boolean }) {
     const dispatch = useCsDispatch();
 
     const [open, setOpen] = useState<boolean>(false)
@@ -73,7 +73,7 @@ export default function ProjectPriority({ project }: { project: IProjectModel })
 
     return (
         <>
-            <button onClick={() => setOpen(true)} className={`border  text-xs px-3 py-1 rounded-full text-center cursor-pointer ${color}`}>
+            <button onClick={() => setOpen(true)} className={`border  text-xs px-3 py-1 rounded-full text-center cursor-pointer ${color}`} disabled={disabled}>
                 {project.priority}
             </button>
             <Dialog open={open} onOpenChange={() => setOpen(false)}>

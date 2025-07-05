@@ -55,18 +55,18 @@ export default function CrmProjectsPage() {
                     {allProject.data?.map((project: IProjectModel, i: number) => (
                         <TableRow key={`client_${i + 7863456}`} className="group">
                             <TableCell className="font-medium w-[50px]">{(i + 1).toString().padStart(2, '0')}</TableCell>
-                            <TableCell onClick={() => { router.push(`/projects/${project._id}`) }} className="font-bold group-hover:underline cursor-pointer">{project.name}</TableCell>
-                            <TableCell className="max-w-[12rem] overflow-hidden group-hover:underline cursor-pointer" onClick={() => { router.push(`/projects/${project._id}`) }}>
+                            <TableCell className="font-bold ">{project.name}</TableCell>
+                            <TableCell className="max-w-[12rem] overflow-hidden " >
                                 {project.description && project.description.length > 35
                                     ? `${project.description.slice(0, 35).trim()} ...`
                                     : project.description}
                             </TableCell>
-                            <TableCell onClick={() => { router.push(`/projects/${project._id}`) }} className="text-center group-hover:underline cursor-pointer">{new Date(project.startDate!)?.toLocaleDateString('en-GB')}</TableCell>
-                            <TableCell onClick={() => { router.push(`/projects/${project._id}`) }} className="text-center group-hover:underline cursor-pointer">{new Date(project.dueDate!)?.toLocaleDateString('en-GB')}</TableCell>
+                            <TableCell className="text-center ">{new Date(project.startDate!)?.toLocaleDateString('en-GB')}</TableCell>
+                            <TableCell className="text-center ">{new Date(project.dueDate!)?.toLocaleDateString('en-GB')}</TableCell>
                             <TableCell className="text-center">{project.priority !== CrmProjectPriority.NA && <ProjectPriority project={project} />}</TableCell>
                             <TableCell className="text-center"><ProjectStatus project={project} /></TableCell>
                             <TableCell className="text-right  flex items-center justify-end">
-                                {/* <Button variant={'ghost'} ><Eye /></Button> */}
+                                <Button onClick={() => { router.push(`/projects/${project._id}`) }} variant={'ghost'} ><MoveRight /></Button>
                                 <ProjectAction project={project} />
                             </TableCell>
                         </TableRow>

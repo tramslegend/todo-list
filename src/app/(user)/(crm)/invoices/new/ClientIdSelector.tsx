@@ -47,7 +47,7 @@ export default function ClientIdSelector({ clientId, setClientId, disabled = fal
 
     // Fetch the associated client if it not in array
     useEffect(() => {
-        if (clientId && !allClient?.data.some(client => client._id === clientId) && disabled && !client) {
+        if (clientId && disabled && (!client || clientId !== client._id)) {
             dispatch(ClientThunk.getById({ id: clientId }))
         }
     }, [clientId, allClient?.data, disabled, dispatch, client]);

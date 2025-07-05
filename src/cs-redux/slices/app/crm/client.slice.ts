@@ -53,6 +53,12 @@ const ClientSlice = createSlice({
             .addCase(ClientThunk.update.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 state.client = payload.client;
+
+                // Update UI (Array)
+                const index = state.allClient?.data.findIndex(client => client._id === payload.client._id);
+                if (index !== -1 && state.allClient) {
+                    state.allClient.data[index!] = payload.client;
+                }
             })
             .addCase(ClientThunk.update.rejected, (state, _) => {
                 state.loading = false;
@@ -95,6 +101,11 @@ const ClientSlice = createSlice({
             .addCase(ClientThunk.archive.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 state.client = payload.client;
+
+                // Remover from UI (Array)
+                if (state.allClient) {
+                    state.allClient.data = state.allClient.data.filter(client => client._id !== payload.client._id);
+                }
             })
             .addCase(ClientThunk.archive.rejected, (state, _) => {
                 state.loading = false;
@@ -120,6 +131,11 @@ const ClientSlice = createSlice({
             })
             .addCase(ClientThunk.delete.fulfilled, (state, { payload }) => {
                 state.loading = false;
+
+                // Remover from UI (Array)
+                if (state.allClient) {
+                    state.allClient.data = state.allClient.data.filter(client => client._id !== payload.client._id);
+                }
             })
             .addCase(ClientThunk.delete.rejected, (state, _) => {
                 state.loading = false;
