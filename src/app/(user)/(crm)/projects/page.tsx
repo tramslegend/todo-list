@@ -13,13 +13,14 @@ import {
 import { useCsDispatch, useCsSelector } from "@/cs-redux"
 import { ProjectThunk } from "@/cs-redux/thunks/app/crm/project.thunk"
 import { IProjectModel } from "@/types/crm/project.type"
-import { MoveRight } from "lucide-react"
+import { Eye, MoveRight } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import ProjectStatus from "./ProjectStatus"
 import { CrmProjectPriority } from "@/constants/crm.constant"
 import ProjectPriority from "./ProjectPriority"
+import ProjectAction from "./ProjectAction"
 
 export default function CrmProjectsPage() {
     const router = useRouter()
@@ -52,20 +53,21 @@ export default function CrmProjectsPage() {
                 </TableHeader>
                 {allProject && <TableBody>
                     {allProject.data?.map((project: IProjectModel, i: number) => (
-                        <TableRow key={`client_${i + 7863456}`}>
+                        <TableRow key={`client_${i + 7863456}`} className="group">
                             <TableCell className="font-medium w-[50px]">{(i + 1).toString().padStart(2, '0')}</TableCell>
-                            <TableCell className="font-bold">{project.name}</TableCell>
-                            <TableCell className="max-w-[12rem] overflow-hidden">
+                            <TableCell onClick={() => { router.push(`/projects/${project._id}`) }} className="font-bold group-hover:underline cursor-pointer">{project.name}</TableCell>
+                            <TableCell className="max-w-[12rem] overflow-hidden group-hover:underline cursor-pointer" onClick={() => { router.push(`/projects/${project._id}`) }}>
                                 {project.description && project.description.length > 35
                                     ? `${project.description.slice(0, 35).trim()} ...`
                                     : project.description}
                             </TableCell>
-                            <TableCell className="text-center">{new Date(project.startDate!)?.toLocaleDateString('en-GB')}</TableCell>
-                            <TableCell className="text-center">{new Date(project.dueDate!)?.toLocaleDateString('en-GB')}</TableCell>
-                            <TableCell className="text-center">{project.priority !== CrmProjectPriority.NA && <ProjectPriority id={project._id} priority={project.priority} />}</TableCell>
-                            <TableCell><ProjectStatus id={project._id} status={project.status} /></TableCell>
+                            <TableCell onClick={() => { router.push(`/projects/${project._id}`) }} className="text-center group-hover:underline cursor-pointer">{new Date(project.startDate!)?.toLocaleDateString('en-GB')}</TableCell>
+                            <TableCell onClick={() => { router.push(`/projects/${project._id}`) }} className="text-center group-hover:underline cursor-pointer">{new Date(project.dueDate!)?.toLocaleDateString('en-GB')}</TableCell>
+                            <TableCell className="text-center">{project.priority !== CrmProjectPriority.NA && <ProjectPriority project={project} />}</TableCell>
+                            <TableCell className="text-center"><ProjectStatus project={project} /></TableCell>
                             <TableCell className="text-right  flex items-center justify-end">
-                                <Button variant={'ghost'} onClick={() => { router.push(`/projects/${project._id}`) }}><MoveRight /></Button>
+                                {/* <Button variant={'ghost'} ><Eye /></Button> */}
+                                <ProjectAction project={project} />
                             </TableCell>
                         </TableRow>
                     ))}

@@ -52,12 +52,9 @@ export default function CrmNewProjectPage() {
 
 
     useEffect(() => {
-        if (id) dispatch(ProjectThunk.getById({ id }))
+        if (id && (!project || project._id !== id)) dispatch(ProjectThunk.getById({ id }))
 
-        // return () => {
-        //     if (id) dispatch(ProjectSlice.actions.clearProject({}))
-        // }
-    }, [dispatch, id])
+    }, [dispatch, id, project])
 
 
     useEffect(() => {
@@ -120,7 +117,7 @@ export default function CrmNewProjectPage() {
                     </div>
                     <div className='space-y-1.5'>
                         <Label htmlFor="description-1">Client</Label>
-                        <ClientIdSelector clientId={formData.clientId} setClientId={(id: string) => setFormData({ ...formData, clientId: id })} />
+                        <ClientIdSelector disabled={id !== null || undefined} clientId={formData.clientId} setClientId={(id: string) => setFormData({ ...formData, clientId: id })} />
                     </div>
                 </div>
 

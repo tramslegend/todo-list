@@ -55,12 +55,55 @@ const ProjectSlice = createSlice({
                 state.loading = false;
                 state.project = payload.project;
 
+                // Update UI (Array)
                 const index = state.allProject?.data.findIndex(project => project._id === payload.project._id);
                 if (index !== -1 && state.allProject) {
                     state.allProject.data[index!] = payload.project;
                 }
             })
             .addCase(ProjectThunk.update.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+                state.project = undefined;
+            })
+
+
+        builder
+            .addCase(ProjectThunk.updateStatus.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ProjectThunk.updateStatus.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.project = payload.project;
+
+                // Update UI (Array)
+                const index = state.allProject?.data.findIndex(project => project._id === payload.project._id);
+                if (index !== -1 && state.allProject) {
+                    state.allProject.data[index!] = payload.project;
+                }
+            })
+            .addCase(ProjectThunk.updateStatus.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+                state.project = undefined;
+            })
+
+
+        builder
+            .addCase(ProjectThunk.updatePriority.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ProjectThunk.updatePriority.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.project = payload.project;
+
+                // Update UI (Array)
+                const index = state.allProject?.data.findIndex(project => project._id === payload.project._id);
+                if (index !== -1 && state.allProject) {
+                    state.allProject.data[index!] = payload.project;
+                }
+            })
+            .addCase(ProjectThunk.updatePriority.rejected, (state, _) => {
                 state.loading = false;
                 state.notFound = true;
                 state.project = undefined;
@@ -120,6 +163,11 @@ const ProjectSlice = createSlice({
                 state.loading = false;
                 state.project = payload.project;
 
+                // Remover from UI (Array)
+                if (state.allProject) {
+                    state.allProject.data = state.allProject.data.filter(project => project._id !== payload.project._id);
+                }
+
             })
             .addCase(ProjectThunk.archive.rejected, (state, _) => {
                 state.loading = false;
@@ -148,6 +196,7 @@ const ProjectSlice = createSlice({
             .addCase(ProjectThunk.delete.fulfilled, (state, { payload }) => {
                 state.loading = false;
 
+                // remover from UI (Array)
                 if (state.allProject) {
                     state.allProject.data = state.allProject.data.filter(project => project._id !== payload.project._id);
                 }

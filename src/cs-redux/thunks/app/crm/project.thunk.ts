@@ -32,6 +32,34 @@ export class ProjectThunk {
         }
     )
 
+    static updateStatus = createAsyncThunk(
+        "ProjectThunk/updateStatus",
+
+        async (payload: { id: string; data: { status: string } }, { rejectWithValue, fulfillWithValue }) => {
+            try {
+                const { data } = await ApiManager.patch(`/app/crm/project/update/status/${payload.id}`, payload.data);
+
+                return fulfillWithValue(data)
+            } catch (error: any) {
+                return rejectWithValue(error.response.data);
+            }
+        }
+    )
+
+    static updatePriority = createAsyncThunk(
+        "ProjectThunk/updatePriority",
+
+        async (payload: { id: string; data: { priority: string } }, { rejectWithValue, fulfillWithValue }) => {
+            try {
+                const { data } = await ApiManager.patch(`/app/crm/project/update/priority/${payload.id}`, payload.data);
+
+                return fulfillWithValue(data)
+            } catch (error: any) {
+                return rejectWithValue(error.response.data);
+            }
+        }
+    )
+
 
     static getAll = createAsyncThunk(
         "ProjectThunk/getAll",

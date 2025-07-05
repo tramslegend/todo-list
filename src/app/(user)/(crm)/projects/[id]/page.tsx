@@ -2,8 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { TypographyH2, TypographyH4, TypographyP } from "@/components/ui/typography";
 import { TypographyH3 } from "@/components/ui/typography";
@@ -18,6 +17,7 @@ import { toast } from "sonner";
 import ProjectStatus from "../ProjectStatus";
 import ProjectPriority from "../ProjectPriority";
 import Link from "next/link";
+import ProjectAction from "../ProjectAction";
 
 export default function CrmProjectDetailsPage() {
     const dispatch = useCsDispatch();
@@ -45,40 +45,9 @@ export default function CrmProjectDetailsPage() {
     }, [client, dispatch, project])
 
 
-    async function onArchive(id: string) {
-        const { payload } = await dispatch(ProjectThunk.archive({ id }));
 
-        if (payload.message) {
-            toast.success(payload.message);
-        }
-        else if (payload.error) {
-            toast.error(payload.error);
-        }
-    }
-    async function onRestore(id: string) {
-        const { payload } = await dispatch(ProjectThunk.restore({ id }));
 
-        if (payload.message) {
-            toast.success(payload.message);
-        }
-        else if (payload.error) {
-            toast.error(payload.error);
-        }
-    }
 
-    async function onDelete(id: string) {
-        const { payload } = await dispatch(ProjectThunk.delete({ id }));
-
-        if (payload.message) {
-            toast.success(payload.message);
-            router.back();
-        }
-        else if (payload.error) {
-            toast.error(payload.error);
-        }
-    }
-
-    const dropdownItemClassName = 'cursor-pointer px-3 py-0.5 hover:bg-accent rounded'
     return (
         <div className="py-3">
             {
@@ -88,18 +57,18 @@ export default function CrmProjectDetailsPage() {
                             <Skeleton className="h-[32px] w-[200px] rounded mb-3" />
                             <hr />
                             <div className="mt-3">
-                                <Skeleton className="h-[14px] w-[181px] rounded" />
+                                <Skeleton className="h-[14px] w-[191px] rounded" />
                                 <div className="grid grid-cols-3 gap-3 mt-5">
                                     <div className="border rounded px-2 py-2 grid grid-cols-2 gap-3">
-                                        <Skeleton className="h-[81px] w-full rounded" />
-                                        <Skeleton className="h-[81px] w-full rounded" />
+                                        <Skeleton className="h-[91px] w-full rounded" />
+                                        <Skeleton className="h-[91px] w-full rounded" />
                                     </div>
                                     <div className="border rounded px-2 py-2 grid grid-cols-2 gap-3">
-                                        <Skeleton className="h-[81px] w-full rounded" />
-                                        <Skeleton className="h-[81px] w-full rounded" />
+                                        <Skeleton className="h-[91px] w-full rounded" />
+                                        <Skeleton className="h-[91px] w-full rounded" />
                                     </div>
                                     <div className="border rounded px-2 py-2 grid grid-cols-1 gap-3">
-                                        <Skeleton className="h-[81px] w-full rounded" />
+                                        <Skeleton className="h-[91px] w-full rounded" />
                                     </div>
                                 </div>
                             </div>
@@ -112,30 +81,21 @@ export default function CrmProjectDetailsPage() {
                                 <span>{project?.name}</span>
                                 {project?.isArchived && <span className="text-sm text-destructive ms-2"> (archived)</span>}
                             </span>
-                            <DropdownMenu >
-                                <DropdownMenuTrigger asChild>
-                                    <Button size={'icon'} variant={'ghost'}><EllipsisVertical /></Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className=" space-y-1 py-2">
-                                    <DropdownMenuItem className={dropdownItemClassName} onClick={() => router.push(`/projects/new?id=${project?._id}`)}>Edit</DropdownMenuItem>
-                                    <DropdownMenuItem className={dropdownItemClassName} onClick={() => project?.isArchived ? onRestore(project?._id) : onArchive(project?._id)}>{project?.isArchived ? "Restore" : "Archive"}</DropdownMenuItem>
-                                    <DropdownMenuItem className={dropdownItemClassName} onClick={() => onDelete(project?._id!)}><span className={`text-destructive hover:text-destructive`}>Delete</span></DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                            <ProjectAction project={project} />
                         </TypographyH2>
 
                         <div className="mt-1">
                             <TypographyP className="text-muted-foreground">{project?.description}</TypographyP>
 
                             <div className="grid grid-cols-3 gap-3 mt-5">
-                                <div className="border rounded px-2 py-2 grid grid-cols-2 gap-3 h-[100px]">
-                                    <div className="bg-accent/20 rounded px-3 py-2 h-full">
+                                <div className="border rounded px-2 py-2 grid grid-cols-2 gap-3 h-[110px]">
+                                    <div className="bg-accent/20 rounded px-3 py-2 h-full flex flex-col items-center">
                                         <TypographyP className="font-bold  text-center mb-2">Status</TypographyP>
-                                        <ProjectStatus id={project._id} status={project.status} />
+                                        <ProjectStatus project={project} />
                                     </div>
-                                    <div className="bg-accent/20 rounded px-3 py-2 h-full">
+                                    <div className="bg-accent/20 rounded px-3 py-2 h-full flex flex-col items-center">
                                         <TypographyP className="font-bold text-center mb-2">Priority</TypographyP>
-                                        <ProjectPriority id={project._id} priority={project.priority} />
+                                        <ProjectPriority project={project} />
                                     </div>
                                 </div>
 

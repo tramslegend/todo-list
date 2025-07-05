@@ -23,6 +23,9 @@ const ClientSlice = createSlice({
     reducers: {
         clearClient(state, _) {
             state.client = undefined
+        },
+        addClientToArray(state, { payload }) {
+            state.allClient?.data.unshift(payload.client);
         }
 
     },
@@ -35,6 +38,7 @@ const ClientSlice = createSlice({
             .addCase(ClientThunk.create.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 state.client = payload.client;
+                state.allClient?.data.unshift(payload.client);
             })
             .addCase(ClientThunk.create.rejected, (state, _) => {
                 state.loading = false;
