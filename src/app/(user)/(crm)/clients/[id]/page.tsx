@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import ClientAction from "../ClientAction";
 import { Label } from "@/components/ui/label";
 import ClientProjectList from "./ClientProjectList";
+import ClientInvoiceList from "./ClientInvoiceList";
 
 export default function CrmClientDetailsPage() {
     const params = useParams()
@@ -24,15 +25,12 @@ export default function CrmClientDetailsPage() {
 
     const dispatch = useCsDispatch();
     const router = useRouter()
-    const { client, loading } = useCsSelector(state => state.client);
+    const { client } = useCsSelector(state => state.client);
     const [show, setShow] = useState<'project' | 'invoice'>('project')
 
     useEffect(() => {
         if (id) dispatch(ClientThunk.getById({ id }))
 
-        // return () => {
-        //     dispatch(ClientSlice.actions.clearClient({}))
-        // }
     }, [dispatch, id])
 
     return (
@@ -110,12 +108,7 @@ export default function CrmClientDetailsPage() {
                 <hr />
                 <section className="mt-5">
                     {show === 'project' && <ClientProjectList />}
-                    {show === 'invoice' &&
-                        <div>
-                            <TypographyH3>Invoices</TypographyH3>
-
-                        </div>
-                    }
+                    {show === 'invoice' && <ClientInvoiceList />}
                 </section>
             </div>
         </div>

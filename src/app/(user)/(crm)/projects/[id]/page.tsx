@@ -2,7 +2,7 @@
 
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { TypographyH2, TypographyP } from "@/components/ui/typography";
+import { TypographyH2, TypographyH3, TypographyP } from "@/components/ui/typography";
 import { useCsDispatch, useCsSelector } from "@/cs-redux";
 import ProjectSlice from "@/cs-redux/slices/app/crm/project.slice";
 import { ClientThunk } from "@/cs-redux/thunks/app/crm/client.thunk";
@@ -14,6 +14,7 @@ import ProjectPriority from "../ProjectPriority";
 import Link from "next/link";
 import ProjectAction from "../ProjectAction";
 import { Button } from "@/components/ui/button";
+import ProjectInvoiceList from "./ProjectInvoiceList";
 
 export default function CrmProjectDetailsPage() {
     const dispatch = useCsDispatch();
@@ -41,7 +42,9 @@ export default function CrmProjectDetailsPage() {
     }, [client, dispatch, project])
 
 
-
+    if (!project) {
+        return (<></>)
+    }
 
 
     return (
@@ -123,9 +126,12 @@ export default function CrmProjectDetailsPage() {
                 </div>
             }
 
-            <div className="mt-5">
+            <div className="mt-9 flex items-center justify-between">
+                <TypographyH3>Invoices</TypographyH3>
                 <Button size={'sm'} variant={'outline'} onClick={() => router.push(`/invoices/new?client=${client?._id}&project=${project?._id}`)}>Create Invoice</Button>
             </div>
+
+            <section><ProjectInvoiceList /></section>
         </div>
     )
 }

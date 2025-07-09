@@ -86,7 +86,7 @@ export class InvoiceThunk {
 
         async (payload: { projectId: string }, { rejectWithValue, fulfillWithValue }) => {
             try {
-                const { data } = await ApiManager.get(`/app/crm/invoice/get/client/${payload.projectId}`);
+                const { data } = await ApiManager.get(`/app/crm/invoice/get/project/${payload.projectId}`);
 
                 return fulfillWithValue(data)
             } catch (error: any) {
