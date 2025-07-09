@@ -3,34 +3,45 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useCsDispatch, useCsSelector } from '@/cs-redux'
-import { INewProject } from '@/types/crm/project.type'
+import { INewInvoice } from '@/types/crm/invoice.type'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import ClientIdSelector from './ClientIdSelector'
 import InvoiceItemsForm from './InvoiceItemsForm'
 import DatePicker2 from '@/components/utils/DatePicker2'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
-import { ProjectThunk } from '@/cs-redux/thunks/app/crm/project.thunk'
-import { useRouter } from 'next/navigation'
-import { CURRENCY } from '@/root.config'
+import { InvoiceThunk } from '@/cs-redux/thunks/app/crm/invoice.thunk'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { CURRENCY, DEFAULT_CURRENCY } from '@/root.config'
+import ProjectSelector from './ProjectSelector'
+import { CrmInvoiceStatus } from '@/constants/crm.constant'
+import { TypographyH4, TypographyP } from '@/components/ui/typography'
+import CurrencySelector from '@/components/utils/CurrencySelector'
 
 
-const defaultValue: INewProject = {
+const defaultValue: INewInvoice = {
     clientId: '',
-    description: '',
-    name: '',
-    startDate: new Date(),
+    projectId: '',
+    title: '',
+    items: [],
+    currency: DEFAULT_CURRENCY,
+    discount: 0,
+    issuedDate: new Date(),
     dueDate: new Date(),
     note: '',
-    items: []
 }
 
 
-export default function CrmNewProjectPage() {
+export default function CrmNewInvoicePage() {
     const dispatch = useCsDispatch();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
+    const clientId = searchParams.get('client');
+    const projectId = searchParams.get('project');
 
-    const [formData, setFormData] = useState<INewProject>(defaultValue)
+    const { invoice } = useCsSelector(state => state.invoice);
+    const [formData, setFormData] = useState<INewInvoice>(defaultValue)
     const [total, setTotal] = useState<number>(0)
 
 
@@ -39,64 +50,125 @@ export default function CrmNewProjectPage() {
             ...formData,
             [e.target.name]: e.target.value
         })
-
-
     }
+
 
     useEffect(() => {
         const totalAmount = formData.items.reduce((acc, item) => acc + item.totalAmount, 0);
         setTotal(totalAmount);
     }, [formData.items]);
 
+    useEffect(() => {
+        if (clientId) {
+            setFormData(prev => ({ ...prev, clientId }));
+        }
+        if (projectId) {
+            setFormData(prev => ({ ...prev, projectId }));
+        }
+    }, [clientId, projectId]);
+
+
+    useEffect(() => {
+        if (id && (!invoice || invoice._id !== id)) dispatch(InvoiceThunk.getById({ id }))
+    }, [dispatch, id, invoice])
+
+    useEffect(() => {
+        if (id && invoice) {
+            setFormData({
+                title: invoice.title,
+                clientId: invoice.clientId,
+                projectId: invoice.projectId,
+                currency: invoice.currency,
+                issuedDate: new Date(invoice.issuedDate),
+                dueDate: new Date(invoice.dueDate!),
+                items: invoice.items,
+                discount: invoice.discount,
+                note: invoice.note,
+            })
+        }
+    }, [id, invoice])
+
+
     async function onSubmit() {
-        if (!formData.name.trim()) return toast.error("Name is required");
+        if (!formData.title.trim()) return toast.error("Invoice title is required");
         if (!formData.clientId.trim()) return toast.error("Select a client");
 
-        const res = await dispatch(ProjectThunk.create(formData));
+        let res;
+
+        if (id && invoice) {
+            res = await dispatch(InvoiceThunk.update({ id, data: formData }));
+        } else {
+            res = await dispatch(InvoiceThunk.create(formData));
+        }
 
         if (res.payload.message) {
             toast.success(res.payload.message);
-            router.push('/projects');
+            router.push(`/invoices/${res.payload.invoice._id}`);
             setFormData(defaultValue);
         } else if (res.payload.error) {
             toast.error(res.payload.error);
         }
     }
 
+    if (id && !invoice) {
+        return (
+            <div> </div>
+        )
+    }
+
+    if (id && invoice && invoice.status !== CrmInvoiceStatus.DRAFT) {
+        return (
+            <div className='mx-auto max-w-sm px-3 py-5 border rounded-2xl flex items-center flex-col gap-5 mt-10'>
+                <TypographyH4>Can not update invoice after sending</TypographyH4>
+                <Button variant={'outline'} onClick={() => router.back()}>Go Back</Button>
+            </div>
+        )
+    }
 
     return (
         <div className="py-3 pb-22">
-            <div className='mb-7 '>
-                <h2 className="font-bold text-2xl ">Create New Project </h2>
-
+            <div className='mb-7 flex items-center justify-between'>
+                <h2 className="font-bold text-2xl ">{id ? "Update Invoice" : "Create New Invoice"}</h2>
+                <h2 className="font-bold pe-3">Total: {formData.currency.symbol} {total} {formData.currency.code}</h2>
             </div>
+
             <div className="space-y-8">
                 <div className="grid grid-cols-3 gap-3 items-start">
                     <div className='space-y-1.5 '>
-                        <Label htmlFor="name-1">Name</Label>
-                        <Input id="name-1" name="name" type="text" value={formData.name} onChange={handleOnChange} placeholder="Project Name" />
+                        <Label htmlFor="title-1">Title</Label>
+                        <Input id="title-1" name="title" type="text" value={formData.title} onChange={handleOnChange} placeholder="Invoice title" />
                     </div>
                     <div className='space-y-1.5'>
-                        <Label htmlFor="description-1">Description</Label>
-                        <Input id="description-1" name="description" type="text" value={formData.description} onChange={handleOnChange} placeholder="Description" />
+                        <Label htmlFor="project-1">Project</Label>
+                        <ProjectSelector disabled={typeof projectId === 'string'} projectId={formData.projectId} setProjectId={(id: string) => setFormData({ ...formData, projectId: id })} />
                     </div>
                     <div className='space-y-1.5'>
                         <Label htmlFor="description-1">Client</Label>
-                        <ClientIdSelector clientId={formData.clientId} setClientId={(id: string) => setFormData({ ...formData, clientId: id })} />
+                        <ClientIdSelector disabled={typeof id === 'string' || typeof clientId === 'string'} clientId={formData.clientId} setClientId={(id: string) => setFormData({ ...formData, clientId: id })} />
                     </div>
-                </div>
-                <div className="grid grid-cols-3 gap-3 items-start">
+
                     <div className='space-y-1.5 '>
-                        <Label htmlFor="startDate-1">Start Date</Label>
-                        <DatePicker2 date={formData.startDate} setDate={(date) => setFormData({ ...formData, startDate: date })} />
+                        <Label htmlFor="issuedDate-1">Start Date</Label>
+                        <DatePicker2 date={formData.issuedDate} setDate={(date) => setFormData({ ...formData, issuedDate: date! })} />
                     </div>
                     <div className='space-y-1.5'>
                         <Label htmlFor="dueDate-1">Due Date</Label>
-                        <DatePicker2 date={formData.dueDate} setDate={(date) => setFormData({ ...formData, dueDate: date })} />
+                        <DatePicker2 date={formData.dueDate} setDate={(date) => setFormData({ ...formData, dueDate: date! })} />
                     </div>
                     <div className='space-y-1.5'>
+                        <Label htmlFor="discount-1">Discount</Label>
+                        <Input id="discount-1" name="discount" type="text" value={formData.discount} onChange={handleOnChange} placeholder="Discount (Optional)" />
+                    </div>
+
+                    <div className='space-y-1.5 col-span-2'>
                         <Label htmlFor="note-1">Note</Label>
                         <Input id="note-1" name="note" type="text" value={formData.note} onChange={handleOnChange} placeholder="Note (Optional)" />
+                    </div>
+
+                    <div className='space-y-1.5'>
+                        <Label htmlFor="currency-1">Currency</Label>
+                        {/* <Input readOnly id="currency-1" name="currency" type="text" value={`${formData.currency.code} (${formData.currency.symbol})`} onChange={() => { }} placeholder="Invoice Currency" /> */}
+                        <CurrencySelector currency={formData.currency} setCurrency={(currency) => setFormData({ ...formData, currency })} />
                     </div>
                 </div>
 
@@ -106,10 +178,10 @@ export default function CrmNewProjectPage() {
 
                 <div className='flex items-center justify-between'>
                     <div className='mt-5 space-x-3'>
-                        <Button size={'sm'} onClick={onSubmit}>Save</Button>
-                        <Button variant={'outline'} size={'sm'} >Back</Button>
+                        <Button size={'sm'} onClick={onSubmit}>{id ? "Update" : "Save"}</Button>
+                        <Button variant={'outline'} size={'sm'} onClick={() => router.back()}>Back</Button>
                     </div>
-                    <h2 className="font-bold text- ">Total: {CURRENCY}{total}</h2>
+
                 </div>
             </div>
         </div>

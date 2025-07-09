@@ -1,33 +1,47 @@
 import { CrmInvoiceStatusType, } from "@/constants/crm.constant";
 import { IInvoiceItem } from "./item.type";
+import { ICurrency } from "..";
+
+
 
 
 
 export interface INewInvoice {
     clientId: string;
-    name: string;
-    description?: string;
+    projectId?: string;
+
+    title: string;
     items: IInvoiceItem[];
-    startDate?: Date;
-    dueDate?: Date;
+    discount: number;
+    currency: ICurrency;
+    issuedDate: Date;
+    dueDate: Date;
     note?: string;
 }
 
 export interface IInvoiceModel {
     _id: string;
+    title: string;
     userId: string;
     clientId: string;
-    name: string;
-    description?: string;
+    projectId?: string;
+    invoiceNumber: string;
+
+    totalAmount: number;
+    amountPaid: number;
+    subtotal: number;
+    discount: number;
+    currency: ICurrency;
+    items: IInvoiceItem[];
 
     status: CrmInvoiceStatusType;
-    totalAmount: number;
-    items: IInvoiceItem[];
-    startDate?: Date;
-    dueDate?: Date;
-    completedAt?: Date;
+    issuedDate: Date;
+    dueDate: Date;
 
     note?: string;
+    token?: string;
+    isArchived: boolean;
+    archivedAt?: Date;
 
     createdAt?: Date;
     updatedAt?: Date;

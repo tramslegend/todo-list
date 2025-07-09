@@ -30,6 +30,13 @@ const defaultValue: INewItem = {
     basePrice: 0
 }
 
+// name: item.name,
+// slug: item.slug,
+// description: item.description,
+// quantity: 1,
+// unit: item.unit,
+// basePrice: item.basePrice,
+// totalAmount: item.basePrice
 export default function ItemSelector({ item, setItem }: { item?: IItemModel; setItem: ((item: IItemModel) => void) }) {
     const dispatch = useCsDispatch();
     const { allItem } = useCsSelector((state) => state.item);
@@ -54,23 +61,45 @@ export default function ItemSelector({ item, setItem }: { item?: IItemModel; set
     }
 
 
-    async function onSubmit() {
+    async function onSaveAndAdd(action: 'save&add' | 'add') {
         if (!formData.name.trim() || formData.name.trim().length < 3 || formData.name.trim().length > 49) return toast.error('Name must be 3 to 49 characters')
         if (formData.basePrice <= 0) return toast.error('Price must be grater that 0')
 
+        switch (action) {
+            case 'save&add':
+                // Dispatch
+                const res = await dispatch(ItemThunk.create(formData))
 
-        // Dispatch
-        const res = await dispatch(ItemThunk.create(formData))
+                if (res.payload.message) {
+                    toast.success(res.payload.message);
+                    setItem(res.payload.item);
+                    setFormData(defaultValue);
+                    setNewItem(false)
+                }
+                else if (res.payload.error) {
+                    toast.error(res.payload.error);
+                }
+                break;
 
-        if (res.payload.message) {
-            toast.success(res.payload.message);
-            setFormData(defaultValue);
-            setNewItem(false)
+            case 'add':
+                const i = {
+                    name: formData.name,
+                    description: formData.description,
+                    unit: formData.unit,
+                    basePrice: formData.basePrice,
+                    _id: "",
+                    userId: "",
+                    slug: CsUtils.generateSlug(formData.name),
+                }
+
+                setItem(i);
+                setFormData(defaultValue);
+                setNewItem(false)
+                break;
+
+            default:
+                break;
         }
-        else if (res.payload.error) {
-            toast.error(res.payload.error);
-        }
-
     }
 
 
@@ -131,8 +160,9 @@ export default function ItemSelector({ item, setItem }: { item?: IItemModel; set
                         </div>
                     </div>
                     <div className="mt-5 space-x-3">
+                        <Button onClick={() => onSaveAndAdd("add")} size={'sm'} variant={'secondary'}>Add</Button>
+                        <Button onClick={() => onSaveAndAdd("save&add")} size={'sm'} >Save & Add</Button>
                         <Button onClick={() => { setNewItem(false); setFormData(defaultValue) }} size={'sm'} variant="outline">Cancel</Button>
-                        <Button onClick={onSubmit} size={'sm'} >Submit</Button>
                     </div>
                 </div>
             }

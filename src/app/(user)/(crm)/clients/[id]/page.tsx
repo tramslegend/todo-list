@@ -105,7 +105,7 @@ export default function CrmClientDetailsPage() {
                         <button className={`py-2 cursor-pointer px-1 transition-all duration-300 border-b-2 ${show === 'invoice' ? "border-b-destructive" : "border-b-transparent"}`} onClick={() => setShow('invoice')}>Invoices</button>
                     </div>
                     {show === 'project' && <Button size={'sm'} variant={'outline'} onClick={() => router.push(`/projects/new?client=${client?._id}`)}>New Project</Button>}
-                    {show === 'invoice' && <Button size={'sm'} variant={'outline'} onClick={() => router.push(`/invoices/new?client=${client?._id}`)}>New Project</Button>}
+                    {show === 'invoice' && <Button size={'sm'} variant={'outline'} onClick={() => router.push(`/invoices/new?client=${client?._id}`)}>New Invoice</Button>}
                 </div>
                 <hr />
                 <section className="mt-5">

@@ -48,7 +48,7 @@ export default function CrmClientsPage() {
                         <TableHead className="text-right w-[100px]">Action</TableHead>
                     </TableRow>
                 </TableHeader>
-                {allClient && <TableBody>
+                {allClient && <TableBody className="border-b">
                     {allClient.data?.map((client: IClientModel, i: number) => (
                         <TableRow key={`client_${i + 7863456}`}>
                             <TableCell className="font-medium w-[50px]">{(i + 1).toString().padStart(2, '0')}</TableCell>

@@ -86,7 +86,7 @@ export default function CrmItemsPage() {
                         <TableHead className="text-right w-[100px]">Action</TableHead>
                     </TableRow>
                 </TableHeader>
-                {allItem && <TableBody>
+                {allItem && <TableBody className="border-b">
                     {allItem.data?.map((item: IItemModel, i: number) => (
                         <TableRow key={`item_${i + 7863456}`}>
                             <TableCell className="font-medium w-[50px]">{(i + 1).toString().padStart(2, '0')}</TableCell>

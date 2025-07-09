@@ -28,7 +28,6 @@ export const CrmInvoiceStatus = {
     SENT: 'Sent',
     PARTIAL: 'Partial',
     PAID: 'Paid',
-    UNPAID: 'Unpaid',
     CANCELLED: 'Cancelled',
 } as const;
 
@@ -68,6 +67,7 @@ export const CrmUnits = {
     HOUR: 'hour',
     DAY: 'day',
     WEEK: 'week',
+    MONTH: 'month',
     ITEM: 'item',
     FIXED: 'fixed',
 } as const;
@@ -79,6 +79,7 @@ export function getUnitLabel(unit: string): string {
         case CrmUnits.HOUR: return 'Per Hour';
         case CrmUnits.DAY: return 'Per Day';
         case CrmUnits.WEEK: return 'Per Week';
+        case CrmUnits.MONTH: return 'Per Month';
         case CrmUnits.ITEM: return 'Per Item';
         case CrmUnits.FIXED: return '(Fixed)';
         default: return unit;

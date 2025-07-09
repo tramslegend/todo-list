@@ -13,7 +13,7 @@ import {
 import { useCsDispatch, useCsSelector } from "@/cs-redux"
 import { ProjectThunk } from "@/cs-redux/thunks/app/crm/project.thunk"
 import { IProjectModel } from "@/types/crm/project.type"
-import { Eye, MoveRight } from "lucide-react"
+import { MoveRight } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -21,6 +21,7 @@ import ProjectStatus from "./ProjectStatus"
 import { CrmProjectPriority } from "@/constants/crm.constant"
 import ProjectPriority from "./ProjectPriority"
 import ProjectAction from "./ProjectAction"
+import { CsUtils } from "@/cs-toolkit"
 
 export default function CrmProjectsPage() {
     const router = useRouter()
@@ -51,7 +52,7 @@ export default function CrmProjectsPage() {
                         <TableHead className="text-right ">Action</TableHead>
                     </TableRow>
                 </TableHeader>
-                {allProject && <TableBody>
+                {allProject && <TableBody className="border-b">
                     {allProject.data?.map((project: IProjectModel, i: number) => (
                         <TableRow key={`client_${i + 7863456}`} className="group">
                             <TableCell className="font-medium w-[50px]">{(i + 1).toString().padStart(2, '0')}</TableCell>
@@ -61,8 +62,8 @@ export default function CrmProjectsPage() {
                                     ? `${project.description.slice(0, 35).trim()} ...`
                                     : project.description}
                             </TableCell>
-                            <TableCell className="text-center ">{new Date(project.startDate!)?.toLocaleDateString('en-GB')}</TableCell>
-                            <TableCell className="text-center ">{new Date(project.dueDate!)?.toLocaleDateString('en-GB')}</TableCell>
+                            <TableCell className="text-center ">{CsUtils.formatDateToShortMonth(project.startDate!)}</TableCell>
+                            <TableCell className="text-center ">{CsUtils.formatDateToShortMonth(project.dueDate!)}</TableCell>
                             <TableCell className="text-center">{project.priority !== CrmProjectPriority.NA && <ProjectPriority project={project} />}</TableCell>
                             <TableCell className="text-center"><ProjectStatus project={project} /></TableCell>
                             <TableCell className="text-right  flex items-center justify-end">

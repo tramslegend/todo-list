@@ -39,7 +39,6 @@ const InvoiceSlice = createSlice({
             .addCase(InvoiceThunk.create.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 state.invoice = payload.invoice;
-
                 state.allInvoice?.data.unshift(payload.invoice);
             })
             .addCase(InvoiceThunk.create.rejected, (state, _) => {
@@ -115,11 +114,27 @@ const InvoiceSlice = createSlice({
 
 
         builder
+            .addCase(InvoiceThunk.getByProjectId.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(InvoiceThunk.getByProjectId.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.projectInvoices = payload.invoices;
+            })
+            .addCase(InvoiceThunk.getByProjectId.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+                state.clientInvoices = undefined;
+            })
+
+
+        builder
             .addCase(InvoiceThunk.archive.pending, (state, _) => {
                 state.loading = true;
             })
             .addCase(InvoiceThunk.archive.fulfilled, (state, { payload }) => {
                 state.loading = false;
+                state.invoice = payload.invoice;
 
                 if (state.allInvoice) {
                     state.allInvoice.data = state.allInvoice.data.filter(invoice => invoice._id !== payload.invoice._id);
@@ -138,6 +153,7 @@ const InvoiceSlice = createSlice({
             })
             .addCase(InvoiceThunk.restore.fulfilled, (state, { payload }) => {
                 state.loading = false;
+                state.invoice = payload.invoice;
             })
             .addCase(InvoiceThunk.restore.rejected, (state, _) => {
                 state.loading = false;

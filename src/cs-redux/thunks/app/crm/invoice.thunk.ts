@@ -81,6 +81,19 @@ export class InvoiceThunk {
             }
         }
     )
+    static getByProjectId = createAsyncThunk(
+        "InvoiceThunk/getByProjectId",
+
+        async (payload: { projectId: string }, { rejectWithValue, fulfillWithValue }) => {
+            try {
+                const { data } = await ApiManager.get(`/app/crm/invoice/get/client/${payload.projectId}`);
+
+                return fulfillWithValue(data)
+            } catch (error: any) {
+                return rejectWithValue(error.response.data);
+            }
+        }
+    )
 
     static archive = createAsyncThunk(
         "InvoiceThunk/archive",

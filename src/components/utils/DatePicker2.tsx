@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronsUpDown } from "lucide-react";
+import { CsUtils } from "@/cs-toolkit";
 
 export default function DatePicker2({
     date,
@@ -18,7 +19,7 @@ export default function DatePicker2({
     // Format date as dd/mm/yyyy
     const formatDate = (date?: Date) => {
         if (!date) return "Select Date";
-        return date.toLocaleDateString("en-GB"); // dd/mm/yyyy
+        return CsUtils.formatDateToShortMonth(date); // dd/mm/yyyy
     };
 
     return (
@@ -26,7 +27,7 @@ export default function DatePicker2({
             <Button
                 onClick={openDatePicker}
                 variant={"outline"}
-                className="w-full flex items-center justify-between"
+                className="w-full flex items-center justify-between mb-0"
             >
                 <span>{formatDate(date)}</span>
                 <span>

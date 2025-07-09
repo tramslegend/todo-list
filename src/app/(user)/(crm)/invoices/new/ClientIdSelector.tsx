@@ -21,6 +21,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { TypographyP, TypographySmall } from '@/components/ui/typography';
 import ClientSlice from '@/cs-redux/slices/app/crm/client.slice';
+import SearchInput from '@/components/utils/SearchInput';
 
 
 
@@ -42,9 +43,6 @@ export default function ClientIdSelector({ clientId, setClientId, disabled = fal
 
 
 
-    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-    const [searchValue, setSearchValue] = useState('');
-
     // Fetch the associated client if it not in array
     useEffect(() => {
         if (clientId && disabled && (!client || clientId !== client._id)) {
@@ -54,23 +52,6 @@ export default function ClientIdSelector({ clientId, setClientId, disabled = fal
 
 
 
-
-    const handleSearch = (value: string) => {
-        // Set the local input value first
-        setSearchValue(value)
-
-        // Clear the timeout if any
-        if (timeoutId) clearTimeout(timeoutId);
-
-        // 
-        const newTimeoutId = setTimeout(() => {
-            setQuery(value)
-        }, 500);
-
-        // Save the new timeout ID
-        setTimeoutId(newTimeoutId);
-    };
-
     return (
         <>
             {disabled ?
@@ -78,7 +59,7 @@ export default function ClientIdSelector({ clientId, setClientId, disabled = fal
                     {client?.name}
                 </Button>
                 :
-                <Popover open={open} onOpenChange={() => { setOpen(!open); setSearchValue(''); setQuery('') }} >
+                <Popover open={open} onOpenChange={() => { setOpen(!open); setQuery('') }} >
                     <PopoverTrigger disabled={disabled} asChild className="w-full">
                         <Button
                             variant="outline"
@@ -95,14 +76,7 @@ export default function ClientIdSelector({ clientId, setClientId, disabled = fal
                     </PopoverTrigger>
                     <PopoverContent className="w-sm">
                         <Command>
-                            <div className='flex items-center relative w-full h-full mb-3' >
-                                <Input value={searchValue} onChange={e => handleSearch(e.target.value)} placeholder='Search...' className='w-full h-full' />
-                                {searchValue ?
-                                    <button onClick={() => handleSearch('')} className='absolute top-1/4 right-2 text-muted-foreground rounded'><X size={17} /></button>
-                                    :
-                                    <button className='absolute top-1/4 right-2 text-muted-foreground rounded ' ><Search size={17} /></button>
-                                }
-                            </div>
+                            <SearchInput query={query} setQuery={(q) => setQuery(q)} />
                             <CommandList>
                                 <CommandEmpty>No client found.</CommandEmpty>
                                 <CommandGroup>
