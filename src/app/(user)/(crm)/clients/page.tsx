@@ -13,11 +13,12 @@ import {
 import { useCsDispatch, useCsSelector } from "@/cs-redux"
 import { ClientThunk } from "@/cs-redux/thunks/app/crm/client.thunk"
 import { IClientModel } from "@/types/crm/client.type"
-import { MoveRight } from "lucide-react"
+import { Grid, MoveRight } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import ClientAction from "./ClientAction"
+import MainPageHeader from "@/components/utils/MainPageHeader"
 
 export default function CrmClientsPage() {
     const router = useRouter()
@@ -35,6 +36,9 @@ export default function CrmClientsPage() {
 
     return (
         <div>
+            <MainPageHeader title="Clients">
+                {/* <Button size={'icon'} variant={'secondary'}><Grid /></Button> */}
+            </MainPageHeader>
             <Table>
                 <TableCaption>{allClient?.data.length ? "A list of your clients" : <>No client available, <Link className="text-blue-600" href={'/clients/new'}>Create Now</Link></>}</TableCaption>
                 <TableHeader>

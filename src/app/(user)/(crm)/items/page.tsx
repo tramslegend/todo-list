@@ -35,6 +35,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { toast } from "sonner"
+import MainPageHeader from "@/components/utils/MainPageHeader"
 
 
 
@@ -73,6 +74,9 @@ export default function CrmItemsPage() {
 
     return (
         <div>
+            <MainPageHeader title="Items">
+                {/* <Button size={'icon'} variant={'secondary'}><Grid /></Button> */}
+            </MainPageHeader>
             <Suspense><CrmItemForm /></Suspense>
             <Table>
                 <TableCaption>{allItem?.data.length ? "A list of your items" : <>No item available, <Link className="text-blue-600" href={'/items?open=true'}>Create Now</Link></>}</TableCaption>

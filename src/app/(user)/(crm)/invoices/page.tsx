@@ -22,6 +22,7 @@ import InvoiceStatus from "./ProjectStatus"
 import { TypographyP } from "@/components/ui/typography"
 import { CURRENCY } from "@/root.config"
 import { CsUtils } from "@/cs-toolkit"
+import MainPageHeader from "@/components/utils/MainPageHeader"
 
 export default function InvoicesPage() {
     const router = useRouter()
@@ -38,6 +39,9 @@ export default function InvoicesPage() {
     }, [dispatch, limit, page, query])
     return (
         <div>
+            <MainPageHeader title="Invoices">
+                {/* <Button size={'icon'} variant={'secondary'}><Grid /></Button> */}
+            </MainPageHeader>
             <Table>
                 <TableCaption >{allInvoice?.data.length ? "A list of your invoices" : <>No invoices available, <Link className="text-blue-600" href={'/invoices/new'}>Create First Invoice</Link></>}</TableCaption>
                 <TableHeader>

@@ -22,6 +22,7 @@ import { CrmProjectPriority } from "@/constants/crm.constant"
 import ProjectPriority from "./ProjectPriority"
 import ProjectAction from "./ProjectAction"
 import { CsUtils } from "@/cs-toolkit"
+import MainPageHeader from "@/components/utils/MainPageHeader"
 
 export default function CrmProjectsPage() {
     const router = useRouter()
@@ -38,6 +39,9 @@ export default function CrmProjectsPage() {
     }, [dispatch, limit, page, query])
     return (
         <div>
+            <MainPageHeader title="Projects">
+                {/* <Button size={'icon'} variant={'secondary'}><Grid /></Button> */}
+            </MainPageHeader>
             <Table>
                 <TableCaption>{allProject?.data.length ? "A list of your projects" : <>No projects available, <Link className="text-blue-600" href={'/projects/new'}>Create Now</Link></>}</TableCaption>
                 <TableHeader>
