@@ -13,7 +13,7 @@ import {
 import { useCsDispatch, useCsSelector } from "@/cs-redux"
 import { ClientThunk } from "@/cs-redux/thunks/app/crm/client.thunk"
 import { IClientModel } from "@/types/crm/client.type"
-import { Grid, MoveRight } from "lucide-react"
+import { Grid, MoveRight, SquareMenu } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -33,6 +33,7 @@ export default function CrmClientsPage() {
     useEffect(() => {
         dispatch(ClientThunk.getAll({ page, limit, query }))
     }, [dispatch, limit, page, query])
+
 
     return (
         <div>
@@ -66,7 +67,7 @@ export default function CrmClientsPage() {
                             </TableCell>
                             <TableCell className={`${client.isIndividual && "text-muted-foreground"}`}>{client.companyName ? client.companyName : "Individual"}</TableCell>
                             <TableCell className="text-right w-[100px] flex items-center justify-end">
-                                <Button variant={'ghost'} onClick={() => { router.push(`/clients/${client._id}`) }}><MoveRight /></Button>
+                                <Button variant={'ghost'} onClick={() => { router.push(`/clients/${client._id}`) }}><SquareMenu /></Button>
                                 <ClientAction client={client} />
                             </TableCell>
                         </TableRow>

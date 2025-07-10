@@ -13,7 +13,7 @@ import {
 import { useCsDispatch, useCsSelector } from "@/cs-redux"
 import { ProjectThunk } from "@/cs-redux/thunks/app/crm/project.thunk"
 import { IProjectModel } from "@/types/crm/project.type"
-import { MoveRight } from "lucide-react"
+import { MoveRight, SquareMenu } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -71,7 +71,7 @@ export default function CrmProjectsPage() {
                             <TableCell className="text-center">{project.priority !== CrmProjectPriority.NA && <ProjectPriority project={project} />}</TableCell>
                             <TableCell className="text-center"><ProjectStatus project={project} /></TableCell>
                             <TableCell className="text-right  flex items-center justify-end">
-                                <Button onClick={() => { router.push(`/projects/${project._id}`) }} variant={'ghost'} ><MoveRight /></Button>
+                                <Button onClick={() => { router.push(`/projects/${project._id}`) }} variant={'ghost'} ><SquareMenu /></Button>
                                 <ProjectAction project={project} />
                             </TableCell>
                         </TableRow>

@@ -55,7 +55,7 @@ export default function InvoiceAction({ invoice }: { invoice: IInvoiceModel, }) 
             <DropdownMenuContent align="end" className=" space-y-1 py-2">
                 <DropdownMenuItem disabled={invoice && (invoice.status !== CrmInvoiceStatus.DRAFT)} className={dropdownItemClassName} onClick={() => router.push(`/invoices/new?id=${invoice?._id}`)}>Edit</DropdownMenuItem>
                 <DropdownMenuItem className={dropdownItemClassName} onClick={() => toast('Not implemented')}>Send Invoice</DropdownMenuItem>
-                <DropdownMenuItem disabled={invoice && (invoice.totalAmount === invoice.amountPaid)} className={dropdownItemClassName} onClick={() => router.push(`/invoices/${invoice?._id}?payment=true`)}>Create Payment</DropdownMenuItem>
+                <DropdownMenuItem disabled={invoice && (invoice.totalAmount === invoice.amountPaid)} className={dropdownItemClassName} onClick={() => router.push(`/invoices/${invoice?._id}?payment=true`)}>Make Payment</DropdownMenuItem>
                 <DropdownMenuItem className={dropdownItemClassName} onClick={invoice?.isArchived ? onRestore : onArchive}>{invoice?.isArchived ? "Restore" : "Archive"}</DropdownMenuItem>
                 <DropdownMenuItem className={dropdownItemClassName} onClick={onDelete}><span className={`text-destructive hover:text-destructive`}>Delete</span></DropdownMenuItem>
             </DropdownMenuContent>

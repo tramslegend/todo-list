@@ -89,13 +89,13 @@ export function getUnitLabel(unit: string): string {
 
 // Transaction ---
 export const CrmPaymentMethod = {
-    UPI: 'upi',
-    BANK: 'bank',
-    CASH: 'cash',
-    CREDIT_CARD: 'credit_card',
-    DEBIT_CARD: 'debit_card',
-    PAYPAL: 'paypal',
-    OTHER: 'other',
+    UPI: 'UPI',
+    BANK: 'Bank',
+    CASH: 'Cash',
+    CREDIT_CARD: 'Credit Card',
+    DEBIT_CARD: 'Debit Card',
+    PAYPAL: 'Paypal',
+    OTHER: 'Other',
 } as const;
 
 export type CrmPaymentMethodType = typeof CrmPaymentMethod[keyof typeof CrmPaymentMethod];

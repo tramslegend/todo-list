@@ -92,6 +92,7 @@ export default function CrmNewInvoicePage() {
     async function onSubmit() {
         if (!formData.title.trim()) return toast.error("Invoice title is required");
         if (!formData.clientId.trim()) return toast.error("Select a client");
+        if (new Date(formData.issuedDate) > new Date()) return toast.error('Issued Date can not be a future date')
 
         let res;
 

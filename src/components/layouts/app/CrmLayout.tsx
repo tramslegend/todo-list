@@ -10,15 +10,7 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {
-    Menubar,
-    MenubarContent,
-    MenubarItem,
-    MenubarMenu,
-    MenubarSeparator,
-    MenubarShortcut,
-    MenubarTrigger,
-} from "@/components/ui/menubar"
+
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 
 
@@ -39,14 +31,14 @@ const NavItems = [
         icon: BriefcaseBusiness,
     },
     {
-        title: "Items",
-        url: "/items",
-        icon: Shapes,
-    },
-    {
         title: "Invoices",
         url: "/invoices",
         icon: ScrollText,
+    },
+    {
+        title: "Items",
+        url: "/items",
+        icon: Shapes,
     },
     {
         title: "Transactions",
@@ -93,8 +85,8 @@ export default function CrmLayout({ children }: Readonly<{ children: React.React
                                 {/* <DropdownMenuSeparator /> */}
                                 <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/clients/new')}>Client</DropdownMenuItem>
                                 <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/projects/new')}>Project</DropdownMenuItem>
-                                <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/items?open=true')}>Item</DropdownMenuItem>
                                 <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/invoices/new')}>Invoice</DropdownMenuItem>
+                                <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/items?open=true')}>Item</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>

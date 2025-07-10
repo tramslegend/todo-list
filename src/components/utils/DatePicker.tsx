@@ -28,7 +28,7 @@ export default function DatePicker({ date, setDate }: { date: Date | undefined, 
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                <Calendar
+                {/* <Calendar
                     mode="single"
                     selected={date}
                     captionLayout="dropdown"
@@ -36,6 +36,17 @@ export default function DatePicker({ date, setDate }: { date: Date | undefined, 
                         setDate(date)
                         setOpen(false)
                     }}
+                /> */}
+                <Calendar
+                    mode="single"
+                    defaultMonth={date}
+                    selected={date}
+                    onSelect={(date) => {
+                        setDate(date)
+                        setOpen(false)
+                    }}
+                    captionLayout={'dropdown'}
+                    className="rounded-lg border shadow-sm"
                 />
             </PopoverContent>
         </Popover>

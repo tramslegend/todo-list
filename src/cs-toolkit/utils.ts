@@ -24,7 +24,7 @@ export function capitalizeFirst(str: string): string {
 }
 
 
-// Date ... 
+// Date Time... 
 export function formatDateToShortMonth(date: Date | string): string {
     const d = new Date(date);
     return d.toLocaleDateString('en-US', {
@@ -33,6 +33,19 @@ export function formatDateToShortMonth(date: Date | string): string {
         day: 'numeric',
     });
 }
+
+export function formatDateTime(date: Date | string): string {
+    const d = new Date(date);
+    return d.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+    });
+}
+
 
 
 // Array ...

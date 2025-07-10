@@ -13,7 +13,7 @@ import {
 import { useCsDispatch, useCsSelector } from "@/cs-redux"
 import { InvoiceThunk } from "@/cs-redux/thunks/app/crm/invoice.thunk"
 import { IInvoiceModel } from "@/types/crm/invoice.type"
-import { MoveRight } from "lucide-react"
+import { MoveRight, SquareMenu } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -70,7 +70,7 @@ export default function InvoicesPage() {
                                 <TableCell className="text-right ">{invoice.currency.symbol}{invoice.amountPaid}</TableCell>
                                 <TableCell className="text-right">{invoice.currency.symbol}{invoice.totalAmount}</TableCell>
                                 <TableCell className="text-right  flex items-center justify-end">
-                                    <Button onClick={() => { router.push(`/invoices/${invoice._id}`) }} variant={'ghost'} ><MoveRight /></Button>
+                                    <Button onClick={() => { router.push(`/invoices/${invoice._id}`) }} variant={'ghost'} ><SquareMenu /></Button>
                                     <InvoiceAction invoice={invoice} />
                                 </TableCell>
                             </TableRow>

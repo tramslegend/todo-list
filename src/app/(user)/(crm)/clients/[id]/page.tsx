@@ -31,7 +31,15 @@ export default function CrmClientDetailsPage() {
     useEffect(() => {
         if (id) dispatch(ClientThunk.getById({ id }))
 
+        return () => {
+            dispatch(ClientSlice.actions.clearClient({}))
+        }
     }, [dispatch, id])
+
+
+    if (!client) {
+        return (<></>)
+    }
 
     return (
         <div className="py-3">

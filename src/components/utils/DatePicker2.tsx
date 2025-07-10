@@ -6,9 +6,11 @@ import { CsUtils } from "@/cs-toolkit";
 export default function DatePicker2({
     date,
     setDate,
+    disabled = false
 }: {
     date: Date | undefined;
     setDate: (date: Date | undefined) => void;
+    disabled?: boolean
 }) {
     const dateRef = useRef<HTMLInputElement>(null);
 
@@ -25,6 +27,7 @@ export default function DatePicker2({
     return (
         <div className="space-y-2 relative">
             <Button
+                disabled={disabled}
                 onClick={openDatePicker}
                 variant={"outline"}
                 className="w-full flex items-center justify-between mb-0"
