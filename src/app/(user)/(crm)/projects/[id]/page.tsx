@@ -15,6 +15,7 @@ import Link from "next/link";
 import ProjectAction from "../ProjectAction";
 import { Button } from "@/components/ui/button";
 import ProjectInvoiceList from "./ProjectInvoiceList";
+import Container from "@/components/utils/Container";
 
 export default function CrmProjectDetailsPage() {
     const dispatch = useCsDispatch();
@@ -48,7 +49,7 @@ export default function CrmProjectDetailsPage() {
 
 
     return (
-        <div className="py-3">
+        <Container className="py-3">
             {!project ?
                 <div className="border rounded-lg px-3 py-5 flex items-start justify-between gap-3">
                     <div className="grow">
@@ -132,6 +133,6 @@ export default function CrmProjectDetailsPage() {
             </div>
 
             <section><ProjectInvoiceList /></section>
-        </div>
+        </Container>
     )
 }

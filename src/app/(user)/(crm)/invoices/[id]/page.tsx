@@ -15,6 +15,7 @@ import { formatDateToShortMonth } from "@/cs-toolkit/utils";
 import { Check, Clock, ClockAlert } from "lucide-react";
 import PaymentForm from "./PaymentForm";
 import InvoiceTransactions from "./InvoiceTransactions";
+import Container from "@/components/utils/Container";
 
 export default function page() {
     const dispatch = useCsDispatch();
@@ -48,7 +49,7 @@ export default function page() {
     }
 
     return (
-        <div className="py-3">
+        <Container className="py-3">
 
             <div className="border rounded-lg px-3 py-5">
                 <PaymentForm invoice={invoice} />
@@ -141,6 +142,6 @@ export default function page() {
                 </div>}
             </div>
             <InvoiceTransactions />
-        </div>
+        </Container>
     )
 }

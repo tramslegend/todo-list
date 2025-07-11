@@ -58,7 +58,7 @@ export default function CurrencySelector({ currency, setCurrency }: { currency?:
             </PopoverTrigger>
             <PopoverContent className="w-sm">
                 <Command>
-                    <SearchInput query={query} setQuery={(q) => setQuery(q)} />
+                    <SearchInput query={query} setQuery={setQuery} />
                     <CommandList>
                         <CommandEmpty>Not found.</CommandEmpty>
                         <CommandGroup>

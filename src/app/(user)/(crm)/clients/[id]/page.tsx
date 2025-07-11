@@ -18,6 +18,7 @@ import ClientAction from "../ClientAction";
 import { Label } from "@/components/ui/label";
 import ClientProjectList from "./ClientProjectList";
 import ClientInvoiceList from "./ClientInvoiceList";
+import Container from "@/components/utils/Container";
 
 export default function CrmClientDetailsPage() {
     const params = useParams()
@@ -42,7 +43,7 @@ export default function CrmClientDetailsPage() {
     }
 
     return (
-        <div className="py-3">
+        <Container className="py-3">
             {(!client || client._id !== id) ?
                 <div className="border rounded-lg px-3 py-5">
                     <Skeleton className="h-[33px] w-[200px] rounded mb-3" />
@@ -119,6 +120,6 @@ export default function CrmClientDetailsPage() {
                     {show === 'invoice' && <ClientInvoiceList />}
                 </section>
             </div>
-        </div>
+        </Container>
     )
 }

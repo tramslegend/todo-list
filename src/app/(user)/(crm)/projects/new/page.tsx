@@ -19,6 +19,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { CrmProjectPriority, CrmProjectPriorityType } from '@/constants/crm.constant'
+import Container from '@/components/utils/Container'
 
 const defaultValue: INewProject = {
     clientId: '',
@@ -106,7 +107,7 @@ export default function CrmNewProjectPage() {
 
 
     return (
-        <div className="py-3 pb-22">
+        <Container className="py-3 pb-22">
             <div className='mb-7 '>
                 <h2 className="font-bold text-2xl ">{id ? "Update Project" : "Create New Project"} </h2>
 
@@ -163,6 +164,6 @@ export default function CrmNewProjectPage() {
                     <Button variant={'outline'} size={'sm'} onClick={() => router.back()}>Back</Button>
                 </div>
             </div>
-        </div>
+        </Container>
     )
 }

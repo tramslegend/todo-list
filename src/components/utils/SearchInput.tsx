@@ -2,9 +2,9 @@
 
 import { Input } from "@/components/ui/input"
 import { Search, X } from "lucide-react"
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
-export default function SearchInput({ query, setQuery }: { query?: string; setQuery: ((query: string) => void) }) {
+export default function SearchInput({ query, setQuery }: { query?: string; setQuery: Dispatch<SetStateAction<string>> }) {
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
     const [searchValue, setSearchValue] = useState('');
 
@@ -24,8 +24,8 @@ export default function SearchInput({ query, setQuery }: { query?: string; setQu
         setTimeoutId(newTimeoutId);
     };
     return (
-        <div className='flex items-center relative w-full h-full mb-3' >
-            <Input value={searchValue} onChange={e => handleSearch(e.target.value)} placeholder='Search...' className='w-full h-full' />
+        <div className='flex items-center relative w-full h-full' >
+            <Input value={searchValue} onChange={e => handleSearch(e.target.value)} placeholder='Search...' className='w-full' />
             {searchValue ?
                 <button onClick={() => handleSearch('')} className='absolute top-1/4 right-2 text-muted-foreground rounded'><X size={17} /></button>
                 :

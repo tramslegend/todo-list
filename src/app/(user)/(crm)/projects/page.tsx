@@ -13,7 +13,7 @@ import {
 import { useCsDispatch, useCsSelector } from "@/cs-redux"
 import { ProjectThunk } from "@/cs-redux/thunks/app/crm/project.thunk"
 import { IProjectModel } from "@/types/crm/project.type"
-import { MoveRight, SquareMenu } from "lucide-react"
+import { MoveRight, Plus, SquareMenu } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -23,15 +23,16 @@ import ProjectPriority from "./ProjectPriority"
 import ProjectAction from "./ProjectAction"
 import { CsUtils } from "@/cs-toolkit"
 import MainPageHeader from "@/components/utils/MainPageHeader"
+import Container from "@/components/utils/Container"
 
 export default function CrmProjectsPage() {
     const router = useRouter()
     const dispatch = useCsDispatch();
     const [page, setPage] = useState<number>(1)
-    const [limit, setLimit] = useState<number>(40)
-
+    const [limit, setLimit] = useState<number>(20);
+    const [query, setQuery] = useState<string>('');
     const { allProject } = useCsSelector(state => state.project);
-    const { query } = useCsSelector(state => state.global);
+
 
 
     useEffect(() => {
@@ -39,45 +40,47 @@ export default function CrmProjectsPage() {
     }, [dispatch, limit, page, query])
     return (
         <div>
-            <MainPageHeader title="Projects">
-                {/* <Button size={'icon'} variant={'secondary'}><Grid /></Button> */}
+            <MainPageHeader title="Projects" setQuery={setQuery}>
+                <Button size={'icon'} variant={'outline'}><Plus /></Button>
             </MainPageHeader>
-            <Table>
-                <TableCaption>{allProject?.data.length ? "A list of your projects" : <>No projects available, <Link className="text-blue-600" href={'/projects/new'}>Create Now</Link></>}</TableCaption>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className="w-[50px]">##</TableHead>
-                        <TableHead >Name</TableHead>
-                        <TableHead className="max-w-[12rem]">Description</TableHead>
-                        <TableHead className="text-center">Start Date</TableHead>
-                        <TableHead className="text-center">Due Date</TableHead>
-                        <TableHead className="text-center">Priority</TableHead>
-                        <TableHead className="text-center">Status</TableHead>
-                        <TableHead className="text-right ">Action</TableHead>
-                    </TableRow>
-                </TableHeader>
-                {allProject && <TableBody className="border-b">
-                    {allProject.data?.map((project: IProjectModel, i: number) => (
-                        <TableRow key={`client_${i + 7863456}`} className="group">
-                            <TableCell className="font-medium w-[50px]">{(i + 1).toString().padStart(2, '0')}</TableCell>
-                            <TableCell className="font-bold ">{project.name}</TableCell>
-                            <TableCell className="max-w-[12rem] overflow-hidden " >
-                                {project.description && project.description.length > 35
-                                    ? `${project.description.slice(0, 35).trim()} ...`
-                                    : project.description}
-                            </TableCell>
-                            <TableCell className="text-center ">{CsUtils.formatDateToShortMonth(project.startDate!)}</TableCell>
-                            <TableCell className="text-center ">{CsUtils.formatDateToShortMonth(project.dueDate!)}</TableCell>
-                            <TableCell className="text-center">{project.priority !== CrmProjectPriority.NA && <ProjectPriority project={project} />}</TableCell>
-                            <TableCell className="text-center"><ProjectStatus project={project} /></TableCell>
-                            <TableCell className="text-right  flex items-center justify-end">
-                                <Button onClick={() => { router.push(`/projects/${project._id}`) }} variant={'ghost'} ><SquareMenu /></Button>
-                                <ProjectAction project={project} />
-                            </TableCell>
+            <Container>
+                <Table>
+                    <TableCaption>{allProject?.data.length ? "A list of your projects" : <>No projects available, <Link className="text-blue-600" href={'/projects/new'}>Create Now</Link></>}</TableCaption>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[50px]">##</TableHead>
+                            <TableHead >Name</TableHead>
+                            <TableHead className="max-w-[12rem]">Description</TableHead>
+                            <TableHead className="text-center">Start Date</TableHead>
+                            <TableHead className="text-center">Due Date</TableHead>
+                            <TableHead className="text-center">Priority</TableHead>
+                            <TableHead className="text-center">Status</TableHead>
+                            <TableHead className="text-right ">Action</TableHead>
                         </TableRow>
-                    ))}
-                </TableBody>}
-            </Table>
+                    </TableHeader>
+                    {allProject && <TableBody className="border-b">
+                        {allProject.data?.map((project: IProjectModel, i: number) => (
+                            <TableRow key={`client_${i + 7863456}`} className="group">
+                                <TableCell className="font-medium w-[50px]">{(i + 1).toString().padStart(2, '0')}</TableCell>
+                                <TableCell className="font-bold ">{project.name}</TableCell>
+                                <TableCell className="max-w-[12rem] overflow-hidden " >
+                                    {project.description && project.description.length > 35
+                                        ? `${project.description.slice(0, 35).trim()} ...`
+                                        : project.description}
+                                </TableCell>
+                                <TableCell className="text-center ">{CsUtils.formatDateToShortMonth(project.startDate!)}</TableCell>
+                                <TableCell className="text-center ">{CsUtils.formatDateToShortMonth(project.dueDate!)}</TableCell>
+                                <TableCell className="text-center">{project.priority !== CrmProjectPriority.NA && <ProjectPriority project={project} />}</TableCell>
+                                <TableCell className="text-center"><ProjectStatus project={project} /></TableCell>
+                                <TableCell className="text-right  flex items-center justify-end">
+                                    <Button onClick={() => { router.push(`/projects/${project._id}`) }} variant={'ghost'} ><SquareMenu /></Button>
+                                    <ProjectAction project={project} />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>}
+                </Table>
+            </Container>
 
         </div>
     )

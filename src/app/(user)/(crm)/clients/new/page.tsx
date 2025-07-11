@@ -20,6 +20,7 @@ import { ClientThunk } from "@/cs-redux/thunks/app/crm/client.thunk"
 import { toast } from "sonner"
 import { useRouter, useSearchParams } from "next/navigation"
 import ClientSlice from "@/cs-redux/slices/app/crm/client.slice"
+import Container from "@/components/utils/Container"
 
 
 
@@ -122,7 +123,7 @@ export default function CrmAddClientPage() {
 
 
     return (
-        <div className="py-3">
+        <Container className="py-3">
             <h2 className="font-bold text-2xl mb-7">{id ? "Update Client" : "Create New Client"}</h2>
 
             <Form {...form}>
@@ -265,6 +266,6 @@ export default function CrmAddClientPage() {
                     </div>
                 </form>
             </Form>
-        </div>
+        </Container>
     )
 }

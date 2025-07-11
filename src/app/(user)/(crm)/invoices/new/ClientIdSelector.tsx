@@ -76,7 +76,7 @@ export default function ClientIdSelector({ clientId, setClientId, disabled = fal
                     </PopoverTrigger>
                     <PopoverContent className="w-sm">
                         <Command>
-                            <SearchInput query={query} setQuery={(q) => setQuery(q)} />
+                            <SearchInput query={query} setQuery={setQuery} />
                             <CommandList>
                                 <CommandEmpty>No client found.</CommandEmpty>
                                 <CommandGroup>

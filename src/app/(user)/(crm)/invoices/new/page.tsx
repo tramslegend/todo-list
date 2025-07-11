@@ -17,6 +17,7 @@ import ProjectSelector from './ProjectSelector'
 import { CrmInvoiceStatus } from '@/constants/crm.constant'
 import { TypographyH4, TypographyP } from '@/components/ui/typography'
 import CurrencySelector from '@/components/utils/CurrencySelector'
+import Container from '@/components/utils/Container'
 
 
 const defaultValue: INewInvoice = {
@@ -127,7 +128,7 @@ export default function CrmNewInvoicePage() {
     }
 
     return (
-        <div className="py-3 pb-22">
+        <Container className="py-3 pb-22">
             <div className='mb-7 flex items-center justify-between'>
                 <h2 className="font-bold text-2xl ">{id ? "Update Invoice" : "Create New Invoice"}</h2>
                 <h2 className="font-bold pe-3">Total: {formData.currency.symbol} {total} {formData.currency.code}</h2>
@@ -185,6 +186,6 @@ export default function CrmNewInvoicePage() {
 
                 </div>
             </div>
-        </div>
+        </Container>
     )
 }

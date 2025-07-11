@@ -110,7 +110,7 @@ export default function ItemSelector({ item, setItem }: { item?: IItemModel; set
             {!newItem ?
                 <div>
                     <div className="h-8 mb-3 flex gap-3">
-                        <SearchInput setQuery={(q) => setQuery(q)} />
+                        <SearchInput setQuery={setQuery} />
                         <Button size={'sm'} onClick={() => setNewItem(true)}>New</Button>
                     </div>
                     <div className="grid max-h-[20rem] min-h-[20rem] overflow-y-auto">

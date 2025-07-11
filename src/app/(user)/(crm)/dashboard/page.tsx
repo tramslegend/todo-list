@@ -1,7 +1,10 @@
+import Container from '@/components/utils/Container'
 import React from 'react'
 
 export default function CrmDashboardPage() {
     return (
-        <div>CrmDashboardPage</div>
+        <Container>
+
+        </Container>
     )
 }

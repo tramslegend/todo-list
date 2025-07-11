@@ -2,12 +2,15 @@ import { Input } from '@/components/ui/input'
 import { useCsDispatch, useCsSelector } from '@/cs-redux';
 import GlobalSlice from '@/cs-redux/slices/global.slice';
 import { Search, X } from 'lucide-react'
-import React, { useState } from 'react'
+import { usePathname } from 'next/navigation';
+import React, { useEffect, useState } from 'react'
 
 
 
 export default function CsSearchbar({ ...props }: React.ComponentProps<"div">) {
     const dispatch = useCsDispatch();
+    const pathName = usePathname();
+
     const { query } = useCsSelector(state => state.global);
 
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
@@ -28,6 +31,11 @@ export default function CsSearchbar({ ...props }: React.ComponentProps<"div">) {
         // Save the new timeout ID
         setTimeoutId(newTimeoutId);
     };
+
+    useEffect(() => {
+        dispatch(GlobalSlice.actions.setSearchQuery(''))
+        setValue('')
+    }, [pathName])
 
     return (
         <div className='flex items-center relative w-full h-full ' {...props} >

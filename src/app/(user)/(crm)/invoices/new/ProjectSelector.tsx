@@ -74,7 +74,7 @@ export default function ProjectSelector({ projectId, setProjectId, disabled = fa
                     </PopoverTrigger>
                     <PopoverContent className="w-sm">
                         <Command>
-                            <SearchInput query={query} setQuery={(q) => setQuery(q)} />
+                            <SearchInput query={query} setQuery={setQuery} />
                             <CommandList>
                                 <CommandEmpty>No project found.</CommandEmpty>
                                 <CommandGroup>

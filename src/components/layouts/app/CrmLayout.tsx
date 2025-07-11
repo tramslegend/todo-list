@@ -8,6 +8,7 @@ import Container from "@/components/utils/Container";
 import {
     DropdownMenu,
     DropdownMenuContent,
+    DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
@@ -54,7 +55,7 @@ export default function CrmLayout({ children }: Readonly<{ children: React.React
 
     return (
         <div>
-            <div className='flex items-center sticky top-0 left-0 border-b z-50 bg-accent backdrop-blur-2xl h-12 px-3'>
+            <div className='flex- hidden items-center sticky top-0 left-0 border-b z-50 bg-accent backdrop-blur-2xl h-12 px-3'>
                 <div className='flex items-center grow h-full'>
                     {
                         NavItems.map((item, i) => (
@@ -71,17 +72,15 @@ export default function CrmLayout({ children }: Readonly<{ children: React.React
                 </div>
 
                 <div className='h-full flex items-center gap-3'>
-                    <div className='grow h-8 max-w-xs w-xs'><CsSearchbar /></div>
+                    {/* <div className='grow h-8 max-w-xs w-xs'><CsSearchbar /></div> */}
                     <div className='flex items-center gap-3'>
-                        {/* <Button size={'icon'} variant={'outline'}> <Filter /></Button>
-                        <Button size={'icon'} variant={'outline'}> <LayoutDashboard /></Button> */}
 
                         <DropdownMenu >
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" size={'sm'}>New <ChevronDown /></Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className=" space-y-1 py-2">
-                                {/* <DropdownMenuLabel>Appearance</DropdownMenuLabel> */}
+                                <DropdownMenuLabel className="text-muted-foreground">Create New</DropdownMenuLabel>
                                 {/* <DropdownMenuSeparator /> */}
                                 <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/clients/new')}>Client</DropdownMenuItem>
                                 <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push('/projects/new')}>Project</DropdownMenuItem>
@@ -93,9 +92,11 @@ export default function CrmLayout({ children }: Readonly<{ children: React.React
                 </div>
             </div>
 
-            <Container>
+            {/* <Container>
                 {children}
-            </Container>
+            </Container> */}
+
+            {children}
         </div>
     )
 }
