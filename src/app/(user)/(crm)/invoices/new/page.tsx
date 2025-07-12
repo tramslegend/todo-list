@@ -118,7 +118,7 @@ export default function CrmNewInvoicePage() {
         )
     }
 
-    if (id && invoice && invoice.status !== CrmInvoiceStatus.DRAFT) {
+    if (id && invoice && invoice.isSent) {
         return (
             <div className='mx-auto max-w-sm px-3 py-5 border rounded-2xl flex items-center flex-col gap-5 mt-10'>
                 <TypographyH4>Can not update invoice after sending</TypographyH4>

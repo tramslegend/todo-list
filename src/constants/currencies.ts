@@ -3,6 +3,11 @@ import { ICurrency } from "@/types";
 
 export const currencies: ICurrency[] = [
   {
+    code: "INR",
+    name: "Indian rupee",
+    symbol: "₹"
+  },
+  {
     code: "AFN",
     name: "Afghan afghani",
     symbol: "؋"
@@ -101,11 +106,6 @@ export const currencies: ICurrency[] = [
     code: "BTN",
     name: "Bhutanese ngultrum",
     symbol: "Nu."
-  },
-  {
-    code: "INR",
-    name: "Indian rupee",
-    symbol: "₹"
   },
   {
     code: "BOB",
