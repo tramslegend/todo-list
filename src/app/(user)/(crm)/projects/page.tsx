@@ -1,88 +1,98 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
 import { useCsDispatch, useCsSelector } from "@/cs-redux"
 import { ProjectThunk } from "@/cs-redux/thunks/app/crm/project.thunk"
 import { IProjectModel } from "@/types/crm/project.type"
-import { MoveRight, Plus, SquareMenu } from "lucide-react"
-import Link from "next/link"
+import { LoaderIcon, Plus, SquareMenu } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import ProjectStatus from "./ProjectStatus"
-import { CrmProjectPriority } from "@/constants/crm.constant"
-import ProjectPriority from "./ProjectPriority"
 import ProjectAction from "./ProjectAction"
-import { CsUtils } from "@/cs-toolkit"
 import MainPageHeader from "@/components/utils/MainPageHeader"
 import Container from "@/components/utils/Container"
+import ProjectSlice from "@/cs-redux/slices/app/crm/project.slice"
+import { TypographyP } from "@/components/ui/typography"
+import SpinLoader from "@/components/utils/SpinLoader"
+import Link from "next/link"
 
-export default function CrmProjectsPage() {
+
+export default function ProjectsPage() {
     const router = useRouter()
     const dispatch = useCsDispatch();
-    const [page, setPage] = useState<number>(1)
+    const { allProject, loading } = useCsSelector(state => state.project);
+
+
+    // Pagination & Fetch Data
     const [limit, setLimit] = useState<number>(20);
+    const [page, setPage] = useState<number>(1);
     const [query, setQuery] = useState<string>('');
-    const { allProject } = useCsSelector(state => state.project);
 
 
+    // Reset data if query changed
+    useEffect(() => {
+        setPage(1)
+        dispatch(ProjectSlice.actions.clearAllProject({}))
+    }, [dispatch, query])
 
+
+    // Fetch Data
     useEffect(() => {
         dispatch(ProjectThunk.getAll({ page, limit, query }))
-    }, [dispatch, limit, page, query])
+    }, [dispatch, limit, query, page])
+
+
     return (
-        <div>
+        <section>
             <MainPageHeader title="Projects" setQuery={setQuery}>
                 <Button size={'icon'} variant={'outline'}><Plus /></Button>
             </MainPageHeader>
-            <Container>
-                <Table>
-                    <TableCaption>{allProject?.data.length ? "A list of your projects" : <>No projects available, <Link className="text-blue-600" href={'/projects/new'}>Create Now</Link></>}</TableCaption>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="w-[50px]">##</TableHead>
-                            <TableHead >Name</TableHead>
-                            <TableHead className="max-w-[12rem]">Description</TableHead>
-                            <TableHead className="text-center">Start Date</TableHead>
-                            <TableHead className="text-center">Due Date</TableHead>
-                            <TableHead className="text-center">Priority</TableHead>
-                            <TableHead className="text-center">Status</TableHead>
-                            <TableHead className="text-right ">Action</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    {allProject && <TableBody className="border-b">
-                        {allProject.data?.map((project: IProjectModel, i: number) => (
-                            <TableRow key={`client_${i + 7863456}`} className="group">
-                                <TableCell className="font-medium w-[50px]">{(i + 1).toString().padStart(2, '0')}</TableCell>
-                                <TableCell className="font-bold ">{project.name}</TableCell>
-                                <TableCell className="max-w-[12rem] overflow-hidden " >
-                                    {project.description && project.description.length > 35
-                                        ? `${project.description.slice(0, 35).trim()} ...`
-                                        : project.description}
-                                </TableCell>
-                                <TableCell className="text-center ">{CsUtils.formatDateToShortMonth(project.startDate!)}</TableCell>
-                                <TableCell className="text-center ">{CsUtils.formatDateToShortMonth(project.dueDate!)}</TableCell>
-                                <TableCell className="text-center">{project.priority !== CrmProjectPriority.NA && <ProjectPriority project={project} />}</TableCell>
-                                <TableCell className="text-center"><ProjectStatus project={project} /></TableCell>
-                                <TableCell className="text-right  flex items-center justify-end">
-                                    <Button onClick={() => { router.push(`/projects/${project._id}`) }} variant={'ghost'} ><SquareMenu /></Button>
-                                    <ProjectAction project={project} />
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>}
-                </Table>
-            </Container>
 
-        </div>
+            <Container className="pb-20">
+                {allProject ?
+                    allProject?.pagination.totalData > 0 ?
+                        <>
+                            <div className="grid grid-cols-1  border rounded bg-accent/10">
+                                {allProject.data.map((project: IProjectModel, i: number) => (
+                                    <div className={`ps-5 pe-3 hover:bg-accent/15 transition-all flex items-center justify-between ${i !== allProject.data.length - 1 && "border-b"}`} key={`project_${i + 8437593}`}>
+                                        <Link href={`/projects/${project._id}`} className="grow py-3 cursor-pointer grid grid-cols-12 gap-3">
+                                            <div className=" col-span-3">
+                                                <TypographyP className="font-bold">{project.name}</TypographyP>
+                                            </div>
+                                            <div className="flex items-center col-span-3">
+                                                <TypographyP className="">{project.name}</TypographyP>
+                                            </div>
+                                            <div className="flex items-center col-span-2">
+                                                <TypographyP className="">{project.name}</TypographyP>
+                                            </div>
+                                            <div className="flex items-center col-span-4 overflow-hidden">
+                                                <TypographyP className="">{project.name}</TypographyP>
+                                            </div>
+                                        </Link>
+
+                                        <div>
+                                            {/* <Button variant={'ghost'} onClick={() => { router.push(`/projects/${project._id}`) }}><SquareMenu /></Button> */}
+                                            <ProjectAction project={project} />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {(allProject?.pagination.currentPage !== allProject?.pagination.totalPages && allProject?.pagination.totalPages > 0) &&
+                                <Button variant={'secondary'} className="w-full mt-5" onClick={() => setPage(page + 1)}>
+                                    {loading ? <LoaderIcon className="animate-spin" /> : "Fetch More"}
+                                </Button>
+                            }
+                        </>
+                        :
+                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No projects found." : "You haven’t added any projects yet."}</TypographyP>
+                    :
+                    <SpinLoader />
+                }
+
+                {/* DEBUG */}
+                {/* <pre>{JSON.stringify(allProject?.pagination)}</pre> */}
+            </Container>
+        </section>
     )
 }
 

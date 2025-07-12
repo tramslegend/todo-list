@@ -24,8 +24,9 @@ const ClientSlice = createSlice({
         clearClient(state, _) {
             state.client = undefined
         },
-        addClientToArray(state, { payload }) {
-            state.allClient?.data.unshift(payload.client);
+        clearAllClient(state, { payload }) {
+            console.log('Clearing client')
+            if (state.allClient) state.allClient = undefined;
         }
 
     },
@@ -72,7 +73,15 @@ const ClientSlice = createSlice({
             })
             .addCase(ClientThunk.getAll.fulfilled, (state, { payload }) => {
                 state.loading = false;
-                state.allClient = payload.allClient;
+
+                const pgData: IPaginationResult<IClientModel> = payload.allClient;
+                if (state.allClient && state.allClient.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
+                    state.allClient.data.push(...pgData.data);
+                    state.allClient.pagination = pgData.pagination;
+                } else {
+                    state.allClient = payload.allClient;
+                }
+
             })
             .addCase(ClientThunk.getAll.rejected, (state, _) => {
                 state.loading = false;

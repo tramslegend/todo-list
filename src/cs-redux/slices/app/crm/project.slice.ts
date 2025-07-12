@@ -25,6 +25,9 @@ const ProjectSlice = createSlice({
     reducers: {
         clearProject(state, _) {
             state.project = undefined
+        },
+        clearAllProject(state, { payload }) {
+            if (state.allProject) state.allProject = undefined;
         }
 
     },
@@ -116,7 +119,15 @@ const ProjectSlice = createSlice({
             })
             .addCase(ProjectThunk.getAll.fulfilled, (state, { payload }) => {
                 state.loading = false;
-                state.allProject = payload.allProject;
+
+
+                const pgData: IPaginationResult<IProjectModel> = payload.allProject;
+                if (state.allProject && state.allProject.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
+                    state.allProject.data.push(...pgData.data);
+                    state.allProject.pagination = pgData.pagination;
+                } else {
+                    state.allProject = payload.allProject;
+                }
             })
             .addCase(ProjectThunk.getAll.rejected, (state, _) => {
                 state.loading = false;

@@ -27,6 +27,9 @@ const InvoiceSlice = createSlice({
     reducers: {
         clearInvoice(state, _) {
             state.invoice = undefined
+        },
+        clearAllInvoice(state, { payload }) {
+            if (state.allInvoice) state.allInvoice = undefined;
         }
 
     },
@@ -74,7 +77,14 @@ const InvoiceSlice = createSlice({
             })
             .addCase(InvoiceThunk.getAll.fulfilled, (state, { payload }) => {
                 state.loading = false;
-                state.allInvoice = payload.allInvoice;
+
+                const pgData: IPaginationResult<IInvoiceModel> = payload.allInvoice;
+                if (state.allInvoice && state.allInvoice.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
+                    state.allInvoice.data.push(...pgData.data);
+                    state.allInvoice.pagination = pgData.pagination;
+                } else {
+                    state.allInvoice = payload.allInvoice;
+                }
             })
             .addCase(InvoiceThunk.getAll.rejected, (state, _) => {
                 state.loading = false;

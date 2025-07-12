@@ -23,6 +23,9 @@ const ItemSlice = createSlice({
     reducers: {
         clearItem(state, _) {
             state.item = undefined
+        },
+        clearAllItem(state, { payload }) {
+            if (state.allItem) state.allItem = undefined;
         }
 
     },
@@ -67,7 +70,13 @@ const ItemSlice = createSlice({
             })
             .addCase(ItemThunk.getAll.fulfilled, (state, { payload }) => {
                 state.loading = false;
-                state.allItem = payload.allItem;
+                const pgData: IPaginationResult<IItemModel> = payload.allItem;
+                if (state.allItem && state.allItem.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
+                    state.allItem.data.push(...pgData.data);
+                    state.allItem.pagination = pgData.pagination;
+                } else {
+                    state.allItem = payload.allItem;
+                }
             })
             .addCase(ItemThunk.getAll.rejected, (state, _) => {
                 state.loading = false;

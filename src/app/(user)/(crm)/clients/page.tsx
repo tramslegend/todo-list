@@ -1,89 +1,99 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
 import { useCsDispatch, useCsSelector } from "@/cs-redux"
 import { ClientThunk } from "@/cs-redux/thunks/app/crm/client.thunk"
 import { IClientModel } from "@/types/crm/client.type"
-import { Grid, MoveRight, Plus, SquareMenu } from "lucide-react"
-import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
+import { LoaderIcon, Plus, SquareMenu } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import ClientAction from "./ClientAction"
 import MainPageHeader from "@/components/utils/MainPageHeader"
-import PaginationButton from "@/components/utils/PaginationButton"
 import Container from "@/components/utils/Container"
+import ClientSlice from "@/cs-redux/slices/app/crm/client.slice"
+import { TypographyP } from "@/components/ui/typography"
+import SpinLoader from "@/components/utils/SpinLoader"
+import Link from "next/link"
 
-export default function CrmClientsPage() {
+
+export default function ClientsPage() {
     const router = useRouter()
     const dispatch = useCsDispatch();
-    const searchParams = useSearchParams();
-    const { allClient } = useCsSelector(state => state.client);
+    const { allClient, loading } = useCsSelector(state => state.client);
 
 
     // Pagination & Fetch Data
-    const currentPage = parseInt(searchParams.get('page') || '1');
-    const [limit, setLimit] = useState<number>(30);
+    const [limit, setLimit] = useState<number>(20);
+    const [page, setPage] = useState<number>(1);
     const [query, setQuery] = useState<string>('');
 
-    // Reset to page 1 if query changes
 
+    // Reset data if query changed
     useEffect(() => {
-        dispatch(ClientThunk.getAll({ page: currentPage, limit, query }))
-    }, [dispatch, limit, currentPage, query])
+        setPage(1)
+        dispatch(ClientSlice.actions.clearAllClient({}))
+    }, [dispatch, query])
+
+
+    // Fetch Data
+    useEffect(() => {
+        dispatch(ClientThunk.getAll({ page, limit, query }))
+    }, [dispatch, limit, query, page])
 
 
     return (
-        <div>
+        <section>
             <MainPageHeader title="Clients" setQuery={setQuery}>
                 <Button size={'icon'} variant={'outline'}><Plus /></Button>
             </MainPageHeader>
-            <Container>
-                <Table>
-                    <TableCaption>{allClient?.data.length ? "A list of your clients" : <>No client available, <Link className="text-blue-600" href={'/clients/new'}>Create Now</Link></>}</TableCaption>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="w-[50px]">##</TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Phone</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead className="max-w-[12rem]">Address</TableHead>
-                            <TableHead>Company</TableHead>
-                            <TableHead className="text-right w-[100px]">Action</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    {allClient && <TableBody className="border-b">
-                        {allClient.data?.map((client: IClientModel, i: number) => (
-                            <TableRow key={`client_${i + 7863456}`}>
-                                <TableCell className="font-medium w-[50px]">{(i + 1).toString().padStart(2, '0')}</TableCell>
-                                <TableCell>{client.name}</TableCell>
-                                <TableCell>{client.phone}</TableCell>
-                                <TableCell>{client.email}</TableCell>
-                                <TableCell className="max-w-[12rem] overflow-hidden">
-                                    {client.address && client.address.length > 35
-                                        ? `${client.address.slice(0, 35)}...`
-                                        : client.address}
-                                </TableCell>
-                                <TableCell className={`${client.isIndividual && "text-muted-foreground"}`}>{client.companyName ? client.companyName : "Individual"}</TableCell>
-                                <TableCell className="text-right w-[100px] flex items-center justify-end">
-                                    <Button variant={'ghost'} onClick={() => { router.push(`/clients/${client._id}`) }}><SquareMenu /></Button>
-                                    <ClientAction client={client} />
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>}
-                </Table>
 
-                {allClient && <PaginationButton limit={limit} setLimit={setLimit} query={query} totalPages={allClient.pagination.totalPages} />}
+            <Container className="pb-20">
+                {allClient ?
+                    allClient?.pagination.totalData > 0 ?
+                        <>
+                            <div className="grid grid-cols-1  border rounded bg-accent/10">
+                                {allClient.data.map((client: IClientModel, i: number) => (
+                                    <div className={`ps-5 pe-3  hover:bg-accent/15 transition-all flex items-center justify-between ${i !== allClient.data.length - 1 && "border-b"}`} key={`client_${i + 8437593}`}>
+                                        <Link href={`/clients/${client._id}`} className="grow py-3 cursor-pointer grid grid-cols-12 gap-3">
+                                            <div className=" col-span-3">
+                                                <TypographyP className="font-bold">{client.name}</TypographyP>
+                                                <TypographyP className="text-muted-foreground text-[12px]" title="Company name">{(!client.isIndividual && client.companyName) && client.companyName}</TypographyP>
+                                            </div>
+                                            <div className="flex items-center col-span-3">
+                                                <TypographyP className="">{client.email}</TypographyP>
+                                            </div>
+                                            <div className="flex items-center col-span-2">
+                                                <TypographyP className="">{client.phone}</TypographyP>
+                                            </div>
+                                            <div className="flex items-center col-span-4 overflow-hidden">
+                                                <TypographyP className="">{client.address}</TypographyP>
+                                            </div>
+                                        </Link>
+
+                                        <div>
+                                            {/* <Button variant={'ghost'} onClick={() => { router.push(`/clients/${client._id}`) }}><SquareMenu /></Button> */}
+                                            <ClientAction client={client} />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {(allClient?.pagination.currentPage !== allClient?.pagination.totalPages && allClient?.pagination.totalPages > 0) &&
+                                <Button variant={'secondary'} className="w-full mt-5" onClick={() => setPage(page + 1)}>
+                                    {loading ? <LoaderIcon className="animate-spin" /> : "Fetch More"}
+                                </Button>
+                            }
+                        </>
+                        :
+                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No clients found." : "You haven’t added any clients yet."}</TypographyP>
+                    :
+                    <SpinLoader />
+                }
+
+                {/* DEBUG */}
+                {/* <pre>{JSON.stringify(allClient?.pagination)}</pre> */}
             </Container>
-        </div>
+        </section>
     )
 }
+

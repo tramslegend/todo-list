@@ -25,6 +25,10 @@ const TransactionSlice = createSlice({
     reducers: {
         clearTransaction(state, _) {
             state.transaction = undefined
+        },
+        clearAllTransaction(state, { payload }) {
+            console.log('Clearing transaction')
+            if (state.allTransaction) state.allTransaction = undefined;
         }
 
     },
@@ -53,7 +57,14 @@ const TransactionSlice = createSlice({
             })
             .addCase(TransactionThunk.getAll.fulfilled, (state, { payload }) => {
                 state.loading = false;
-                state.allTransaction = payload.allTransaction;
+
+                const pgData: IPaginationResult<ITransactionModel> = payload.allTransaction;
+                if (state.allTransaction && state.allTransaction.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
+                    state.allTransaction.data.push(...pgData.data);
+                    state.allTransaction.pagination = pgData.pagination;
+                } else {
+                    state.allTransaction = payload.allTransaction;
+                }
             })
             .addCase(TransactionThunk.getAll.rejected, (state, _) => {
                 state.loading = false;
