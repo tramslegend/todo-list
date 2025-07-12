@@ -14,7 +14,7 @@ import {
 
 import { LOGO, LOGO_DARK, PROJECT_NAME } from '@/root.config'
 import { ThemeToggle } from '@/components/theme/ThemeToggle'
-import { BellIcon, ChevronDown, Home, LayoutDashboardIcon, LogOut, Settings, User } from 'lucide-react'
+import { BellIcon, ChevronDown, Home, LayoutDashboardIcon, LogOut, Moon, Settings, Sun, User } from 'lucide-react'
 import { toast } from 'sonner'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
@@ -30,6 +30,8 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { TypographyP } from "@/components/ui/typography"
+import { ThemeToggle2 } from "@/components/theme/ThemeToggle2"
 
 const NavItems = [
     {
@@ -128,14 +130,13 @@ export default function UserRootLayout({ children }: Readonly<{ children: React.
                     </DropdownMenu>}
 
                     <Menubar className='p-0 bg-transparent rounded-full border-0 '>
-                        <MenubarMenu>
+                        <MenubarMenu >
                             <MenubarTrigger className={`cursor-pointer bg-background/50 hover:bg-muted  rounded-full border h-full aspect-square px-0 py-0 text-accent-foreground grid place-items-center `}>
                                 <User size={16} />
                             </MenubarTrigger>
                             <MenubarContent align='end' className='w-[13rem] px-3 py-3'>
                                 <div className='mb-3'>
                                     <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-
                                         <div className="grid flex-1 text-left text-sm leading-tight">
                                             <span className="truncate font-semibold">{authUser?.name}</span>
                                             <span className="truncate text-xs">{authUser?.primaryEmail}</span>
@@ -148,15 +149,19 @@ export default function UserRootLayout({ children }: Readonly<{ children: React.
                                     <MenubarShortcut><LayoutDashboardIcon /></MenubarShortcut>
                                 </MenubarItem>
                                 <MenubarItem onClick={() => router.push('/settings/account')}>
-                                    Account Setting
-
+                                    Setting
                                     <MenubarShortcut><Settings /></MenubarShortcut>
                                 </MenubarItem>
-                                <MenubarSeparator />
                                 <MenubarItem onClick={() => router.push('/home')}>
                                     Home Page
                                     <MenubarShortcut><Home /></MenubarShortcut>
                                 </MenubarItem>
+                                <MenubarSeparator />
+                                <div className="px-3 py-1 text-sm flex items-center justify-between">
+                                    <span className="grow">Theme</span>
+                                    <ThemeToggle2 />
+                                </div>
+                                <MenubarSeparator />
                                 <MenubarItem variant='destructive' onClick={() => { dispatch(UserAuthThunk.logout()); router.replace('/auth/login') }}>
                                     Logout <MenubarShortcut><LogOut /></MenubarShortcut>
                                 </MenubarItem>
