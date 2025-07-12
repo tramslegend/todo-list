@@ -15,6 +15,7 @@ import SpinLoader from "@/components/utils/SpinLoader"
 import Link from "next/link"
 import TransactionDetails from "./TransactionDetails"
 import { ITransactionModel } from "@/types/crm/transaction.type"
+import { CsUtils } from "@/cs-toolkit"
 
 
 export default function TransactionsPage() {
@@ -54,24 +55,24 @@ export default function TransactionsPage() {
                         <>
                             <div className="grid grid-cols-1  border rounded bg-accent/10">
                                 {allTransaction.data.map((transaction: ITransactionModel, i: number) => (
-                                    <div className={`ps-5 pe-3 hover:bg-accent/15 transition-all flex items-center justify-between ${i !== allTransaction.data.length - 1 && "border-b"}`} key={`transaction_${i + 8437593}`}>
+                                    <div className={`ps-5 pe-3 hover:bg-accent/15 transition-all gap-3 flex items-center justify-between ${i !== allTransaction.data.length - 1 && "border-b"}`} key={`transaction_${i + 8437593}`}>
                                         <div onClick={() => setFlaggedTransaction(transaction)} className="grow py-3 cursor-pointer grid grid-cols-12 gap-3">
                                             <div className=" col-span-3">
                                                 <TypographyP className="font-bold">{transaction.invoiceNumber}</TypographyP>
                                             </div>
-                                            <div className="flex items-center col-span-3">
-                                                <TypographyP className="">{transaction.amount}</TypographyP>
+                                            <div className=" col-span-3">
+                                                <TypographyP className="">{transaction.method}</TypographyP>
+                                                <TypographyP className="text-muted-foreground text-[12px]">{transaction.referenceId}</TypographyP>
                                             </div>
-                                            {/*<div className="flex items-center col-span-2">
-                                                <TypographyP className="">{transaction.name}</TypographyP>
+                                            <div className=" col-span-3">
+                                                <TypographyP className="">{CsUtils.formatDateTime(transaction.paidAt)}</TypographyP>
                                             </div>
-                                            <div className="flex items-center col-span-4 overflow-hidden">
-                                                <TypographyP className="">{transaction.name}</TypographyP>
-                                            </div> */}
+                                            <div className="col-span-3">
+                                                <TypographyP className="text-right ont-bold">{transaction.currency.symbol} {transaction.amount}</TypographyP>
+                                            </div>
                                         </div>
 
                                         <div>
-                                            {/* <Button variant={'ghost'} onClick={() => { router.push(`/transactions/${transaction._id}`) }}><SquareMenu /></Button> */}
                                             <TransactionAction transaction={transaction} />
                                         </div>
                                     </div>
@@ -85,13 +86,13 @@ export default function TransactionsPage() {
                             }
                         </>
                         :
-                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No transactions found." : "You haven’t added any transactions yet."}</TypographyP>
+                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No transactions found." : "You haven&prime;t added any transactions yet."}</TypographyP>
                     :
                     <SpinLoader />
                 }
 
                 {/* DEBUG */}
-                <pre>{JSON.stringify(allTransaction?.pagination)}</pre>
+                {/* <pre>{JSON.stringify(allTransaction?.pagination)}</pre> */}
             </Container>
             <TransactionDetails transaction={flaggedTransaction} setTransaction={setFlaggedTransaction} />
 

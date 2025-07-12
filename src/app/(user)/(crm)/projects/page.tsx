@@ -14,6 +14,10 @@ import ProjectSlice from "@/cs-redux/slices/app/crm/project.slice"
 import { TypographyP } from "@/components/ui/typography"
 import SpinLoader from "@/components/utils/SpinLoader"
 import Link from "next/link"
+import { CsUtils } from "@/cs-toolkit"
+import ProjectPriority from "./ProjectPriority"
+import ProjectStatus from "./ProjectStatus"
+import { CrmProjectPriority } from "@/constants/crm.constant"
 
 
 export default function ProjectsPage() {
@@ -55,17 +59,22 @@ export default function ProjectsPage() {
                                 {allProject.data.map((project: IProjectModel, i: number) => (
                                     <div className={`ps-5 pe-3 hover:bg-accent/15 transition-all flex items-center justify-between ${i !== allProject.data.length - 1 && "border-b"}`} key={`project_${i + 8437593}`}>
                                         <Link href={`/projects/${project._id}`} className="grow py-3 cursor-pointer grid grid-cols-12 gap-3">
-                                            <div className=" col-span-3">
+                                            <div className=" col-span-3 overflow-hidden">
                                                 <TypographyP className="font-bold">{project.name}</TypographyP>
+                                                <TypographyP className="text-muted-foreground text-[12px] leading-3 mt-1">{project.description}</TypographyP>
                                             </div>
-                                            <div className="flex items-center col-span-3">
-                                                <TypographyP className="">{project.name}</TypographyP>
+                                            <div className="col-span-3">
+                                                <TypographyP className="">Started: <span className="text-muted-foreground ms-4">{CsUtils.formatDateToShortMonth(project.startDate)}</span></TypographyP>
+                                                <TypographyP className="">Due Date: <span className="text-muted-foreground ">{CsUtils.formatDateToShortMonth(project.dueDate)}</span></TypographyP>
+                                            </div>
+                                            <div className="flex items-center col-span-3 overflow-hidden">
+                                                {/* <TypographyP className="">{project.name}</TypographyP> */}
+                                            </div>
+                                            <div className="flex items-center col-span-1">
+                                                {project.priority !== CrmProjectPriority.NA && <ProjectPriority project={project} disabled />}
                                             </div>
                                             <div className="flex items-center col-span-2">
-                                                <TypographyP className="">{project.name}</TypographyP>
-                                            </div>
-                                            <div className="flex items-center col-span-4 overflow-hidden">
-                                                <TypographyP className="">{project.name}</TypographyP>
+                                                <ProjectStatus project={project} disabled />
                                             </div>
                                         </Link>
 

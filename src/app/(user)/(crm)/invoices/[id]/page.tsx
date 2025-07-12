@@ -10,7 +10,7 @@ import InvoiceSlice from "@/cs-redux/slices/app/crm/invoice.slice";
 import { ClientThunk } from "@/cs-redux/thunks/app/crm/client.thunk";
 import { ProjectThunk } from "@/cs-redux/thunks/app/crm/project.thunk";
 import InvoiceStatus from "../ProjectStatus";
-import { getUnitLabel } from "@/constants/crm.constant";
+import { CrmInvoiceStatus, getUnitLabel } from "@/constants/crm.constant";
 import { formatDateToShortMonth } from "@/cs-toolkit/utils";
 import { Check, Clock, ClockAlert } from "lucide-react";
 import PaymentForm from "./PaymentForm";
@@ -69,7 +69,9 @@ export default function page() {
                                 <TypographyP className="flex items-center gap-1  rounded-full px-3 py-0.5 mt-1 bg-[#0861df] text-primary-foreground dark:text-primary">
                                     <span className="font-bold flex items-center gap-0.5"><Clock size={14} />Due:</span>
                                     <span>{formatDateToShortMonth(invoice.dueDate)}</span>
-                                    {new Date(invoice.dueDate) < new Date() && <span className="font-bold text-[11px] text-destructive bg-accent rounded-full px-1.5">(OVERDUE)</span>}
+                                    {(new Date(invoice.dueDate) < new Date() && invoice.status === CrmInvoiceStatus.SENT) &&
+                                        <span className="font-bold text-[11px] text-destructive bg-accent rounded-full px-1.5">(OVERDUE)</span>
+                                    }
                                 </TypographyP>
                             </div>
                         </div>

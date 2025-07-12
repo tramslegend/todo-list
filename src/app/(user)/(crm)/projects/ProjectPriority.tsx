@@ -95,11 +95,9 @@ export default function ProjectPriority({ project, disabled = false }: { project
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Priority</SelectLabel>
-                                    {
-                                        Object.values(CrmProjectPriority).map((s: string, i: number) => (
-                                            <SelectItem key={`priority-${i + 4387653}`} value={s}>{s}</SelectItem>
-                                        ))
-                                    }
+                                    {Object.values(CrmProjectPriority).map((s: string, i: number) => (
+                                        <SelectItem key={`priority-${i + 4387653}`} value={s}>{s}</SelectItem>
+                                    ))}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>

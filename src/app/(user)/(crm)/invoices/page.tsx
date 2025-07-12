@@ -14,6 +14,9 @@ import InvoiceSlice from "@/cs-redux/slices/app/crm/invoice.slice"
 import { TypographyP } from "@/components/ui/typography"
 import SpinLoader from "@/components/utils/SpinLoader"
 import Link from "next/link"
+import { CsUtils } from "@/cs-toolkit"
+import InvoiceStatus from "./ProjectStatus"
+import { CrmInvoiceStatus } from "@/constants/crm.constant"
 
 
 export default function InvoicesPage() {
@@ -53,20 +56,29 @@ export default function InvoicesPage() {
                         <>
                             <div className="grid grid-cols-1  border rounded bg-accent/10">
                                 {allInvoice.data.map((invoice: IInvoiceModel, i: number) => (
-                                    <div className={`ps-5 pe-3 hover:bg-accent/15 transition-all flex items-center justify-between ${i !== allInvoice.data.length - 1 && "border-b"}`} key={`invoice_${i + 8437593}`}>
+                                    <div className={`ps-5 pe-3 hover:bg-accent/15 transition-all gap-3 flex items-center justify-between ${i !== allInvoice.data.length - 1 && "border-b"}`} key={`invoice_${i + 8437593}`}>
                                         <Link href={`/invoices/${invoice._id}`} className="grow py-3 cursor-pointer grid grid-cols-12 gap-3">
-                                            <div className=" col-span-3">
+                                            <div className=" col-span-3 overflow-hidden">
                                                 <TypographyP className="font-bold">{invoice.title}</TypographyP>
                                             </div>
-                                            {/* <div className="flex items-center col-span-3">
-                                                <TypographyP className="">{invoice.name}</TypographyP>
+                                            <div className=" col-span-3">
+                                                <TypographyP className="">Issued: <span className="text-muted-foreground ms-5">{CsUtils.formatDateToShortMonth(invoice.issuedDate)}</span></TypographyP>
+                                                <TypographyP className="">Due Date: <span className="text-muted-foreground ">{CsUtils.formatDateToShortMonth(invoice.dueDate)}</span></TypographyP>
+                                                {(new Date(invoice.dueDate) < new Date() && (invoice.status === CrmInvoiceStatus.SENT)) &&
+                                                    <span className="font-bold text-[11px] text-destructive bg-accent rounded-full px-1.5">(OVERDUE)</span>
+                                                }
                                             </div>
-                                            <div className="flex items-center col-span-2">
-                                                <TypographyP className="">{invoice.name}</TypographyP>
+                                            <div className=" col-span-3 flex items-center">
+                                                <InvoiceStatus invoice={invoice} />
                                             </div>
-                                            <div className="flex items-center col-span-4 overflow-hidden">
-                                                <TypographyP className="">{invoice.name}</TypographyP>
-                                            </div> */}
+                                            <div className=" col-span-3">
+                                                <TypographyP className="font-bold text-right">{invoice.currency.symbol} {invoice.totalAmount}</TypographyP>
+                                                {
+                                                    invoice.totalAmount - invoice.amountPaid > 0 &&
+                                                    <TypographyP className="text-right text-muted-foreground text-[12px]">Due: {invoice.currency.symbol} {invoice.totalAmount - invoice.amountPaid}</TypographyP>
+
+                                                }
+                                            </div>
                                         </Link>
 
                                         <div>
