@@ -28,8 +28,11 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import CrmItemForm from "./ItemForm"
+import ItemForm from "./ItemForm"
 import { toast } from "sonner"
+import ItemDetails from "./ItemDetails"
+import { CURRENCY } from "@/root.config"
+import { getUnitLabel } from "@/constants/crm.constant"
 
 
 export default function ItemsPage() {
@@ -37,6 +40,7 @@ export default function ItemsPage() {
     const dispatch = useCsDispatch();
     const { allItem, loading } = useCsSelector(state => state.item);
     const [flaggedItem, setFlaggedItem] = useState<IItemModel | null>(null);
+    const [itemToEdit, setItemToEdit] = useState<IItemModel | null>(null);
     const [idToDelete, setIdToDelete] = useState<string | null>(null);
 
     // Pagination & Fetch Data
@@ -76,7 +80,7 @@ export default function ItemsPage() {
     return (
         <section>
             <MainPageHeader title="Items" setQuery={setQuery}>
-                <Button size={'icon'} variant={'outline'}><Plus /></Button>
+                <Button onClick={() => router.push(`/items?new=true`)} size={'icon'} variant={'outline'}><Plus /></Button>
             </MainPageHeader>
 
             <Container className="pb-20">
@@ -90,15 +94,13 @@ export default function ItemsPage() {
                                             <div className=" col-span-3">
                                                 <TypographyP className="font-bold">{item.name}</TypographyP>
                                             </div>
-                                            <div className="flex items-center col-span-3">
-                                                <TypographyP className="">{item.basePrice}</TypographyP>
+                                            <div className="flex items-center col-span-6">
+                                                <TypographyP className="">{item.description}</TypographyP>
                                             </div>
-                                            {/*<div className="flex items-center col-span-2">
-                                                <TypographyP className="">{item.name}</TypographyP>
+                                            <div className="items-center col-span-3 grid grid-cols-2">
+                                                <TypographyP className="text-right">{CURRENCY} {item.basePrice} </TypographyP>
+                                                <TypographyP className="text-muted-foreground text-[12px] ms-1.5">{getUnitLabel(item.unit)}</TypographyP>
                                             </div>
-                                            <div className="flex items-center col-span-4 overflow-hidden">
-                                                <TypographyP className="">{item.name}</TypographyP>
-                                            </div> */}
                                         </div>
 
                                         <div>
@@ -110,11 +112,11 @@ export default function ItemsPage() {
                                                 <DropdownMenuContent align="end" className=" space-y-1 py-2">
                                                     {/* <DropdownMenuLabel>Appearance</DropdownMenuLabel> */}
                                                     {/* <DropdownMenuSeparator /> */}
-                                                    <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => router.push(`/items?open=true&id=${item._id}`)}>Edit</DropdownMenuItem>
-                                                    <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => setIdToDelete(item._id)}>Delete</DropdownMenuItem>
-
+                                                    <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent rounded" onClick={() => { setItemToEdit(item) }}>Edit</DropdownMenuItem>
+                                                    <DropdownMenuItem className="cursor-pointer px-3 py-0.5 hover:bg-accent hover:text-destructive rounded text-destructive" onClick={() => setIdToDelete(item._id)}>Delete</DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
+
                                             <Dialog open={idToDelete !== null} onOpenChange={() => setIdToDelete(null)}>
                                                 <DialogTrigger></DialogTrigger>
                                                 <DialogContent>
@@ -129,7 +131,6 @@ export default function ItemsPage() {
                                                         <Button variant={'destructive'} onClick={onDelete}> Delete </Button>
                                                     </DialogFooter>
                                                 </DialogContent>
-
                                             </Dialog>
                                         </div>
                                     </div>
@@ -143,16 +144,17 @@ export default function ItemsPage() {
                             }
                         </>
                         :
-                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No items found." : "You haven’t added any items yet."}</TypographyP>
+                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No items found." : "You haven&prime;t added any items yet."}</TypographyP>
                     :
                     <SpinLoader />
                 }
 
                 {/* DEBUG */}
-                <pre>{JSON.stringify(allItem?.pagination)}</pre>
+                {/* <pre>{JSON.stringify(allItem?.pagination)}</pre> */}
+                {/* <pre>{JSON.stringify(flaggedItem)}</pre> */}
             </Container>
-            {/* <ItemDetails item={flaggedItem} setItem={setFlaggedItem} /> */}
-            <Suspense><CrmItemForm /></Suspense>
+            <ItemDetails item={flaggedItem} setItem={setFlaggedItem} />
+            <Suspense><ItemForm item={itemToEdit} setItem={setItemToEdit} /></Suspense>
 
         </section>
     )

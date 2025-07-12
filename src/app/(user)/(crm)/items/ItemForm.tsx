@@ -15,9 +15,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useCsDispatch, useCsSelector } from "@/cs-redux"
 import { ItemThunk } from "@/cs-redux/thunks/app/crm/item.thunk"
-import { INewItem } from "@/types/crm/item.type"
+import { IItemModel, INewItem } from "@/types/crm/item.type"
 import { useRouter, useSearchParams } from "next/navigation"
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react"
 import {
     Select,
     SelectContent,
@@ -40,24 +40,17 @@ const defaultValue: INewItem = {
     basePrice: 0
 }
 
-export default function CrmItemForm() {
+export default function ItemForm({ item, setItem }: { item: IItemModel | null; setItem: Dispatch<SetStateAction<IItemModel | null>> }) {
     const searchParams = useSearchParams()
     const router = useRouter()
     const dispatch = useCsDispatch();
-
-    const open = searchParams.get('open');
-    const id = searchParams.get('id');
-
-    const { item } = useCsSelector(state => state.item);
+    const newItem = searchParams.get('new') === 'true';
     const [formData, setFormData] = useState<INewItem>(defaultValue)
 
 
-    useEffect(() => {
-        if (id) dispatch(ItemThunk.getById({ id }))
-    }, [dispatch, id])
 
     useEffect(() => {
-        if (id && item) {
+        if (item) {
             setFormData({
                 name: item.name,
                 description: item.description,
@@ -65,13 +58,13 @@ export default function CrmItemForm() {
                 unit: item.unit,
             })
         }
-    }, [dispatch, id, item])
+    }, [dispatch, item])
 
 
     function onOpenChange() {
-        dispatch(ItemSlice.actions.clearItem({}));
         setFormData(defaultValue);
-        router.push('/items');
+        setItem(null);
+        router.replace('/items');
     }
 
 
@@ -90,14 +83,14 @@ export default function CrmItemForm() {
 
         // Dispatch
         let res;
-        if (id && item) {
-            res = await dispatch(ItemThunk.update({ id, data: formData }))
+        if (item) {
+            res = await dispatch(ItemThunk.update({ id: item._id, data: formData }))
         } else {
             res = await dispatch(ItemThunk.create(formData))
         }
 
         if (res.payload.message) {
-            router.push('/items');
+            router.replace('/items');
             toast.success(res.payload.message);
             setFormData(defaultValue);
         }
@@ -108,13 +101,13 @@ export default function CrmItemForm() {
     }
 
     return (
-        <Dialog open={open === 'true'} onOpenChange={onOpenChange}>
+        <Dialog open={newItem || item !== null} onOpenChange={onOpenChange}>
             <form>
                 <DialogTrigger asChild>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>{id ? "Update Item" : "Add New Item"}</DialogTitle>
+                        <DialogTitle>{item ? "Update Item" : "Add New Item"}</DialogTitle>
                         <DialogDescription>
                             Fill the details for the item
                         </DialogDescription>
@@ -157,7 +150,7 @@ export default function CrmItemForm() {
                         <DialogClose asChild>
                             <Button size={'sm'} variant="outline">Cancel</Button>
                         </DialogClose>
-                        <Button onClick={onSubmit} size={'sm'} >{id ? "Update" : "Add Item"}</Button>
+                        <Button onClick={onSubmit} size={'sm'} >{item ? "Update" : "Add Item"}</Button>
                     </DialogFooter>
                 </DialogContent>
             </form>
