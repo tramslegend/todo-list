@@ -44,7 +44,7 @@ export default function ClientsPage() {
     return (
         <section>
             <MainPageHeader title="Clients" setQuery={setQuery}>
-                <Button size={'icon'} variant={'outline'}><Plus /></Button>
+                <Button size={'icon'} variant={'outline'} onClick={() => router.push(`/clients/new`)}><Plus /></Button>
             </MainPageHeader>
 
             <Container className="pb-20">

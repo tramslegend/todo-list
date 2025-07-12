@@ -62,6 +62,7 @@ const InvoiceSlice = createSlice({
                 const index = state.allInvoice?.data.findIndex(invoice => invoice._id === payload.invoice._id);
                 if (index !== -1 && state.allInvoice) {
                     state.allInvoice.data[index!] = payload.invoice;
+                    state.allInvoice.data.sort((a, b) => new Date(b.updatedAt!).getTime() - new Date(a.updatedAt!).getTime());
                 }
             })
             .addCase(InvoiceThunk.update.rejected, (state, _) => {

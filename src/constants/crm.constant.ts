@@ -24,11 +24,9 @@ export type CrmProjectPriorityType = typeof CrmProjectPriority[keyof typeof CrmP
 
 // Invoice
 export const CrmInvoiceStatus = {
-    DRAFT: 'Draft',
-    SENT: 'Sent',
+    UNPAID: 'Unpaid',
     PARTIAL: 'Partial',
     PAID: 'Paid',
-    CANCELLED: 'Cancelled',
 } as const;
 
 export type CrmInvoiceStatusType = typeof CrmInvoiceStatus[keyof typeof CrmInvoiceStatus];

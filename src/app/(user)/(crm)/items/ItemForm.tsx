@@ -93,6 +93,7 @@ export default function ItemForm({ item, setItem }: { item: IItemModel | null; s
             router.replace('/items');
             toast.success(res.payload.message);
             setFormData(defaultValue);
+            setItem(null);
         }
         else if (res.payload.error) {
             toast.error(res.payload.error);

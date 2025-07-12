@@ -56,6 +56,8 @@ const ItemSlice = createSlice({
                 const index = state.allItem?.data.findIndex(item => item._id === payload.item._id);
                 if (index !== -1 && state.allItem) {
                     state.allItem.data[index!] = payload.item;
+                    state.allItem.data.sort((a, b) => new Date(b.updatedAt!).getTime() - new Date(a.updatedAt!).getTime());
+
                 }
             })
             .addCase(ItemThunk.update.rejected, (state, _) => {

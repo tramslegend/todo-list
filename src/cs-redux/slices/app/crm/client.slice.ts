@@ -59,6 +59,7 @@ const ClientSlice = createSlice({
                 const index = state.allClient?.data.findIndex(client => client._id === payload.client._id);
                 if (index !== -1 && state.allClient) {
                     state.allClient.data[index!] = payload.client;
+                    state.allClient.data.sort((a, b) => new Date(b.updatedAt!).getTime() - new Date(a.updatedAt!).getTime());
                 }
             })
             .addCase(ClientThunk.update.rejected, (state, _) => {

@@ -40,6 +40,7 @@ export interface IInvoiceModel {
 
     note?: string;
     token?: string;
+    isSent: boolean;
     isArchived: boolean;
     archivedAt?: Date;
 

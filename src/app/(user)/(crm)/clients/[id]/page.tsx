@@ -1,19 +1,13 @@
 'use client'
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import { TypographyH2, TypographyH3, TypographyH4, TypographyP } from "@/components/ui/typography";
+import { TypographyH2, TypographyP } from "@/components/ui/typography";
 import { useCsDispatch, useCsSelector } from "@/cs-redux";
 import ClientSlice from "@/cs-redux/slices/app/crm/client.slice";
 import { ClientThunk } from "@/cs-redux/thunks/app/crm/client.thunk";
-import { PLACEHOLDER_IMAGE } from "@/root.config";
-import { EllipsisVertical, User } from "lucide-react";
-import { useParams, useRouter } from "next/navigation"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import ClientAction from "../ClientAction";
 import { Label } from "@/components/ui/label";
 import ClientProjectList from "./ClientProjectList";
@@ -22,12 +16,20 @@ import Container from "@/components/utils/Container";
 
 export default function CrmClientDetailsPage() {
     const params = useParams()
+    const searchParams = useSearchParams()
+    const paramsTab = searchParams.get('tab');
     const id = params?.id?.toString();
-
     const dispatch = useCsDispatch();
     const router = useRouter()
+
     const { client } = useCsSelector(state => state.client);
-    const [show, setShow] = useState<'project' | 'invoice'>('project')
+    const [tab, setTab] = useState<'project' | 'invoice'>('project')
+
+    useEffect(() => {
+        if (paramsTab && paramsTab === 'project') setTab('project')
+        else if (paramsTab && paramsTab === 'invoice') setTab('invoice')
+        else setTab('project')
+    }, [paramsTab])
 
     useEffect(() => {
         if (id) dispatch(ClientThunk.getById({ id }))
@@ -108,16 +110,28 @@ export default function CrmClientDetailsPage() {
             <div className="mt-9">
                 <div className="flex items-center justify-between">
                     <div className="space-x-2">
-                        <button className={`py-2 cursor-pointer px-1 transition-all duration-300 border-b-2 ${show === 'project' ? "border-b-destructive" : "border-b-transparent"}`} onClick={() => setShow('project')}>Projects</button>
-                        <button className={`py-2 cursor-pointer px-1 transition-all duration-300 border-b-2 ${show === 'invoice' ? "border-b-destructive" : "border-b-transparent"}`} onClick={() => setShow('invoice')}>Invoices</button>
+                        <button
+                            className={`py-2 cursor-pointer px-1 transition-all duration-300 border-b-2 ${tab === 'project' ? "border-b-destructive" : "border-b-transparent"}`}
+                            onClick={() => { setTab('project'); router.push(`/clients/${client?._id}?tab=project`) }}
+                        >
+                            Projects
+                        </button>
+                        <button
+                            className={`py-2 cursor-pointer px-1 transition-all duration-300 border-b-2 ${tab === 'invoice' ? "border-b-destructive" : "border-b-transparent"}`}
+                            onClick={() => { setTab('invoice'); router.push(`/clients/${client?._id}?tab=invoice`) }}
+                        >
+                            Invoices
+                        </button>
                     </div>
-                    {show === 'project' && <Button size={'sm'} variant={'outline'} onClick={() => router.push(`/projects/new?client=${client?._id}`)}>New Project</Button>}
-                    {show === 'invoice' && <Button size={'sm'} variant={'outline'} onClick={() => router.push(`/invoices/new?client=${client?._id}`)}>New Invoice</Button>}
+                    {tab === 'project' && <Button size={'sm'} variant={'outline'} onClick={() => router.push(`/projects/new?client=${client?._id}`)}>New Project</Button>}
+                    {tab === 'invoice' && <Button size={'sm'} variant={'outline'} onClick={() => router.push(`/invoices/new?client=${client?._id}`)}>New Invoice</Button>}
                 </div>
+
                 <hr />
+
                 <section className="mt-5">
-                    {show === 'project' && <ClientProjectList />}
-                    {show === 'invoice' && <ClientInvoiceList />}
+                    {tab === 'project' && <ClientProjectList />}
+                    {tab === 'invoice' && <ClientInvoiceList />}
                 </section>
             </div>
         </Container>

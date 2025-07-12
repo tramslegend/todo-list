@@ -9,7 +9,7 @@ import { TypographyH2, TypographyH3, TypographyH4, TypographyP, TypographySmall 
 import InvoiceSlice from "@/cs-redux/slices/app/crm/invoice.slice";
 import { ClientThunk } from "@/cs-redux/thunks/app/crm/client.thunk";
 import { ProjectThunk } from "@/cs-redux/thunks/app/crm/project.thunk";
-import InvoiceStatus from "../ProjectStatus";
+import InvoiceStatus from "../InvoiceStatus";
 import { CrmInvoiceStatus, getUnitLabel } from "@/constants/crm.constant";
 import { formatDateToShortMonth } from "@/cs-toolkit/utils";
 import { Check, Clock, ClockAlert } from "lucide-react";
@@ -55,7 +55,7 @@ export default function page() {
                 <PaymentForm invoice={invoice} />
                 <TypographyH2 className="flex items-center justify-between">
                     <span>
-                        <span>{invoice?.title} <InvoiceStatus invoice={invoice} /></span>
+                        <span>{invoice?.title} <InvoiceStatus status={invoice.status} /></span>
                         {invoice?.isArchived && <span className="text-sm text-destructive ms-2"> (archived)</span>}
                     </span>
                     <InvoiceAction invoice={invoice} />
@@ -69,9 +69,9 @@ export default function page() {
                                 <TypographyP className="flex items-center gap-1  rounded-full px-3 py-0.5 mt-1 bg-[#0861df] text-primary-foreground dark:text-primary">
                                     <span className="font-bold flex items-center gap-0.5"><Clock size={14} />Due:</span>
                                     <span>{formatDateToShortMonth(invoice.dueDate)}</span>
-                                    {(new Date(invoice.dueDate) < new Date() && invoice.status === CrmInvoiceStatus.SENT) &&
+                                    {/* {(new Date(invoice.dueDate) < new Date() && invoice.status === CrmInvoiceStatus.SENT) &&
                                         <span className="font-bold text-[11px] text-destructive bg-accent rounded-full px-1.5">(OVERDUE)</span>
-                                    }
+                                    } */}
                                 </TypographyP>
                             </div>
                         </div>

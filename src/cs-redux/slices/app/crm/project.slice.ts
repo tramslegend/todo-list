@@ -62,6 +62,7 @@ const ProjectSlice = createSlice({
                 const index = state.allProject?.data.findIndex(project => project._id === payload.project._id);
                 if (index !== -1 && state.allProject) {
                     state.allProject.data[index!] = payload.project;
+                    state.allProject.data.sort((a, b) => new Date(b.updatedAt!).getTime() - new Date(a.updatedAt!).getTime());
                 }
             })
             .addCase(ProjectThunk.update.rejected, (state, _) => {
