@@ -2,23 +2,45 @@
 
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
 import { TypographyH3, TypographyP } from "@/components/ui/typography"
 import CurrencySelector from "@/components/utils/CurrencySelector"
+import SpinLoader from "@/components/utils/SpinLoader"
 import { currencies } from "@/constants/currencies"
+import { useCsDispatch, useCsSelector } from "@/cs-redux"
+import { OrganizationAction } from "@/cs-redux/thunks/app/organization.action"
 import { CsUtils } from "@/cs-toolkit"
 import { ICurrency } from "@/types"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
 
 
 
 export default function OrgDefaultCurrency() {
+    const dispatch = useCsDispatch();
+    const { organization, } = useCsSelector(state => state.organization);
     const [currency, setCurrency] = useState<ICurrency>(CsUtils.findByProperty(currencies, 'code', 'INR')!)
+    const [loading, setLoading] = useState<boolean>(false)
 
+    useEffect(() => {
+        if (organization) {
+            setCurrency(organization.currency)
+        }
+    }, [organization])
 
 
     async function onSave() {
+        setLoading(true);
+        if (!currency) return toast.error("Organization name is requeued!")
 
+        const res = await dispatch(OrganizationAction.updateCurrency({ currency }))
+
+        if (res.payload.message) {
+            toast.success(res.payload.message)
+        }
+        else if (res.payload.error) {
+            toast.error(res.payload.error)
+        }
+        setLoading(false);
     }
     return (
         <Card className="px-5">
@@ -32,7 +54,7 @@ export default function OrgDefaultCurrency() {
             <hr />
             <div className="flex items-center justify-between">
                 <TypographyP className="text-muted-foreground">Selected currency will be applied to all new invoices by default.</TypographyP>
-                <Button onClick={onSave}>Save</Button>
+                <Button onClick={onSave}>{loading ? <SpinLoader /> : "Save"}</Button>
             </div>
         </Card>
     )

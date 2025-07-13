@@ -9,6 +9,7 @@ import ItemSlice from "./slices/app/crm/item.slice";
 import ProjectSlice from "./slices/app/crm/project.slice";
 import InvoiceSlice from "./slices/app/crm/invoice.slice";
 import TransactionSlice from "./slices/app/crm/transaction.slice";
+import OrganizationSlice from "./slices/app/organization.sliece";
 
 const CsRootReducer = combineReducers({
     global: GlobalSlice.reducer,
@@ -22,6 +23,8 @@ const CsRootReducer = combineReducers({
     project: ProjectSlice.reducer,
     invoice: InvoiceSlice.reducer,
     transaction: TransactionSlice.reducer,
+
+    organization: OrganizationSlice.reducer,
 })
 
 export type CsRootState = ReturnType<typeof CsRootReducer>;

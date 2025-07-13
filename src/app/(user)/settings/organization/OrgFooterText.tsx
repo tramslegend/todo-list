@@ -4,17 +4,41 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { TypographyH3, TypographyP } from "@/components/ui/typography"
-import { useState } from "react"
+import SpinLoader from "@/components/utils/SpinLoader"
+import { useCsDispatch, useCsSelector } from "@/cs-redux"
+import { OrganizationAction } from "@/cs-redux/thunks/app/organization.action"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
 
 
 
 export default function OrgFooterText() {
+    const dispatch = useCsDispatch();
+    const { organization, } = useCsSelector(state => state.organization);
     const [footerText, setFooterText] = useState<string>('')
+    const [loading, setLoading] = useState<boolean>(false)
 
+
+
+    useEffect(() => {
+        if (organization) {
+            setFooterText(organization.footerText || '')
+        }
+    }, [organization])
 
 
     async function onSave() {
+        setLoading(true);
 
+        const res = await dispatch(OrganizationAction.updateFooterText({ footerText }))
+
+        if (res.payload.message) {
+            toast.success(res.payload.message)
+        }
+        else if (res.payload.error) {
+            toast.error(res.payload.error)
+        }
+        setLoading(false);
     }
     return (
         <Card className="px-5">
@@ -26,7 +50,7 @@ export default function OrgFooterText() {
             <hr />
             <div className="flex items-center justify-between">
                 <TypographyP className="text-muted-foreground">These value will be applied on invoice footer. Remove this if you don&prime;t want any footer on invoice.</TypographyP>
-                <Button onClick={onSave}>Save</Button>
+                <Button onClick={onSave}>{loading ? <SpinLoader /> : "Save"}</Button>
             </div>
         </Card>
     )

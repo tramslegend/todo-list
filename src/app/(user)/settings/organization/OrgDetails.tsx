@@ -5,18 +5,49 @@ import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { TypographyH3, TypographyP } from "@/components/ui/typography"
-import { ChangeEvent, useState } from "react"
+import SpinLoader from "@/components/utils/SpinLoader"
+import { useCsDispatch, useCsSelector } from "@/cs-redux"
+import { OrganizationAction } from "@/cs-redux/thunks/app/organization.action"
+import { ChangeEvent, useEffect, useState } from "react"
+import { toast } from "sonner"
 
-const defaultValue = {
+interface newOrg {
+    name: string;
+    email?: string;
+    phone?: string;
+    website?: string;
+    address1?: string;
+    address2?: string;
+}
+
+const defaultValue: newOrg = {
     name: '',
     email: '',
     phone: '',
     website: '',
-    address: '',
+    address1: '',
+    address2: '',
 }
 
 export default function OrgDetails() {
-    const [formData, setFormData] = useState(defaultValue)
+    const dispatch = useCsDispatch();
+    const { organization, } = useCsSelector(state => state.organization);
+    const [formData, setFormData] = useState<newOrg>(defaultValue)
+    const [loading, setLoading] = useState<boolean>(false)
+
+    useEffect(() => {
+        if (organization) {
+            setFormData({
+                name: organization.name,
+                email: organization.email || "",
+                phone: organization.phone || "",
+                address1: organization.address1 || "",
+                address2: organization.address2 || "",
+                website: organization.website || "",
+            })
+        }
+    }, [organization])
+
 
     function handleOnChange(e: ChangeEvent<HTMLInputElement>) {
         setFormData({
@@ -25,9 +56,24 @@ export default function OrgDetails() {
         })
     }
 
-    async function onSave() {
 
+
+    async function onSave() {
+        setLoading(true);
+        if (!formData.name) return toast.error("Organization name is requeued!")
+
+        const res = await dispatch(OrganizationAction.updateDetails(formData))
+
+        if (res.payload.message) {
+            toast.success(res.payload.message)
+        }
+        else if (res.payload.error) {
+            toast.error(res.payload.error)
+        }
+        setLoading(false);
     }
+
+
     return (
         <Card className="px-5">
             <div>
@@ -53,27 +99,33 @@ export default function OrgDetails() {
                     <div className="grid grid-cols-2 gap-5">
                         <div>
                             <Label htmlFor="phone-1">Phone:</Label>
-                            <Input id="phone-1" name="phone" value={formData.phone} onChange={handleOnChange} type="number" className="w-full mt-1.5" placeholder="Phone Number" />
-                            <TypographyP className="text-muted-foreground text-[11px] mt-0.5">Provide a 10-digit phone number where clients can reach your organization.</TypographyP>
+                            <Input id="phone-1" name="phone" value={formData.phone} onChange={handleOnChange} type="text" className="w-full mt-1.5" placeholder="Phone Number" />
+                            <TypographyP className="text-muted-foreground text-[11px] mt-0.5">Provide a phone number with code (+91 ...) where clients can reach your organization.</TypographyP>
                         </div>
                         <div>
                             <Label htmlFor="website-1">Website:</Label>
                             <Input id="website-1" name="website" value={formData.website} onChange={handleOnChange} type="text" className="w-full mt-1.5" placeholder="https://www.example.com" />
-                            <TypographyP className="text-muted-foreground text-[11px] mt-0.5">Add your organization’s website (optional).</TypographyP>
+                            <TypographyP className="text-muted-foreground text-[11px] mt-0.5">Add your organization&prime;s website (optional).</TypographyP>
                         </div>
                     </div>
 
                     <div>
-                        <Label htmlFor="address-1">Address:</Label>
-                        <Input id="address-1" name="address" value={formData.address} onChange={handleOnChange} type="text" className="w-full mt-1.5" placeholder="Full Address..." />
-                        <TypographyP className="text-muted-foreground text-[11px] mt-0.5">Enter your office or business address.</TypographyP>
+                        <div>
+                            <Label htmlFor="address1-1">Address:</Label>
+                            <Input id="address1-1" name="address1" value={formData.address1} onChange={handleOnChange} type="text" className="w-full mt-1.5" placeholder="Address Line 1" />
+                            {/* <TypographyP className="text-muted-foreground text-[11px] mt-0.5">Enter your office or business address.</TypographyP> */}
+                        </div>
+                        <div>
+                            <Input id="address2-1" name="address2" value={formData.address2} onChange={handleOnChange} type="text" className="w-full mt-1.5" placeholder="Address Line 2" />
+                            <TypographyP className="text-muted-foreground text-[11px] mt-0.5">Enter your office or business address.</TypographyP>
+                        </div>
                     </div>
                 </div>
             </div>
             <hr />
             <div className="flex items-center justify-between">
                 <TypographyP className="text-muted-foreground">This information will be used for invoice branding & communication.</TypographyP>
-                <Button onClick={onSave}>Save</Button>
+                <Button onClick={onSave}>{loading ? <SpinLoader /> : "Save"}</Button>
             </div>
         </Card>
     )

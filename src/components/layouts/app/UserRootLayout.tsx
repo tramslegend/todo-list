@@ -30,8 +30,8 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { TypographyP } from "@/components/ui/typography"
 import { ThemeToggle2 } from "@/components/theme/ThemeToggle2"
+import { OrganizationAction } from "@/cs-redux/thunks/app/organization.action"
 
 const NavItems = [
     {
@@ -77,6 +77,10 @@ export default function UserRootLayout({ children }: Readonly<{ children: React.
 
     useEffect(() => {
         dispatch(UserAuthThunk.session())
+    }, [dispatch])
+
+    useEffect(() => {
+        dispatch(OrganizationAction.getDefaultOrg())
     }, [dispatch])
 
 

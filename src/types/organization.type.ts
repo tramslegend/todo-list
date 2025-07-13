@@ -1,6 +1,6 @@
 import { ICurrency } from ".";
 
-export interface IOrganization {
+export interface IOrganizationModel {
     _id: string;
     userId: string;
 
@@ -8,9 +8,10 @@ export interface IOrganization {
     email?: string;
     phone?: string;
     website?: string;
-    address?: string;
+    address1?: string;
+    address2?: string;
 
-    logoUrl?: string;
+    logo?: string;
     taxId?: string;
     currency: ICurrency;
 
