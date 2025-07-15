@@ -1,3 +1,4 @@
+"use client"
 import { IItemModel } from '@/types/crm/item.type';
 import React, { Dispatch, SetStateAction } from 'react'
 import {
@@ -9,9 +10,10 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { TypographyP } from '@/components/ui/typography';
-import { CURRENCY } from '@/root.config';
 import { getUnitLabel } from '@/constants/crm.constant';
+import { useCsSelector } from '@/cs-redux';
 export default function ItemDetails({ item, setItem }: { item: IItemModel | null; setItem: Dispatch<SetStateAction<IItemModel | null>> }) {
+    const { organization, } = useCsSelector(state => state.organization);
     return (
         <Dialog open={item !== null} onOpenChange={() => setItem(null)}>
             <DialogTrigger ></DialogTrigger>
@@ -24,7 +26,7 @@ export default function ItemDetails({ item, setItem }: { item: IItemModel | null
                 {item && <div className="space-y-4 mt-4">
                     <div className="grid grid-cols-2">
                         <TypographyP className='text-muted-foreground'>Price:</TypographyP>
-                        <TypographyP className="font-medium capitalize">{CURRENCY} {item.basePrice}</TypographyP>
+                        <TypographyP className="font-medium capitalize">{organization?.currency.symbol} {item.basePrice}</TypographyP>
                     </div>
                     <div className="grid grid-cols-2">
                         <TypographyP className='text-muted-foreground'>Unit:</TypographyP>

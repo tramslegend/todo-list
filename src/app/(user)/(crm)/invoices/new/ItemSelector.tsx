@@ -7,7 +7,6 @@ import { INewItem, IItemModel } from "@/types/crm/item.type";
 import { TypographyH3, TypographyP, TypographySmall } from "../../../../../components/ui/typography";
 import SearchInput from "@/components/utils/SearchInput";
 import { Button } from "../../../../../components/ui/button";
-import { CURRENCY } from "@/root.config";
 import { CsUtils } from "@/cs-toolkit";
 import { toast } from "sonner";
 import { Label } from "../../../../../components/ui/label";
@@ -40,7 +39,7 @@ const defaultValue: INewItem = {
 export default function ItemSelector({ item, setItem }: { item?: IItemModel; setItem: ((item: IItemModel) => void) }) {
     const dispatch = useCsDispatch();
     const { allItem } = useCsSelector((state) => state.item);
-
+    const { organization, } = useCsSelector(state => state.organization);
 
     const [newItem, setNewItem] = useState<boolean>(false)
     const [page, setPage] = useState<number>(1)
@@ -118,7 +117,7 @@ export default function ItemSelector({ item, setItem }: { item?: IItemModel; set
                             <div className="mb-3 cursor-pointer bg-accent/30 hover:bg-accent/50  px-3 py-1 rounded-lg" key={`item_${item._id}${i + 9786}`} onClick={() => { setItem(item) }}>
                                 <TypographyP className='font-bold'>{item.name}</TypographyP>
                                 {item.description && <><TypographyP className='text-muted-foreground text-[12px]'>{item.description}</TypographyP></>}
-                                <TypographyP className='text-muted-foreground text-[12px] font-semibold mt-1'>{CURRENCY} {item.basePrice} {getUnitLabel(item.unit)}</TypographyP>
+                                <TypographyP className='text-muted-foreground text-[12px] font-semibold mt-1'>{organization?.currency.symbol} {item.basePrice} {getUnitLabel(item.unit)}</TypographyP>
                             </div>
                         ))}
                     </div>

@@ -13,15 +13,16 @@ import {
 } from "@/components/ui/dialog"
 import ItemSelector from './ItemSelector';
 import { toast } from 'sonner';
-import { TypographyH3, TypographyH4, TypographyP } from '@/components/ui/typography';
-import { CURRENCY } from '@/root.config';
+import { TypographyH4, TypographyP } from '@/components/ui/typography';
 import { getUnitLabel } from '@/constants/crm.constant';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { ICurrency } from '@/types';
 
 
-export default function InvoiceItemsForm({ items, setItems, }: { items: IInvoiceItem[]; setItems: ((items: IInvoiceItem[]) => void) }) {
+export default function InvoiceItemsForm({ items, setItems, currency }: { items: IInvoiceItem[]; setItems: ((items: IInvoiceItem[]) => void), currency: ICurrency | null; }) {
     const [open, setOpen] = useState<boolean>(false);
+
 
     function onSelectItem(item: IItemModel) {
         if (items.some(s => s.slug === item.slug)) return toast.info("Item Already Added");
@@ -109,7 +110,7 @@ export default function InvoiceItemsForm({ items, setItems, }: { items: IInvoice
                             </div>
                             <div className="grid gap-3 justify-end">
                                 <TypographyP className='text-right'>Amount</TypographyP>
-                                <TypographyH4 className='text-[17px] text-right'>{CURRENCY} {item.totalAmount}</TypographyH4>
+                                <TypographyH4 className='text-[17px] text-right'>{currency?.symbol} {item.totalAmount}</TypographyH4>
                             </div>
                         </div>
                     </div>

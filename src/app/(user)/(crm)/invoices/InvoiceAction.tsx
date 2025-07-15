@@ -53,11 +53,11 @@ export default function InvoiceAction({ invoice }: { invoice: IInvoiceModel, }) 
                 <Button size={'icon'} variant={'ghost'}><EllipsisVertical /></Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className=" space-y-1 py-2">
-                <DropdownMenuItem disabled={invoice && (invoice.status !== CrmInvoiceStatus.DRAFT)} className={dropdownItemClassName} onClick={() => router.push(`/invoices/new?id=${invoice?._id}`)}>Edit</DropdownMenuItem>
-                <DropdownMenuItem className={dropdownItemClassName} onClick={() => toast('Not implemented')}>Send Invoice</DropdownMenuItem>
+                <DropdownMenuItem disabled={invoice && invoice.isSent} className={dropdownItemClassName} onClick={() => router.push(`/invoices/new?id=${invoice?._id}`)}>Edit</DropdownMenuItem>
+                <DropdownMenuItem className={dropdownItemClassName} onClick={() => toast('Not implemented')}>{invoice.isSent ? "Resend Invoice" : "Send Invoice"}</DropdownMenuItem>
                 <DropdownMenuItem disabled={invoice && (invoice.totalAmount === invoice.amountPaid)} className={dropdownItemClassName} onClick={() => router.push(`/invoices/${invoice?._id}?payment=true`)}>Make Payment</DropdownMenuItem>
                 <DropdownMenuItem className={dropdownItemClassName} onClick={invoice?.isArchived ? onRestore : onArchive}>{invoice?.isArchived ? "Restore" : "Archive"}</DropdownMenuItem>
-                <DropdownMenuItem className={dropdownItemClassName} onClick={onDelete}><span className={`text-destructive hover:text-destructive`}>Delete</span></DropdownMenuItem>
+                <DropdownMenuItem disabled={invoice && invoice.amountPaid > 0} className={dropdownItemClassName} onClick={onDelete}><span className={`text-destructive hover:text-destructive`}>Delete</span></DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     )

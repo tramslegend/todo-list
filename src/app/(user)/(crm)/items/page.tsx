@@ -31,7 +31,6 @@ import {
 import ItemForm from "./ItemForm"
 import { toast } from "sonner"
 import ItemDetails from "./ItemDetails"
-import { CURRENCY } from "@/root.config"
 import { getUnitLabel } from "@/constants/crm.constant"
 
 
@@ -42,6 +41,7 @@ export default function ItemsPage() {
     const [flaggedItem, setFlaggedItem] = useState<IItemModel | null>(null);
     const [itemToEdit, setItemToEdit] = useState<IItemModel | null>(null);
     const [idToDelete, setIdToDelete] = useState<string | null>(null);
+    const { organization, } = useCsSelector(state => state.organization);
 
     // Pagination & Fetch Data
     const [limit, setLimit] = useState<number>(20);
@@ -98,7 +98,7 @@ export default function ItemsPage() {
                                                 <TypographyP className="">{item.description}</TypographyP>
                                             </div>
                                             <div className="items-center col-span-3 grid grid-cols-2">
-                                                <TypographyP className="text-right">{CURRENCY} {item.basePrice} </TypographyP>
+                                                <TypographyP className="text-right">{organization?.currency.symbol} {item.basePrice} </TypographyP>
                                                 <TypographyP className="text-muted-foreground text-[12px] ms-1.5">{getUnitLabel(item.unit)}</TypographyP>
                                             </div>
                                         </div>

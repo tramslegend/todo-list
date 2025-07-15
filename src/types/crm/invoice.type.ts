@@ -13,7 +13,7 @@ export interface INewInvoice {
     title: string;
     items: IInvoiceItem[];
     discount: number;
-    currency: ICurrency;
+    currency: ICurrency | null;
     issuedDate: Date;
     dueDate: Date;
     note?: string;

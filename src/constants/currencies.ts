@@ -8,6 +8,16 @@ export const currencies: ICurrency[] = [
     symbol: "₹"
   },
   {
+    code: "USD",
+    name: "United States dollar",
+    symbol: "$"
+  },
+  {
+    code: "EUR",
+    name: "Euro",
+    symbol: "€"
+  },
+  {
     code: "AFN",
     name: "Afghan afghani",
     symbol: "؋"
@@ -21,16 +31,6 @@ export const currencies: ICurrency[] = [
     code: "DZD",
     name: "Algerian dinar",
     symbol: "د.ج"
-  },
-  {
-    code: "USD",
-    name: "United States dollar",
-    symbol: "$"
-  },
-  {
-    code: "EUR",
-    name: "Euro",
-    symbol: "€"
   },
   {
     code: "AOA",

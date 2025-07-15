@@ -19,15 +19,16 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from '@/components/ui/button';
-import { TypographyP, TypographySmall } from '@/components/ui/typography';
+import { TypographyH3, TypographyP, TypographySmall } from '@/components/ui/typography';
 import SearchInput from '@/components/utils/SearchInput';
 import { currencies } from '@/constants/currencies';
 import { ICurrency } from '@/types';
 import { findByProperty } from '@/cs-toolkit/utils';
+import NotAvailable from './NotAvailable';
 
 
 
-export default function CurrencySelector({ currency, setCurrency }: { currency?: ICurrency; setCurrency: ((code: ICurrency) => void) }) {
+export default function CurrencySelector({ currency, setCurrency }: { currency: ICurrency | null; setCurrency: ((code: ICurrency) => void) }) {
     // Popover
     const [open, setOpen] = useState(false)
 
@@ -52,12 +53,16 @@ export default function CurrencySelector({ currency, setCurrency }: { currency?:
                     aria-expanded={open}
                     className="w-full justify-between "
                 >
-                    {currency && <span className='flex items-center gap-2'><span className='capitalize'>{currency.name}</span> ({currency.code} - {currency.symbol})</span>}
+                    {currency ?
+                        <span className='flex items-center gap-2'><span className='capitalize'>{currency.name}</span> ({currency.code} - {currency.symbol})</span>
+                        : <TypographyP className='text-muted-foreground'>Currency</TypographyP>
+                    }
                     <ChevronsUpDown className="opacity-50" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-sm">
-                <Command>
+                <NotAvailable />
+                {/* <Command>
                     <SearchInput query={query} setQuery={setQuery} />
                     <CommandList>
                         <CommandEmpty>Not found.</CommandEmpty>
@@ -70,7 +75,7 @@ export default function CurrencySelector({ currency, setCurrency }: { currency?:
                             ))}
                         </CommandGroup>
                     </CommandList>
-                </Command>
+                </Command> */}
             </PopoverContent>
         </Popover>
     )

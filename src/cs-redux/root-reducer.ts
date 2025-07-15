@@ -10,6 +10,7 @@ import ProjectSlice from "./slices/app/crm/project.slice";
 import InvoiceSlice from "./slices/app/crm/invoice.slice";
 import TransactionSlice from "./slices/app/crm/transaction.slice";
 import OrganizationSlice from "./slices/app/organization.sliece";
+import DashboardSlice from "./slices/app/crm/dashboard.slice";
 
 const CsRootReducer = combineReducers({
     global: GlobalSlice.reducer,
@@ -23,6 +24,7 @@ const CsRootReducer = combineReducers({
     project: ProjectSlice.reducer,
     invoice: InvoiceSlice.reducer,
     transaction: TransactionSlice.reducer,
+    dashboard: DashboardSlice.reducer,
 
     organization: OrganizationSlice.reducer,
 })

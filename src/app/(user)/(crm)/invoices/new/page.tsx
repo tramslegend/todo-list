@@ -12,7 +12,6 @@ import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { InvoiceThunk } from '@/cs-redux/thunks/app/crm/invoice.thunk'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { CURRENCY, DEFAULT_CURRENCY } from '@/root.config'
 import ProjectSelector from './ProjectSelector'
 import { CrmInvoiceStatus } from '@/constants/crm.constant'
 import { TypographyH4, TypographyP } from '@/components/ui/typography'
@@ -25,7 +24,7 @@ const defaultValue: INewInvoice = {
     projectId: '',
     title: '',
     items: [],
-    currency: DEFAULT_CURRENCY,
+    currency: null,
     discount: 0,
     issuedDate: new Date(),
     dueDate: new Date(),
@@ -42,6 +41,7 @@ export default function CrmNewInvoicePage() {
     const projectId = searchParams.get('project');
 
     const { invoice } = useCsSelector(state => state.invoice);
+    const { organization, } = useCsSelector(state => state.organization);
     const [formData, setFormData] = useState<INewInvoice>(defaultValue)
     const [total, setTotal] = useState<number>(0)
 
@@ -66,9 +66,13 @@ export default function CrmNewInvoicePage() {
         if (projectId) {
             setFormData(prev => ({ ...prev, projectId }));
         }
-    }, [clientId, projectId]);
+        if (organization) {
+            setFormData(prev => ({ ...prev, currency: organization.currency }));
+        }
+    }, [clientId, projectId, organization]);
 
 
+    // Update
     useEffect(() => {
         if (id && (!invoice || invoice._id !== id)) dispatch(InvoiceThunk.getById({ id }))
     }, [dispatch, id, invoice])
@@ -131,7 +135,7 @@ export default function CrmNewInvoicePage() {
         <Container className="py-3 pb-22">
             <div className='mb-7 flex items-center justify-between'>
                 <h2 className="font-bold text-2xl ">{id ? "Update Invoice" : "Create New Invoice"}</h2>
-                <h2 className="font-bold pe-3">Total: {formData.currency.symbol} {total} {formData.currency.code}</h2>
+                <h2 className="font-bold pe-3">Total: {formData?.currency?.symbol} {total} {formData?.currency?.code}</h2>
             </div>
 
             <div className="space-y-8">
@@ -169,13 +173,12 @@ export default function CrmNewInvoicePage() {
 
                     <div className='space-y-1.5'>
                         <Label htmlFor="currency-1">Currency</Label>
-                        {/* <Input readOnly id="currency-1" name="currency" type="text" value={`${formData.currency.code} (${formData.currency.symbol})`} onChange={() => { }} placeholder="Invoice Currency" /> */}
                         <CurrencySelector currency={formData.currency} setCurrency={(currency) => setFormData({ ...formData, currency })} />
                     </div>
                 </div>
 
                 <div className='space-y-1.5'>
-                    <InvoiceItemsForm items={formData.items} setItems={(items) => setFormData({ ...formData, items })} />
+                    <InvoiceItemsForm currency={formData.currency} items={formData.items} setItems={(items) => setFormData({ ...formData, items })} />
                 </div>
 
                 <div className='flex items-center justify-between'>
