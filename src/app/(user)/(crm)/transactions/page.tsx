@@ -11,7 +11,7 @@ import MainPageHeader from "@/components/utils/MainPageHeader"
 import Container from "@/components/utils/Container"
 import TransactionSlice from "@/cs-redux/slices/app/crm/transaction.slice"
 import { TypographyP } from "@/components/ui/typography"
-import SpinLoader from "@/components/utils/SpinLoader"
+import SpinLoaderCard from "@/components/utils/SpinLoaderCard"
 import Link from "next/link"
 import TransactionDetails from "./TransactionDetails"
 import { ITransactionModel } from "@/types/crm/transaction.type"
@@ -64,7 +64,7 @@ export default function TransactionsPage() {
                         :
                         <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No transactions found." : "You haven&prime;t added any transactions yet."}</TypographyP>
                     :
-                    <SpinLoader />
+                    <SpinLoaderCard />
                 }
 
                 {/* DEBUG */}

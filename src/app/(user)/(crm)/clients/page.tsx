@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { useCsDispatch, useCsSelector } from "@/cs-redux"
 import { ClientThunk } from "@/cs-redux/thunks/app/crm/client.thunk"
 import { IClientModel } from "@/types/crm/client.type"
-import { LoaderIcon, Plus, SquareMenu } from "lucide-react"
+import { LoaderIcon, Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import ClientAction from "./ClientAction"
@@ -12,7 +12,7 @@ import MainPageHeader from "@/components/utils/MainPageHeader"
 import Container from "@/components/utils/Container"
 import ClientSlice from "@/cs-redux/slices/app/crm/client.slice"
 import { TypographyP } from "@/components/ui/typography"
-import SpinLoader from "@/components/utils/SpinLoader"
+import SpinLoaderCard from "@/components/utils/SpinLoaderCard"
 import Link from "next/link"
 
 
@@ -87,7 +87,7 @@ export default function ClientsPage() {
                         :
                         <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No clients found." : "You haven’t added any clients yet."}</TypographyP>
                     :
-                    <SpinLoader />
+                    <SpinLoaderCard />
                 }
 
                 {/* DEBUG */}

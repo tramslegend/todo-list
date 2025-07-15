@@ -9,12 +9,14 @@ const initialState: {
     project: IProjectModel | undefined;
     clientProjects: IProjectModel[] | undefined;
     allProject: IPaginationResult<IProjectModel> | undefined;
+    allArchivedProject: IPaginationResult<IProjectModel> | undefined;
     loading: boolean;
     notFound: boolean;
 } = {
     project: undefined,
     clientProjects: undefined,
     allProject: undefined,
+    allArchivedProject: undefined,
     loading: false,
     notFound: false,
 };
@@ -28,7 +30,10 @@ const ProjectSlice = createSlice({
         },
         clearAllProject(state, { payload }) {
             if (state.allProject) state.allProject = undefined;
-        }
+        },
+        clearAllArchivedProject(state, { payload }) {
+            if (state.allArchivedProject) state.allArchivedProject = undefined;
+        },
 
     },
     extraReducers: (builder) => {
@@ -121,9 +126,9 @@ const ProjectSlice = createSlice({
             .addCase(ProjectThunk.getAll.fulfilled, (state, { payload }) => {
                 state.loading = false;
 
-
                 const pgData: IPaginationResult<IProjectModel> = payload.allProject;
-                if (state.allProject && state.allProject.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
+
+                if (state.allProject && pgData && state.allProject.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
                     state.allProject.data.push(...pgData.data);
                     state.allProject.pagination = pgData.pagination;
                 } else {
@@ -134,6 +139,28 @@ const ProjectSlice = createSlice({
                 state.loading = false;
                 state.notFound = true;
                 state.allProject = undefined;
+            })
+
+        builder
+            .addCase(ProjectThunk.getAllArchived.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ProjectThunk.getAllArchived.fulfilled, (state, { payload }) => {
+                state.loading = false;
+
+                const pgData: IPaginationResult<IProjectModel> = payload.allProject;
+
+                if (state.allArchivedProject && pgData && state.allArchivedProject.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
+                    state.allArchivedProject.data.push(...pgData.data);
+                    state.allArchivedProject.pagination = pgData.pagination;
+                } else {
+                    state.allArchivedProject = payload.allArchivedProject;
+                }
+            })
+            .addCase(ProjectThunk.getAllArchived.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+                state.allArchivedProject = undefined;
             })
 
 
@@ -194,6 +221,10 @@ const ProjectSlice = createSlice({
             .addCase(ProjectThunk.restore.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 state.project = payload.project;
+
+                if (state.allArchivedProject) {
+                    state.allArchivedProject.data = state.allArchivedProject.data.filter(project => project._id !== payload.project._id);
+                }
             })
             .addCase(ProjectThunk.restore.rejected, (state, _) => {
                 state.loading = false;

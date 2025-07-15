@@ -10,6 +10,7 @@ const initialState: {
     clientInvoices: IInvoiceModel[] | undefined;
     projectInvoices: IInvoiceModel[] | undefined;
     allInvoice: IPaginationResult<IInvoiceModel> | undefined;
+    allArchivedInvoice: IPaginationResult<IInvoiceModel> | undefined;
     loading: boolean;
     notFound: boolean;
 } = {
@@ -17,6 +18,7 @@ const initialState: {
     clientInvoices: undefined,
     projectInvoices: undefined,
     allInvoice: undefined,
+    allArchivedInvoice: undefined,
     loading: false,
     notFound: false,
 };
@@ -30,7 +32,10 @@ const InvoiceSlice = createSlice({
         },
         clearAllInvoice(state, { payload }) {
             if (state.allInvoice) state.allInvoice = undefined;
-        }
+        },
+        clearAllArchivedInvoice(state, { payload }) {
+            if (state.allArchivedInvoice) state.allArchivedInvoice = undefined;
+        },
 
     },
     extraReducers: (builder) => {
@@ -80,7 +85,7 @@ const InvoiceSlice = createSlice({
                 state.loading = false;
 
                 const pgData: IPaginationResult<IInvoiceModel> = payload.allInvoice;
-                if (state.allInvoice && state.allInvoice.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
+                if (state.allInvoice && pgData && state.allInvoice.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
                     state.allInvoice.data.push(...pgData.data);
                     state.allInvoice.pagination = pgData.pagination;
                 } else {
@@ -91,6 +96,28 @@ const InvoiceSlice = createSlice({
                 state.loading = false;
                 state.notFound = true;
                 state.allInvoice = undefined;
+            })
+
+        builder
+            .addCase(InvoiceThunk.getAllArchived.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(InvoiceThunk.getAllArchived.fulfilled, (state, { payload }) => {
+                state.loading = false;
+
+                const pgData: IPaginationResult<IInvoiceModel> = payload.allArchivedInvoice;
+
+                if (state.allArchivedInvoice && pgData && state.allArchivedInvoice.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
+                    state.allArchivedInvoice.data.push(...pgData.data);
+                    state.allArchivedInvoice.pagination = pgData.pagination;
+                } else {
+                    state.allArchivedInvoice = payload.allArchivedInvoice;
+                }
+            })
+            .addCase(InvoiceThunk.getAllArchived.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+                state.allArchivedInvoice = undefined;
             })
 
 
@@ -165,6 +192,9 @@ const InvoiceSlice = createSlice({
             .addCase(InvoiceThunk.restore.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 state.invoice = payload.invoice;
+                if (state.allArchivedInvoice) {
+                    state.allArchivedInvoice.data = state.allArchivedInvoice.data.filter(invoice => invoice._id !== payload.invoice._id);
+                }
             })
             .addCase(InvoiceThunk.restore.rejected, (state, _) => {
                 state.loading = false;

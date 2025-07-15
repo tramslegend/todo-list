@@ -53,6 +53,26 @@ export class InvoiceThunk {
         }
     )
 
+    static getAllArchived = createAsyncThunk(
+        "InvoiceThunk/getAllArchived",
+
+        async (payload: { page: number, limit: number, query?: string }, { rejectWithValue, fulfillWithValue }) => {
+            try {
+                const { data } = await ApiManager.get(`/app/crm/invoice/get/archived`, {
+                    params: {
+                        page: payload.page,
+                        limit: payload.limit,
+                        query: payload.query,
+                    },
+                });
+
+                return fulfillWithValue(data)
+            } catch (error: any) {
+                return rejectWithValue(error.response.data);
+            }
+        }
+    )
+
 
     static getById = createAsyncThunk(
         "InvoiceThunk/getById",

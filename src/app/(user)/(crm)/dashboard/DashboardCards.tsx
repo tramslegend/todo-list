@@ -4,7 +4,7 @@ import { TypographyH3, TypographyP } from '@/components/ui/typography'
 import { useCsDispatch, useCsSelector } from '@/cs-redux'
 import { DashboardAction } from '@/cs-redux/thunks/app/crm/dashboard.action'
 import { DEFAULT_CURRENCY } from '@/root.config'
-import { BriefcaseBusiness, IndianRupee, ScrollText, TrendingUp, Users } from 'lucide-react'
+import { BriefcaseBusiness, ScrollText, TrendingUp, Users } from 'lucide-react'
 import React from 'react'
 
 export default function DashboardCards() {
@@ -34,6 +34,8 @@ export default function DashboardCards() {
                 <TypographyP className='text-muted-foreground flex items-center gap-1'><BriefcaseBusiness size={15} />Projects</TypographyP>
                 <TypographyH3 className='mt-2'>{cardData?.projects ? cardData?.projects : 0}</TypographyH3>
             </div>
+
+
         </div>
     )
 }

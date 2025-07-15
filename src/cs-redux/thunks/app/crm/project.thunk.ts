@@ -81,6 +81,26 @@ export class ProjectThunk {
         }
     )
 
+    static getAllArchived = createAsyncThunk(
+        "ProjectThunk/getAllArchived",
+
+        async (payload: { page: number, limit: number, query?: string }, { rejectWithValue, fulfillWithValue }) => {
+            try {
+                const { data } = await ApiManager.get(`/app/crm/project/get/archived`, {
+                    params: {
+                        page: payload.page,
+                        limit: payload.limit,
+                        query: payload.query,
+                    },
+                });
+
+                return fulfillWithValue(data)
+            } catch (error: any) {
+                return rejectWithValue(error.response.data);
+            }
+        }
+    )
+
 
     static getById = createAsyncThunk(
         "ProjectThunk/getById",

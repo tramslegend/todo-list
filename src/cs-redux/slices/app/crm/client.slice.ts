@@ -8,11 +8,13 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState: {
     client: IClientModel | undefined;
     allClient: IPaginationResult<IClientModel> | undefined;
+    allArchivedClient: IPaginationResult<IClientModel> | undefined;
     loading: boolean;
     notFound: boolean;
 } = {
     client: undefined,
     allClient: undefined,
+    allArchivedClient: undefined,
     loading: false,
     notFound: false,
 };
@@ -25,9 +27,11 @@ const ClientSlice = createSlice({
             state.client = undefined
         },
         clearAllClient(state, { payload }) {
-            console.log('Clearing client')
             if (state.allClient) state.allClient = undefined;
-        }
+        },
+        clearAllArchivedClient(state, { payload }) {
+            if (state.allClient) state.allArchivedClient = undefined;
+        },
 
     },
     extraReducers: (builder) => {
@@ -76,18 +80,40 @@ const ClientSlice = createSlice({
                 state.loading = false;
 
                 const pgData: IPaginationResult<IClientModel> = payload.allClient;
-                if (state.allClient && state.allClient.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
+
+                if (state.allClient && pgData && state.allClient.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
                     state.allClient.data.push(...pgData.data);
                     state.allClient.pagination = pgData.pagination;
                 } else {
                     state.allClient = payload.allClient;
                 }
-
             })
             .addCase(ClientThunk.getAll.rejected, (state, _) => {
                 state.loading = false;
                 state.notFound = true;
                 state.allClient = undefined;
+            })
+
+        builder
+            .addCase(ClientThunk.getAllArchived.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ClientThunk.getAllArchived.fulfilled, (state, { payload }) => {
+                state.loading = false;
+
+                const pgData: IPaginationResult<IClientModel> = payload.allArchivedClient;
+
+                if (state.allArchivedClient && pgData && state.allArchivedClient.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
+                    state.allArchivedClient.data.push(...pgData.data);
+                    state.allArchivedClient.pagination = pgData.pagination;
+                } else {
+                    state.allArchivedClient = payload.allArchivedClient;
+                }
+            })
+            .addCase(ClientThunk.getAllArchived.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+                state.allArchivedClient = undefined;
             })
 
         builder
@@ -129,6 +155,9 @@ const ClientSlice = createSlice({
             .addCase(ClientThunk.restore.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 state.client = payload.client;
+                if (state.allArchivedClient) {
+                    state.allArchivedClient.data = state.allArchivedClient.data.filter(client => client._id !== payload.client._id);
+                }
             })
             .addCase(ClientThunk.restore.rejected, (state, _) => {
                 state.loading = false;

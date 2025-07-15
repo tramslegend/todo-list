@@ -3,19 +3,14 @@
 import { Button } from "@/components/ui/button"
 import { useCsDispatch, useCsSelector } from "@/cs-redux"
 import { InvoiceThunk } from "@/cs-redux/thunks/app/crm/invoice.thunk"
-import { IInvoiceModel } from "@/types/crm/invoice.type"
 import { LoaderIcon, Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import InvoiceAction from "./InvoiceAction"
 import MainPageHeader from "@/components/utils/MainPageHeader"
 import Container from "@/components/utils/Container"
 import InvoiceSlice from "@/cs-redux/slices/app/crm/invoice.slice"
 import { TypographyP } from "@/components/ui/typography"
-import SpinLoader from "@/components/utils/SpinLoader"
-import Link from "next/link"
-import { CsUtils } from "@/cs-toolkit"
-import InvoiceStatus from "./InvoiceStatus"
+import SpinLoaderCard from "@/components/utils/SpinLoaderCard"
 import InvoiceList from "./InvoiceList"
 
 
@@ -65,7 +60,7 @@ export default function InvoicesPage() {
                         :
                         <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No invoices found." : "You haven’t added any invoices yet."}</TypographyP>
                     :
-                    <SpinLoader />
+                    <SpinLoaderCard />
                 }
 
                 {/* DEBUG */}

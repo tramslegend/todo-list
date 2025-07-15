@@ -12,7 +12,7 @@ export default function Home() {
           <Image className="scale-105" src={'/logo.png'} width={300} height={300} alt={PROJECT_NAME} />
         </div>
         <h3 className="text-center text-3xl font-bold my-3">{PROJECT_NAME}</h3>
-        <Link href={'/admin/dashboard'}><Button className="cursor-pointer" variant={'outline'} size={'sm'}>Dashboard</Button></Link>
+        <Link href={'/dashboard'}><Button className="cursor-pointer" variant={'outline'} size={'sm'}>Dashboard</Button></Link>
       </div>
     </div>
   );

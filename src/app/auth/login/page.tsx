@@ -18,6 +18,7 @@ import OAuthButtons from "@/components/utils/OAuthButtons";
 import { useCsDispatch, useCsSelector } from "@/cs-redux";
 import { useRouter } from "next/navigation";
 import { UserAuthThunk } from "@/cs-redux/thunks/app/user-auth.thunk";
+import SpinLoader from "@/components/utils/SpinLoader";
 
 export default function LoginView() {
     const dispatch = useCsDispatch();
@@ -71,7 +72,7 @@ export default function LoginView() {
 
                 <form onSubmit={loginWithEmail}>
                     <Input value={email} onChange={e => setEmail(e.target.value)} type="email" required placeholder="Email Address" />
-                    <Button type="submit" className="mt-3 w-full" disabled={loading}>{loading ? "Processing..." : "Log in with Email"}</Button>
+                    <Button type="submit" className="mt-3 w-full" disabled={loading}>{loading ? <span className="flex items-center gap-1"><SpinLoader /> Processing...</span> : "Log in with Email"}</Button>
                 </form>
 
                 <Separator />
@@ -95,7 +96,7 @@ export default function LoginView() {
                                 <InputOTPSlot index={5} />
                             </InputOTPGroup>
                         </InputOTP>
-                        <Button type="submit" className="mt-5 w-full" disabled={loading}>{loading ? "Processing..." : "Verify"}</Button>
+                        <Button type="submit" className="mt-5 w-full" disabled={loading}>{loading ? <span className="flex items-center gap-1"><SpinLoader /> Processing...</span> : "Verify"}</Button>
                     </form>
                     <div className="flex items-center justify-center ">
                         <button onClick={() => setToken('')} className="cursor-pointer text-blue-500 flex items-center gap-2 border-b border-b-transparent hover:border-b-blue-500" ><MoveLeft className="mt-1" size={15} /><span>Back</span></button>

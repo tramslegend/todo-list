@@ -12,7 +12,7 @@ import MainPageHeader from "@/components/utils/MainPageHeader"
 import Container from "@/components/utils/Container"
 import ProjectSlice from "@/cs-redux/slices/app/crm/project.slice"
 import { TypographyP } from "@/components/ui/typography"
-import SpinLoader from "@/components/utils/SpinLoader"
+import SpinLoaderCard from "@/components/utils/SpinLoaderCard"
 import Link from "next/link"
 import { CsUtils } from "@/cs-toolkit"
 import ProjectPriority from "./ProjectPriority"
@@ -67,7 +67,7 @@ export default function ProjectsPage() {
                         :
                         <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No projects found." : "You haven’t added any projects yet."}</TypographyP>
                     :
-                    <SpinLoader />
+                    <SpinLoaderCard />
                 }
 
                 {/* DEBUG */}

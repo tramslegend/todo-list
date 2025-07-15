@@ -10,7 +10,7 @@ import MainPageHeader from "@/components/utils/MainPageHeader"
 import Container from "@/components/utils/Container"
 import ItemSlice from "@/cs-redux/slices/app/crm/item.slice"
 import { TypographyP } from "@/components/ui/typography"
-import SpinLoader from "@/components/utils/SpinLoader"
+import SpinLoaderCard from "@/components/utils/SpinLoaderCard"
 import { IItemModel } from "@/types/crm/item.type"
 import {
     DropdownMenu,
@@ -146,7 +146,7 @@ export default function ItemsPage() {
                         :
                         <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No items found." : "You haven&prime;t added any items yet."}</TypographyP>
                     :
-                    <SpinLoader />
+                    <SpinLoaderCard />
                 }
 
                 {/* DEBUG */}
