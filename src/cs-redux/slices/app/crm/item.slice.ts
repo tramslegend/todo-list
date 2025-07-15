@@ -108,6 +108,7 @@ const ItemSlice = createSlice({
                 state.loading = false;
 
                 if (state.allItem) {
+                    state.allItem.pagination.totalData -= 1;
                     state.allItem.data = state.allItem.data.filter(item => item._id !== payload.item._id);
                 }
 

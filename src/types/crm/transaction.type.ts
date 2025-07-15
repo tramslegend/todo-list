@@ -14,6 +14,7 @@ export interface ITransactionModel {
     _id: string;
     userId: string;
     invoiceId: string;
+    clientId: string;
     invoiceNumber: string;
 
     referenceId?: string;

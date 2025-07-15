@@ -173,7 +173,13 @@ const ClientSlice = createSlice({
 
                 // Remover from UI (Array)
                 if (state.allClient) {
+                    state.allClient.pagination.totalData -= 1;
                     state.allClient.data = state.allClient.data.filter(client => client._id !== payload.client._id);
+                }
+
+                if (state.allArchivedClient) {
+                    state.allArchivedClient.pagination.totalData -= 1;
+                    state.allArchivedClient.data = state.allArchivedClient.data.filter(client => client._id !== payload.client._id);
                 }
             })
             .addCase(ClientThunk.delete.rejected, (state, _) => {

@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/popover"
 import { Button } from '@/components/ui/button';
 import { TypographyP, TypographySmall } from '@/components/ui/typography';
-import ProjectSlice from '@/cs-redux/slices/app/crm/project.slice';
 import SearchInput from '@/components/utils/SearchInput';
 
 
@@ -74,7 +73,10 @@ export default function ProjectSelector({ projectId, setProjectId, disabled = fa
                     </PopoverTrigger>
                     <PopoverContent className="w-sm">
                         <Command>
-                            <SearchInput query={query} setQuery={setQuery} />
+                            <div className='flex items-center gap-2 mb-3'>
+                                <SearchInput query={query} setQuery={setQuery} />
+                                <Button variant={'ghost'} onClick={() => { setProjectId(''); setOpen(false) }} size={'icon'}><X /></Button>
+                            </div>
                             <CommandList>
                                 <CommandEmpty>No project found.</CommandEmpty>
                                 <CommandGroup>

@@ -110,6 +110,10 @@ const TransactionSlice = createSlice({
                 if (state.invoiceTransactions) {
                     state.invoiceTransactions = state.invoiceTransactions.filter(transaction => transaction._id !== payload.transaction._id);
                 }
+                if (state.allTransaction) {
+                    state.allTransaction.pagination.totalData -= 1;
+                    state.allTransaction.data = state.allTransaction.data.filter(transaction => transaction._id !== payload.transaction._id);
+                }
 
             })
             .addCase(TransactionThunk.delete.rejected, (state, _) => {

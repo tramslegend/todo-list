@@ -166,15 +166,15 @@ export default function CrmNewInvoicePage() {
                         <Input id="discount-1" name="discount" type="text" value={formData.discount} onChange={handleOnChange} placeholder="Discount (Optional)" />
                     </div>
 
-                    <div className='space-y-1.5 col-span-2'>
+                    <div className='space-y-1.5 col-span-3'>
                         <Label htmlFor="note-1">Note</Label>
                         <Input id="note-1" name="note" type="text" value={formData.note} onChange={handleOnChange} placeholder="Note (Optional)" />
                     </div>
 
-                    <div className='space-y-1.5'>
+                    {/* <div className='space-y-1.5'>
                         <Label htmlFor="currency-1">Currency</Label>
                         <CurrencySelector currency={formData.currency} setCurrency={(currency) => setFormData({ ...formData, currency })} />
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className='space-y-1.5'>

@@ -209,8 +209,22 @@ const InvoiceSlice = createSlice({
             .addCase(InvoiceThunk.delete.fulfilled, (state, { payload }) => {
                 state.loading = false;
 
+                if (state.clientInvoices) {
+                    state.clientInvoices = state.clientInvoices.filter(invoice => invoice._id !== payload.invoice._id);
+                }
+
+                if (state.projectInvoices) {
+                    state.projectInvoices = state.projectInvoices.filter(invoice => invoice._id !== payload.invoice._id);
+                }
+
                 if (state.allInvoice) {
+                    state.allInvoice.pagination.totalData -= 1;
                     state.allInvoice.data = state.allInvoice.data.filter(invoice => invoice._id !== payload.invoice._id);
+                }
+
+                if (state.allArchivedInvoice) {
+                    state.allArchivedInvoice.pagination.totalData -= 1;
+                    state.allArchivedInvoice.data = state.allArchivedInvoice.data.filter(invoice => invoice._id !== payload.invoice._id);
                 }
 
             })

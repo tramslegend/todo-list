@@ -76,7 +76,10 @@ export default function ClientIdSelector({ clientId, setClientId, disabled = fal
                     </PopoverTrigger>
                     <PopoverContent className="w-sm">
                         <Command>
-                            <SearchInput query={query} setQuery={setQuery} />
+                            <div className='flex items-center gap-2 mb-3'>
+                                <SearchInput query={query} setQuery={setQuery} />
+                                <Button variant={'ghost'} onClick={() => { setClientId(''); setOpen(false) }} size={'icon'}><X /></Button>
+                            </div>
                             <CommandList>
                                 <CommandEmpty>No client found.</CommandEmpty>
                                 <CommandGroup>

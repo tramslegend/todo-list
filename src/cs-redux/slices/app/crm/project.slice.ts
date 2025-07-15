@@ -240,8 +240,18 @@ const ProjectSlice = createSlice({
                 state.loading = false;
 
                 // remover from UI (Array)
+                if (state.clientProjects) {
+                    state.clientProjects = state.clientProjects.filter(project => project._id !== payload.project._id);
+                }
+
                 if (state.allProject) {
+                    state.allProject.pagination.totalData -= 1;
                     state.allProject.data = state.allProject.data.filter(project => project._id !== payload.project._id);
+                }
+
+                if (state.allArchivedProject) {
+                    state.allArchivedProject.pagination.totalData -= 1;
+                    state.allArchivedProject.data = state.allArchivedProject.data.filter(project => project._id !== payload.project._id);
                 }
 
             })
