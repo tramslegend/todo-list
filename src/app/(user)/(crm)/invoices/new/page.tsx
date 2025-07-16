@@ -7,7 +7,7 @@ import { INewInvoice } from '@/types/crm/invoice.type'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import ClientIdSelector from './ClientIdSelector'
 import InvoiceItemsForm from './InvoiceItemsForm'
-import DatePicker2 from '@/components/utils/DatePicker2'
+import DateTimePicker from '@/components/utils/DateTimePicker'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { InvoiceThunk } from '@/cs-redux/thunks/app/crm/invoice.thunk'
@@ -155,11 +155,11 @@ export default function CrmNewInvoicePage() {
 
                     <div className='space-y-1.5 '>
                         <Label htmlFor="issuedDate-1">Start Date</Label>
-                        <DatePicker2 date={formData.issuedDate} setDate={(date) => setFormData({ ...formData, issuedDate: date! })} />
+                        <DateTimePicker maxDate={new Date()} date={formData.issuedDate} setDate={(date) => setFormData({ ...formData, issuedDate: date! })} />
                     </div>
                     <div className='space-y-1.5'>
                         <Label htmlFor="dueDate-1">Due Date</Label>
-                        <DatePicker2 date={formData.dueDate} setDate={(date) => setFormData({ ...formData, dueDate: date! })} />
+                        <DateTimePicker minDate={new Date(formData.issuedDate)} date={formData.dueDate} setDate={(date) => setFormData({ ...formData, dueDate: date! })} />
                     </div>
                     <div className='space-y-1.5'>
                         <Label htmlFor="discount-1">Discount</Label>

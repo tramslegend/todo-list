@@ -6,7 +6,7 @@ import { useCsDispatch, useCsSelector } from '@/cs-redux'
 import { INewProject } from '@/types/crm/project.type'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import ClientIdSelector from '@/app/(user)/(crm)/invoices/new/ClientIdSelector'
-import DatePicker2 from '@/components/utils/DatePicker2'
+import DateTimePicker from '@/components/utils/DateTimePicker'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { ProjectThunk } from '@/cs-redux/thunks/app/crm/project.thunk'
@@ -131,11 +131,11 @@ export default function CrmNewProjectPage() {
                 <div className="grid grid-cols-3 gap-3 items-start">
                     <div className='space-y-1.5 '>
                         <Label htmlFor="startDate-1">Start Date</Label>
-                        <DatePicker2 date={formData.startDate} setDate={(date) => setFormData({ ...formData, startDate: date! })} />
+                        <DateTimePicker maxDate={new Date()} date={formData.startDate} setDate={(date) => setFormData({ ...formData, startDate: date! })} />
                     </div>
                     <div className='space-y-1.5'>
                         <Label htmlFor="dueDate-1">Due Date</Label>
-                        <DatePicker2 date={formData.dueDate} setDate={(date) => setFormData({ ...formData, dueDate: date! })} />
+                        <DateTimePicker minDate={new Date(formData.startDate)} date={formData.dueDate} setDate={(date) => setFormData({ ...formData, dueDate: date! })} />
                     </div>
                     <div className='space-y-1.5'>
                         <Label htmlFor="note-1">Note</Label>

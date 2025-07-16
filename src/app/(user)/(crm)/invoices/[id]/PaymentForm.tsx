@@ -15,17 +15,17 @@ import { INewTransaction } from "@/types/crm/transaction.type";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import DatePicker2 from "@/components/utils/DatePicker2";
+import DateTimePicker from "@/components/utils/DateTimePicker";
 import { Select } from "@radix-ui/react-select";
 import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CrmPaymentMethod, CrmPaymentMethodType, CrmProjectPriorityType } from "@/constants/crm.constant";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useCsDispatch, useCsSelector } from "@/cs-redux";
-import DatePicker from "@/components/utils/DatePicker";
+import { useCsDispatch } from "@/cs-redux";
 import { TransactionThunk } from "@/cs-redux/thunks/app/crm/transaction.thunk";
 import { InvoiceThunk } from "@/cs-redux/thunks/app/crm/invoice.thunk";
+
 
 
 const defaultValue: INewTransaction = {
@@ -91,7 +91,10 @@ export default function PaymentForm({ invoice }: { invoice: IInvoiceModel }) {
     return (
         <Dialog open={open === 'true'} onOpenChange={onClose}>
             <DialogTrigger></DialogTrigger>
-            <DialogContent>
+            <DialogContent
+                onPointerDownOutside={(e) => e.preventDefault()}
+                onEscapeKeyDown={(e) => e.preventDefault()}
+            >
                 <DialogHeader>
                     <DialogTitle>{transactionId ? "Update Transaction Data" : "Make A Payment"}</DialogTitle>
                     <DialogDescription>
@@ -125,7 +128,7 @@ export default function PaymentForm({ invoice }: { invoice: IInvoiceModel }) {
                     <div className="flex items-center gap-3">
                         <div className='space-y-1.5 grow'>
                             <Label htmlFor="paidAt-1">Paid At</Label>
-                            <DatePicker2 date={formData.paidAt} setDate={(date) => setFormData({ ...formData, paidAt: date! })} />
+                            <DateTimePicker datetime maxDate={new Date()} minDate={new Date(invoice.issuedDate)} date={formData.paidAt} setDate={(date) => setFormData({ ...formData, paidAt: date! })} />
                         </div>
                         <Checkbox className="hidden" />
                     </div>
