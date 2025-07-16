@@ -14,6 +14,7 @@ import ClientSlice from "@/cs-redux/slices/app/crm/client.slice"
 import { TypographyP } from "@/components/ui/typography"
 import SpinLoaderCard from "@/components/utils/SpinLoaderCard"
 import Link from "next/link"
+import EmptyList from "@/components/utils/EmptyList"
 
 
 export default function ClientsPage() {
@@ -85,7 +86,7 @@ export default function ClientsPage() {
                             }
                         </>
                         :
-                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No client found" : "No client"}</TypographyP>
+                        <EmptyList title="No Clients" subtitle="You currently don't have any clients." notFoundSubtitle="No clients found with the query." query={query !== ''} />
                     :
                     <SpinLoaderCard />
                 }

@@ -19,6 +19,7 @@ import ProjectPriority from "./ProjectPriority"
 import ProjectStatus from "./ProjectStatus"
 import { CrmProjectPriority } from "@/constants/crm.constant"
 import ProjectList from "./ProjectList"
+import EmptyList from "@/components/utils/EmptyList"
 
 
 export default function ProjectsPage() {
@@ -65,7 +66,7 @@ export default function ProjectsPage() {
                             }
                         </>
                         :
-                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No Project Found" : "No Project"}</TypographyP>
+                        <EmptyList title="No Projects" subtitle="You currently don't have any projects." notFoundSubtitle="No projects found with the query." query={query !== ''} />
                     :
                     <SpinLoaderCard />
                 }

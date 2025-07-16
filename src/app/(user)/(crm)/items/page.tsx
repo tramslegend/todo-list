@@ -32,6 +32,7 @@ import ItemForm from "./ItemForm"
 import { toast } from "sonner"
 import ItemDetails from "./ItemDetails"
 import { getUnitLabel } from "@/constants/crm.constant"
+import EmptyList from "@/components/utils/EmptyList"
 
 
 export default function ItemsPage() {
@@ -144,7 +145,7 @@ export default function ItemsPage() {
                             }
                         </>
                         :
-                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No Item Found" : "No Item"}</TypographyP>
+                        <EmptyList title="No Items" subtitle="You currently don't have any items." notFoundSubtitle="No items found with the query." query={query !== ''} />
                     :
                     <SpinLoaderCard />
                 }

@@ -12,6 +12,7 @@ import InvoiceSlice from "@/cs-redux/slices/app/crm/invoice.slice"
 import { TypographyP } from "@/components/ui/typography"
 import SpinLoaderCard from "@/components/utils/SpinLoaderCard"
 import InvoiceList from "./InvoiceList"
+import EmptyList from "@/components/utils/EmptyList"
 
 
 export default function InvoicesPage() {
@@ -58,7 +59,8 @@ export default function InvoicesPage() {
                             }
                         </>
                         :
-                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No invoice Found" : "No invoice"}</TypographyP>
+                        <EmptyList title="No Invoices" subtitle="You currently don't have any invoices." notFoundSubtitle="No invoice found with the query." query={query !== ''} />
+
                     :
                     <SpinLoaderCard />
                 }

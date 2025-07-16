@@ -19,11 +19,12 @@ export default function RecentInvoices() {
     }, [allInvoice?.data.length, dispatch])
     return (
         <>
-            {allInvoice?.data.length && <div className="">
-                <TypographyH3 className="mb-3">Recent Invoices</TypographyH3>
+            {(allInvoice && allInvoice?.data.length !== 0) &&
+                <div className="">
+                    <TypographyH3 className="mb-3">Recent Invoices</TypographyH3>
 
-                <InvoiceList data={allInvoice?.data.slice(0, 10)!} />
-            </div>}
+                    <InvoiceList data={allInvoice?.data.slice(0, 10)!} />
+                </div>}
         </>
     )
 }

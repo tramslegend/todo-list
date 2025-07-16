@@ -10,7 +10,7 @@ import { Check } from 'lucide-react'
 export default function InvoiceList({ data }: { data: IInvoiceModel[] }) {
     return (
         <div className="grid grid-cols-1  border rounded bg-accent/10">
-            {data.map((invoice: IInvoiceModel, i: number) => (
+            {data?.map((invoice: IInvoiceModel, i: number) => (
                 <div className={`ps-5 pe-3 hover:bg-accent/15 transition-all gap-3 flex items-center justify-between ${i !== data.length - 1 && "border-b"}`} key={`invoice_${i + 8437593}`}>
                     <Link href={`/invoices/${invoice._id}`} className="grow py-3 cursor-pointer grid grid-cols-12 gap-3">
                         <div className=" col-span-3 overflow-hidden">

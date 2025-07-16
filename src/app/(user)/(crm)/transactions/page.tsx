@@ -17,6 +17,7 @@ import TransactionDetails from "./TransactionDetails"
 import { ITransactionModel } from "@/types/crm/transaction.type"
 import { CsUtils } from "@/cs-toolkit"
 import TransactionList from "./TransactionList"
+import EmptyList from "@/components/utils/EmptyList"
 
 
 export default function TransactionsPage() {
@@ -62,7 +63,7 @@ export default function TransactionsPage() {
                             }
                         </>
                         :
-                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No Transaction Found." : "No Transaction"}</TypographyP>
+                        <EmptyList title="No Transactions" subtitle="You currently don't have any transactions." notFoundSubtitle="No transactions found with the query." query={query !== ''} />
                     :
                     <SpinLoaderCard />
                 }
