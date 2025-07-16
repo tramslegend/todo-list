@@ -88,6 +88,21 @@ export class InvoiceThunk {
         }
     )
 
+
+    static getCascadeData = createAsyncThunk(
+        "InvoiceThunk/getCascadeData",
+
+        async (payload: { id: string }, { rejectWithValue, fulfillWithValue }) => {
+            try {
+                const { data } = await ApiManager.get(`/app/crm/invoice/get/cascade/${payload.id}`);
+
+                return fulfillWithValue(data)
+            } catch (error: any) {
+                return rejectWithValue(error.response.data);
+            }
+        }
+    )
+
     static getByClientId = createAsyncThunk(
         "InvoiceThunk/getByClientId",
 

@@ -1,12 +1,13 @@
 
 import { ClientThunk } from '@/cs-redux/thunks/app/crm/client.thunk';
-import { IClientModel } from '@/types/crm/client.type';
+import { IClientCascadeData, IClientModel } from '@/types/crm/client.type';
 import { IPaginationResult } from '@/types/pagination.type';
 import { createSlice } from '@reduxjs/toolkit';
 
 
 const initialState: {
     client: IClientModel | undefined;
+    cascadeData: IClientCascadeData;
     allClient: IPaginationResult<IClientModel> | undefined;
     allArchivedClient: IPaginationResult<IClientModel> | undefined;
     loading: boolean;
@@ -17,6 +18,12 @@ const initialState: {
     allArchivedClient: undefined,
     loading: false,
     notFound: false,
+    cascadeData: {
+        canDelete: false,
+        projects: [],
+        invoices: [],
+        transactions: [],
+    }
 };
 
 const ClientSlice = createSlice({
@@ -128,6 +135,20 @@ const ClientSlice = createSlice({
                 state.loading = false;
                 state.notFound = true;
                 state.client = undefined;
+            })
+
+
+        builder
+            .addCase(ClientThunk.getCascadeData.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ClientThunk.getCascadeData.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.cascadeData = payload.cascadeData;
+            })
+            .addCase(ClientThunk.getCascadeData.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
             })
 
         builder

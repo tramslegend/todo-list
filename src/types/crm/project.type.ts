@@ -1,7 +1,10 @@
 import { CrmProjectPriorityType, CrmProjectStatusType, CrmUnitsType } from "@/constants/crm.constant";
-import { IInvoiceItem } from "./item.type";
 
 
+export interface IProjectCascadeData {
+    canDelete: boolean,
+    invoices: string[]
+}
 
 export interface INewProject {
     clientId: string;

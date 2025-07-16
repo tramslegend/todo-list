@@ -154,7 +154,7 @@ export default function CrmNewInvoicePage() {
                     </div>
 
                     <div className='space-y-1.5 '>
-                        <Label htmlFor="issuedDate-1">Start Date</Label>
+                        <Label htmlFor="issuedDate-1">Issue Date</Label>
                         <DateTimePicker maxDate={new Date()} date={formData.issuedDate} setDate={(date) => setFormData({ ...formData, issuedDate: date! })} />
                     </div>
                     <div className='space-y-1.5'>

@@ -83,10 +83,11 @@ export default function UserRootLayout({ children }: Readonly<{ children: React.
 
                 {/* RIGHT */}
                 <div className='flex items-center gap-3 h-full'>
-                    <FeedBackForm />
 
                     {/* ADD NEW BUTTONS */}
                     <AddNewButton />
+
+                    <FeedBackForm />
 
                     {/* NAV USER- also handle session & organization */}
                     <NavUserMenu />

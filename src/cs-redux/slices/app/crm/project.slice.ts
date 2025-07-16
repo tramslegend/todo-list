@@ -1,12 +1,13 @@
 
 import { ProjectThunk } from '@/cs-redux/thunks/app/crm/project.thunk';
-import { IProjectModel } from '@/types/crm/project.type';
+import { IProjectCascadeData, IProjectModel } from '@/types/crm/project.type';
 import { IPaginationResult } from '@/types/pagination.type';
 import { createSlice } from '@reduxjs/toolkit';
 
 
 const initialState: {
     project: IProjectModel | undefined;
+    cascadeData: IProjectCascadeData;
     clientProjects: IProjectModel[] | undefined;
     allProject: IPaginationResult<IProjectModel> | undefined;
     allArchivedProject: IPaginationResult<IProjectModel> | undefined;
@@ -19,6 +20,10 @@ const initialState: {
     allArchivedProject: undefined,
     loading: false,
     notFound: false,
+    cascadeData: {
+        canDelete: false,
+        invoices: []
+    }
 };
 
 const ProjectSlice = createSlice({
@@ -176,6 +181,19 @@ const ProjectSlice = createSlice({
                 state.loading = false;
                 state.notFound = true;
                 state.project = undefined;
+            })
+
+        builder
+            .addCase(ProjectThunk.getCascadeData.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ProjectThunk.getCascadeData.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.cascadeData = payload.cascadeData;
+            })
+            .addCase(ProjectThunk.getCascadeData.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
             })
 
 

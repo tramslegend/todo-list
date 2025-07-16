@@ -1,4 +1,12 @@
 
+
+export interface IClientCascadeData {
+    canDelete: boolean,
+    projects: string[],
+    invoices: string[],
+    transactions: string[],
+}
+
 export interface IClientModel {
     _id: string;
     name: string;

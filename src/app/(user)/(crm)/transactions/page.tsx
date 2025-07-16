@@ -62,7 +62,7 @@ export default function TransactionsPage() {
                             }
                         </>
                         :
-                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No transactions found." : "You don't have any transactions yet."}</TypographyP>
+                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No Transaction Found." : "No Transaction"}</TypographyP>
                     :
                     <SpinLoaderCard />
                 }

@@ -116,6 +116,21 @@ export class ProjectThunk {
         }
     )
 
+
+    static getCascadeData = createAsyncThunk(
+        "ProjectThunk/getCascadeData",
+
+        async (payload: { id: string }, { rejectWithValue, fulfillWithValue }) => {
+            try {
+                const { data } = await ApiManager.get(`/app/crm/project/get/cascade/${payload.id}`);
+
+                return fulfillWithValue(data)
+            } catch (error: any) {
+                return rejectWithValue(error.response.data);
+            }
+        }
+    )
+
     static getByClientId = createAsyncThunk(
         "ProjectThunk/getByClientId",
 

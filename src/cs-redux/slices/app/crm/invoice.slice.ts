@@ -1,6 +1,6 @@
 
 import { InvoiceThunk } from '@/cs-redux/thunks/app/crm/invoice.thunk';
-import { IInvoiceModel } from '@/types/crm/invoice.type';
+import { IInvoiceCascadeData, IInvoiceModel } from '@/types/crm/invoice.type';
 import { IPaginationResult } from '@/types/pagination.type';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -8,6 +8,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState: {
     invoice: IInvoiceModel | undefined;
     clientInvoices: IInvoiceModel[] | undefined;
+    cascadeData: IInvoiceCascadeData;
     projectInvoices: IInvoiceModel[] | undefined;
     allInvoice: IPaginationResult<IInvoiceModel> | undefined;
     allArchivedInvoice: IPaginationResult<IInvoiceModel> | undefined;
@@ -21,6 +22,10 @@ const initialState: {
     allArchivedInvoice: undefined,
     loading: false,
     notFound: false,
+    cascadeData: {
+        canDelete: false,
+        transactions: []
+    }
 };
 
 const InvoiceSlice = createSlice({
@@ -133,6 +138,20 @@ const InvoiceSlice = createSlice({
                 state.loading = false;
                 state.notFound = true;
                 state.invoice = undefined;
+            })
+
+
+        builder
+            .addCase(InvoiceThunk.getCascadeData.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(InvoiceThunk.getCascadeData.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.cascadeData = payload.cascadeData;
+            })
+            .addCase(InvoiceThunk.getCascadeData.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
             })
 
 

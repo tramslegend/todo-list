@@ -144,7 +144,7 @@ export default function ItemsPage() {
                             }
                         </>
                         :
-                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No items found." : "You haven&prime;t added any items yet."}</TypographyP>
+                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No Item Found" : "No Item"}</TypographyP>
                     :
                     <SpinLoaderCard />
                 }

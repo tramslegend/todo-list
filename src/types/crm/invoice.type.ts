@@ -3,7 +3,10 @@ import { IInvoiceItem } from "./item.type";
 import { ICurrency } from "..";
 
 
-
+export interface IInvoiceCascadeData {
+    canDelete: boolean,
+    transactions: string[],
+}
 
 
 export interface INewInvoice {

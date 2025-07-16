@@ -65,7 +65,7 @@ export default function ProjectsPage() {
                             }
                         </>
                         :
-                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No projects found." : "You haven’t added any projects yet."}</TypographyP>
+                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No Project Found" : "No Project"}</TypographyP>
                     :
                     <SpinLoaderCard />
                 }

@@ -58,7 +58,7 @@ export default function InvoicesPage() {
                             }
                         </>
                         :
-                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No invoices found." : "You haven’t added any invoices yet."}</TypographyP>
+                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No invoice Found" : "No invoice"}</TypographyP>
                     :
                     <SpinLoaderCard />
                 }

@@ -85,7 +85,7 @@ export default function ClientsPage() {
                             }
                         </>
                         :
-                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No clients found." : "You haven’t added any clients yet."}</TypographyP>
+                        <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No client found" : "No client"}</TypographyP>
                     :
                     <SpinLoaderCard />
                 }
