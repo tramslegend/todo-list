@@ -96,7 +96,7 @@ export default function ArchivedProjects({ query }: { query: string }) {
                         }
                     </>
                     :
-                    <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No projects found." : "No Archived Project."}</TypographyP>
+                    <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No projects found." : "No Archived Project"}</TypographyP>
                 :
                 <SpinLoaderCard />
             }

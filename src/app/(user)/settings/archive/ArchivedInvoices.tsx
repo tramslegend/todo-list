@@ -100,7 +100,7 @@ export default function ArchivedInvoices({ query }: { query: string }) {
                         }
                     </>
                     :
-                    <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No invoices found." : "You haven’t added any invoices yet."}</TypographyP>
+                    <TypographyP className="text-center text-muted-foreground mt-9">{query ? "No invoices found." : "No Archived invoices"}</TypographyP>
                 :
                 <SpinLoaderCard />
             }
