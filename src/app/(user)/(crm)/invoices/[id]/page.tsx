@@ -56,6 +56,8 @@ export default function page() {
                 <TypographyH2 className="flex items-center justify-between">
                     <span>
                         <span>{invoice?.title} <InvoiceStatus status={invoice.status} /></span>
+                        <span className={`ms-2 border bg-accent/10 text-xs px-3 py-1 rounded-full text-center ${invoice.isSent && "bg-blue-500/5 border-blue-500/20 text-blue-500"}`}>{invoice.isSent ? "Sent" : "Not Sent"}</span>
+
                         {invoice?.isArchived && <span className="text-sm text-destructive ms-2"> (archived)</span>}
                     </span>
                     <InvoiceAction invoice={invoice} />

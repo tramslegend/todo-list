@@ -28,7 +28,7 @@ export default function InvoiceList({ data }: { data: IInvoiceModel[] }) {
                             <InvoiceStatus status={invoice.status} />
                         </div>
                         <div className=" col-span-1 flex items-center justify-center">
-                            <TypographyP className={`border bg-accent/10 text-xs px-3 py-1 rounded-full text-center ${invoice.isSent && "bg-blue-500/5 border-blue-500/20 text-blue-500"}`}>{invoice.isSent ? "Sent" : "Draft"}</TypographyP>
+                            <TypographyP className={`border bg-accent/10 text-xs px-3 py-1 rounded-full text-center ${invoice.isSent && "bg-blue-500/5 border-blue-500/20 text-blue-500"}`}>{invoice.isSent ? "Sent" : "Not Sent"}</TypographyP>
                         </div>
                         <div className=" col-span-3">
                             <TypographyP className="font-bold text-right">{invoice.currency.symbol} {invoice.totalAmount}</TypographyP>

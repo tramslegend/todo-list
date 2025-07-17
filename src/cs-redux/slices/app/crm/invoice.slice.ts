@@ -81,6 +81,26 @@ const InvoiceSlice = createSlice({
                 state.invoice = undefined;
             })
 
+        builder
+            .addCase(InvoiceThunk.sendInvoice.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(InvoiceThunk.sendInvoice.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.invoice = payload.invoice;
+
+                const index = state.allInvoice?.data.findIndex(invoice => invoice._id === payload.invoice._id);
+                if (index !== -1 && state.allInvoice) {
+                    state.allInvoice.data[index!] = payload.invoice;
+                    state.allInvoice.data.sort((a, b) => new Date(b.updatedAt!).getTime() - new Date(a.updatedAt!).getTime());
+                }
+            })
+            .addCase(InvoiceThunk.sendInvoice.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+                state.invoice = undefined;
+            })
+
 
         builder
             .addCase(InvoiceThunk.getAll.pending, (state, _) => {

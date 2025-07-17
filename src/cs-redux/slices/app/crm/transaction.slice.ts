@@ -50,6 +50,26 @@ const TransactionSlice = createSlice({
             })
 
 
+        builder
+            .addCase(TransactionThunk.sendPaymentReceipt.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(TransactionThunk.sendPaymentReceipt.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.transaction = payload.transaction;
+
+                const index = state.allTransaction?.data.findIndex(transaction => transaction._id === payload.transaction._id);
+                if (index !== -1 && state.allTransaction) {
+                    state.allTransaction.data[index!] = payload.invoice;
+                }
+            })
+            .addCase(TransactionThunk.sendPaymentReceipt.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+                state.transaction = undefined;
+            })
+
+
 
         builder
             .addCase(TransactionThunk.getAll.pending, (state, _) => {

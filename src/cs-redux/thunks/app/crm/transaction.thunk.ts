@@ -83,4 +83,25 @@ export class TransactionThunk {
             }
         }
     )
+
+
+
+    static sendPaymentReceipt = createAsyncThunk(
+        "TransactionThunk/sendPaymentReceipt",
+
+        async (payload: { id: string, clientId: string }, { rejectWithValue, fulfillWithValue }) => {
+            try {
+                const { data } = await ApiManager.get(`/app/crm/transaction/send`, {
+                    params: {
+                        transaction: payload.id,
+                        client: payload.clientId
+                    }
+                });
+
+                return fulfillWithValue(data)
+            } catch (error: any) {
+                return rejectWithValue(error.response.data);
+            }
+        }
+    )
 }

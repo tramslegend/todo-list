@@ -171,4 +171,24 @@ export class InvoiceThunk {
             }
         }
     )
+
+
+    static sendInvoice = createAsyncThunk(
+        "TransactionThunk/sendInvoice",
+
+        async (payload: { id: string, clientId: string }, { rejectWithValue, fulfillWithValue }) => {
+            try {
+                const { data } = await ApiManager.get(`/app/crm/invoice/send`, {
+                    params: {
+                        invoice: payload.id,
+                        client: payload.clientId
+                    }
+                });
+
+                return fulfillWithValue(data)
+            } catch (error: any) {
+                return rejectWithValue(error.response.data);
+            }
+        }
+    )
 }

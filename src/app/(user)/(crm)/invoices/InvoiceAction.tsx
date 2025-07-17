@@ -31,6 +31,23 @@ export default function InvoiceAction({ invoice }: { invoice: IInvoiceModel, }) 
 
     const [openDelete, setOpenDelete] = useState<boolean>(false);
     const [forceDelete, setForceDelete] = useState<boolean>(false);
+    const [openNoEmailDialog, setOpenNoEmailDialog] = useState<boolean>(false);
+
+    async function send() {
+        toast.info("Sending Email");
+
+        const { payload } = await dispatch(InvoiceThunk.sendInvoice({ id: invoice._id, clientId: invoice.clientId }));
+
+        if (payload.message) {
+            toast.success(payload.message);
+        }
+        else if (payload.error) {
+            toast.error(payload.error);
+            if (payload.error === "No Email") {
+                setOpenNoEmailDialog(true);
+            }
+        }
+    }
 
     async function onArchive() {
         const { payload } = await dispatch(InvoiceThunk.archive({ id: invoice._id }));
@@ -42,6 +59,7 @@ export default function InvoiceAction({ invoice }: { invoice: IInvoiceModel, }) 
             toast.error(payload.error);
         }
     }
+
     async function onRestore() {
         const { payload } = await dispatch(InvoiceThunk.restore({ id: invoice._id }));
 
@@ -81,8 +99,8 @@ export default function InvoiceAction({ invoice }: { invoice: IInvoiceModel, }) 
                     <Button size={'icon'} variant={'ghost'}><EllipsisVertical /></Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className=" space-y-1 py-2">
-                    <DropdownMenuItem disabled={invoice && invoice.isSent} className={dropdownItemClassName} onClick={() => router.push(`/invoices/new?id=${invoice?._id}`)}>Edit</DropdownMenuItem>
-                    <DropdownMenuItem className={dropdownItemClassName} onClick={() => toast('Not implemented')}>{invoice.isSent ? "Resend Invoice" : "Send Invoice"}</DropdownMenuItem>
+                    <DropdownMenuItem disabled={invoice.isSent || invoice.amountPaid !== 0} className={dropdownItemClassName} onClick={() => router.push(`/invoices/new?id=${invoice?._id}`)}>Edit</DropdownMenuItem>
+                    <DropdownMenuItem className={dropdownItemClassName} onClick={send}>{invoice.isSent ? "Resend Invoice" : "Send Invoice"}</DropdownMenuItem>
                     <DropdownMenuItem disabled={invoice && (invoice.totalAmount === invoice.amountPaid)} className={dropdownItemClassName} onClick={() => router.push(`/invoices/${invoice?._id}?payment=true`)}>Make Payment</DropdownMenuItem>
                     <DropdownMenuItem className={dropdownItemClassName} onClick={invoice?.isArchived ? onRestore : onArchive}>{invoice?.isArchived ? "Restore" : "Archive"}</DropdownMenuItem>
                     <DropdownMenuItem className={dropdownItemClassName} onClick={getCascade}><span className={`text-destructive hover:text-destructive`}>Delete</span></DropdownMenuItem>
@@ -122,6 +140,23 @@ export default function InvoiceAction({ invoice }: { invoice: IInvoiceModel, }) 
                     <DialogFooter className="mt-3">
                         <DialogClose asChild><Button variant={'outline'} size={'sm'}>Go Back</Button></DialogClose>
                         <Button disabled={loading || (!cascadeData.canDelete && !forceDelete)} variant={'destructive'} size={'sm'} onClick={onDelete}>Delete</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={openNoEmailDialog} onOpenChange={() => { setOpenNoEmailDialog(false) }}>
+                <DialogTrigger></DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>⚠️ No Email!</DialogTitle>
+                        <DialogDescription>
+                            The associate client dose not have any email. An email is needed for sending invoice. Do you want to add email?
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <DialogFooter className="mt-3">
+                        <DialogClose asChild><Button variant={'outline'} size={'sm'}>Cancel</Button></DialogClose>
+                        <Button variant={'default'} size={'sm'} onClick={() => router.push(`/clients/new?id=${invoice.clientId}`)}>Add Email</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
