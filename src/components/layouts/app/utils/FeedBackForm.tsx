@@ -18,16 +18,30 @@ import { useEffect, useState } from "react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { FeedbackType, IFeedbackType } from "@/constants";
 import { toast } from "sonner";
+import ApiManager from "@/configs/api.config";
+import SpinLoader from "@/components/utils/SpinLoader";
 
 export default function FeedBackForm() {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
     const [feedbackType, setFeedbackType] = useState<IFeedbackType>(FeedbackType.FEEDBACK);
     const [message, setMessage] = useState<string>('');
 
     async function onSubmit() {
+        setLoading(true);
         if (!message) return toast.error('Please enter your feedback then submit!')
 
-        console.log({ message, feedbackType })
+        const { data } = await ApiManager.post('/common/feedback/send', { message, feedbackType });
+        if (data.message) {
+            toast.success(data.message);
+            setOpen(false);
+        }
+        else if (data.error) {
+            toast.error(data.error);
+        }
+
+
+        setLoading(false);
     }
 
     function clearForm() {
@@ -68,7 +82,7 @@ export default function FeedBackForm() {
                     </div>
                     <DialogFooter className="mt-3">
                         <DialogClose asChild><Button variant={'outline'} size={'sm'}>Cancel</Button></DialogClose>
-                        <Button onClick={onSubmit} size={'sm'}>Submit Feedback</Button>
+                        <Button disabled={loading} onClick={onSubmit} size={'sm'}>{loading ? <><SpinLoader /> Sending...</> : "Submit Feedback"}</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
