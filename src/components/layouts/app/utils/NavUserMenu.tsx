@@ -4,10 +4,6 @@ import { Home, LayoutDashboardIcon, LogOut, Settings, User } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import {
     Command,
-    CommandDialog,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
     CommandItem,
     CommandList,
     CommandSeparator,
