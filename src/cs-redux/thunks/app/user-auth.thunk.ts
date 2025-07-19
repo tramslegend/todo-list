@@ -60,6 +60,20 @@ export class UserAuthThunk {
         }
     )
 
+    static continueWithOAuth = createAsyncThunk(
+        "UserAuthThunk/continueWithOAuth",
+
+        async (payload: { token: string }, { rejectWithValue, fulfillWithValue }) => {
+            try {
+                const { data } = await ApiManager.post(`/app/auth/oauth`, payload);
+
+                return fulfillWithValue(data)
+            } catch (error: any) {
+                return rejectWithValue(error.response.data);
+            }
+        }
+    )
+
     static session = createAsyncThunk(
         "UserAuthThunk/session",
 
