@@ -25,7 +25,8 @@ export default function UserAvatar() {
             </div>
             <hr />
             <div>
-                <TypographyP className="text-muted-foreground">Avatar is optional but recommended</TypographyP>
+                {/* <TypographyP className="text-muted-foreground">Avatar is optional but recommended</TypographyP> */}
+                <TypographyP className="text-muted-foreground">This feature is not available for current version</TypographyP>
             </div>
         </Card>
     )

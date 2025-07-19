@@ -11,8 +11,13 @@ const NavItems = [
         icon: LayoutDashboard,
     },
     {
-        title: "Authentication",
-        url: "/settings/authentication",
+        title: "Organization",
+        url: "/settings/organization",
+        icon: LayoutDashboard,
+    },
+    {
+        title: "Archive",
+        url: "/settings/archive",
         icon: LayoutDashboard,
     },
     {

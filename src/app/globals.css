@@ -79,8 +79,8 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
+  --background: oklch(11.492% 0.00001 271.152);
+  --foreground: oklch(95.815% 0.00011 271.152);
   --card: oklch(17.764% 0.00002 271.152);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
@@ -110,6 +110,78 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer utilities {
+
+  .bg-gradient-radial {
+    background-image: radial-gradient(circle at center, var(--tw-gradient-stops));
+  }
+
+  @keyframes torchFlicker {
+
+    0%,
+    100% {
+      opacity: 0.5;
+    }
+
+    40% {
+      opacity: 0.6;
+    }
+
+    70% {
+      opacity: 0.4;
+    }
+  }
+
+  .animate-torchFlicker {
+    animation: torchFlicker 4s ease-in-out infinite;
+  }
+
+
+
+
+  @keyframes opacityFade {
+
+    0%,
+    100% {
+      opacity: 0.5;
+    }
+
+    50% {
+      opacity: 0.6;
+    }
+  }
+
+  .animate-opacityFade {
+    animation: opacityFade 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 0;
+    }
+
+    20% {
+      opacity: 0.4;
+    }
+
+    50% {
+      opacity: 0.2;
+    }
+
+    100% {
+      transform: translateY(-800px) scale(1.1);
+      opacity: 0;
+    }
+  }
+
+  .animate-float {
+    animation-name: float;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
 }
 
 @layer base {

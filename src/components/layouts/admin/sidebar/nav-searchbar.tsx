@@ -2,13 +2,16 @@ import { Input } from '@/components/ui/input'
 import { useCsDispatch, useCsSelector } from '@/cs-redux';
 import GlobalSlice from '@/cs-redux/slices/global.slice';
 import { Search, X } from 'lucide-react'
-import React, { useState } from 'react'
+import { usePathname } from 'next/navigation';
+import React, { useEffect, useState } from 'react'
 
 
 
 export default function CsSearchbar({ ...props }: React.ComponentProps<"div">) {
     const dispatch = useCsDispatch();
-    const { searchQuery } = useCsSelector(state => state.global);
+    const pathName = usePathname();
+
+    const { query } = useCsSelector(state => state.global);
 
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
     const [value, setValue] = useState('');
@@ -29,6 +32,12 @@ export default function CsSearchbar({ ...props }: React.ComponentProps<"div">) {
         setTimeoutId(newTimeoutId);
     };
 
+    useEffect(() => {
+        dispatch(GlobalSlice.actions.setSearchQuery(''))
+        setValue('')
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pathName])
+
     return (
         <div className='flex items-center relative w-full h-full ' {...props} >
             <Input value={value} onChange={e => handleSearch(e.target.value)} placeholder='Search...' className='w-full h-full' />
@@ -37,7 +46,6 @@ export default function CsSearchbar({ ...props }: React.ComponentProps<"div">) {
                 :
                 <button className='absolute top-1/4 right-2 text-muted-foreground rounded ' ><Search size={17} /></button>
             }
-
         </div>
     )
 }

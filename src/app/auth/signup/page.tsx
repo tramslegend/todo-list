@@ -113,7 +113,7 @@ export default function SignupPage() {
                 </div>
                 <div className="mt-9 text-center space-y-5 px-3">
                     <p className="text-xs text-muted-foreground/70">By joining, you agree to our
-                        <Link className="font-semibold mx-1 text-muted-foreground hover:border-b border-b-foreground/50 border-dotted" href={'#'}>Terms of Service</Link>
+                        <Link className="font-semibold mx-1 text-muted-foreground hover:border-b border-b-foreground/50 border-dotted" href={'#'}>Terms of Item</Link>
                         and
                         <Link className="font-semibold mx-1 text-muted-foreground hover:border-b border-b-foreground/50 border-dotted" href={'#'}>Privacy Policy</Link>
                     </p>

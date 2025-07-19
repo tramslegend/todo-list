@@ -1,0 +1,214 @@
+
+import { ClientThunk } from '@/cs-redux/thunks/app/crm/client.thunk';
+import { IClientCascadeData, IClientModel } from '@/types/crm/client.type';
+import { IPaginationResult } from '@/types/pagination.type';
+import { createSlice } from '@reduxjs/toolkit';
+
+
+const initialState: {
+    client: IClientModel | undefined;
+    cascadeData: IClientCascadeData;
+    allClient: IPaginationResult<IClientModel> | undefined;
+    allArchivedClient: IPaginationResult<IClientModel> | undefined;
+    loading: boolean;
+    notFound: boolean;
+} = {
+    client: undefined,
+    allClient: undefined,
+    allArchivedClient: undefined,
+    loading: false,
+    notFound: false,
+    cascadeData: {
+        canDelete: false,
+        projects: [],
+        invoices: [],
+        transactions: [],
+    }
+};
+
+const ClientSlice = createSlice({
+    name: "ClientSlice",
+    initialState,
+    reducers: {
+        clearClient(state, _) {
+            state.client = undefined
+        },
+        clearAllClient(state, { payload }) {
+            if (state.allClient) state.allClient = undefined;
+        },
+        clearAllArchivedClient(state, { payload }) {
+            if (state.allClient) state.allArchivedClient = undefined;
+        },
+
+    },
+    extraReducers: (builder) => {
+
+        builder
+            .addCase(ClientThunk.create.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ClientThunk.create.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.client = payload.client;
+                state.allClient?.data.unshift(payload.client);
+            })
+            .addCase(ClientThunk.create.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+                state.client = undefined;
+            })
+
+        builder
+            .addCase(ClientThunk.update.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ClientThunk.update.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.client = payload.client;
+
+                // Update UI (Array)
+                const index = state.allClient?.data.findIndex(client => client._id === payload.client._id);
+                if (index !== -1 && state.allClient) {
+                    state.allClient.data[index!] = payload.client;
+                    state.allClient.data.sort((a, b) => new Date(b.updatedAt!).getTime() - new Date(a.updatedAt!).getTime());
+                }
+            })
+            .addCase(ClientThunk.update.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+                state.client = undefined;
+            })
+
+        builder
+            .addCase(ClientThunk.getAll.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ClientThunk.getAll.fulfilled, (state, { payload }) => {
+                state.loading = false;
+
+                const pgData: IPaginationResult<IClientModel> = payload.allClient;
+
+                if (state.allClient && pgData && state.allClient.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
+                    state.allClient.data.push(...pgData.data);
+                    state.allClient.pagination = pgData.pagination;
+                } else {
+                    state.allClient = payload.allClient;
+                }
+            })
+            .addCase(ClientThunk.getAll.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+                state.allClient = undefined;
+            })
+
+        builder
+            .addCase(ClientThunk.getAllArchived.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ClientThunk.getAllArchived.fulfilled, (state, { payload }) => {
+                state.loading = false;
+
+                const pgData: IPaginationResult<IClientModel> = payload.allArchivedClient;
+
+                if (state.allArchivedClient && pgData && state.allArchivedClient.data.length < pgData.pagination.limit * pgData.pagination.currentPage && pgData.pagination.totalData > pgData.pagination.limit) {
+                    state.allArchivedClient.data.push(...pgData.data);
+                    state.allArchivedClient.pagination = pgData.pagination;
+                } else {
+                    state.allArchivedClient = payload.allArchivedClient;
+                }
+            })
+            .addCase(ClientThunk.getAllArchived.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+                state.allArchivedClient = undefined;
+            })
+
+        builder
+            .addCase(ClientThunk.getById.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ClientThunk.getById.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.client = payload.client;
+            })
+            .addCase(ClientThunk.getById.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+                state.client = undefined;
+            })
+
+
+        builder
+            .addCase(ClientThunk.getCascadeData.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ClientThunk.getCascadeData.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.cascadeData = payload.cascadeData;
+            })
+            .addCase(ClientThunk.getCascadeData.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+            })
+
+        builder
+            .addCase(ClientThunk.archive.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ClientThunk.archive.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.client = payload.client;
+
+                // Remover from UI (Array)
+                if (state.allClient) {
+                    state.allClient.data = state.allClient.data.filter(client => client._id !== payload.client._id);
+                }
+            })
+            .addCase(ClientThunk.archive.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+            })
+
+        builder
+            .addCase(ClientThunk.restore.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ClientThunk.restore.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.client = payload.client;
+                if (state.allArchivedClient) {
+                    state.allArchivedClient.data = state.allArchivedClient.data.filter(client => client._id !== payload.client._id);
+                }
+            })
+            .addCase(ClientThunk.restore.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+            })
+
+        builder
+            .addCase(ClientThunk.delete.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(ClientThunk.delete.fulfilled, (state, { payload }) => {
+                state.loading = false;
+
+                // Remover from UI (Array)
+                if (state.allClient) {
+                    state.allClient.pagination.totalData -= 1;
+                    state.allClient.data = state.allClient.data.filter(client => client._id !== payload.client._id);
+                }
+
+                if (state.allArchivedClient) {
+                    state.allArchivedClient.pagination.totalData -= 1;
+                    state.allArchivedClient.data = state.allArchivedClient.data.filter(client => client._id !== payload.client._id);
+                }
+            })
+            .addCase(ClientThunk.delete.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+            })
+    }
+});
+
+export default ClientSlice;
+

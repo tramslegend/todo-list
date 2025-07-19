@@ -6,7 +6,7 @@ import Email from './Email'
 
 export default function AccountSettingsPage() {
     return (
-        <div className='space-y-9 pb-10'>
+        <div className='space-y-9 pb-20'>
             <UserAvatar />
             <DisplayName />
             <Email />

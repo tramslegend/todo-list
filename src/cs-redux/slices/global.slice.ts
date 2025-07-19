@@ -3,11 +3,11 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 
 const initialState: {
-    searchQuery: string;
+    query: string;
     loading: boolean;
     notFound: boolean;
 } = {
-    searchQuery: '',
+    query: '',
     loading: false,
     notFound: false,
 };
@@ -17,7 +17,7 @@ const GlobalSlice = createSlice({
     initialState,
     reducers: {
         setSearchQuery: (state, { payload }) => {
-            state.searchQuery = payload;
+            state.query = payload;
         },
     },
     extraReducers: (builder) => {

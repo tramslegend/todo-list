@@ -18,8 +18,6 @@ const UserAuthSlice = createSlice({
     name: "UserAuthSlice",
     initialState,
     reducers: {
-
-
     },
     extraReducers: (builder) => {
 
@@ -103,6 +101,21 @@ const UserAuthSlice = createSlice({
                 state.authUser = action.payload.authUser;
             })
             .addCase(UserAuthThunk.verifySignup.rejected, (state, _) => {
+                state.loading = false;
+                state.notFound = true;
+                state.authUser = null;
+            })
+
+
+        builder
+            .addCase(UserAuthThunk.continueWithOAuth.pending, (state, _) => {
+                state.loading = true;
+            })
+            .addCase(UserAuthThunk.continueWithOAuth.fulfilled, (state, action) => {
+                state.loading = false;
+                state.authUser = action.payload.authUser;
+            })
+            .addCase(UserAuthThunk.continueWithOAuth.rejected, (state, _) => {
                 state.loading = false;
                 state.notFound = true;
                 state.authUser = null;
