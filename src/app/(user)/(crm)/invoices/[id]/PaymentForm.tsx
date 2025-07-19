@@ -1,6 +1,6 @@
 "use client"
 
-import { useParams, useRouter, useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import {
     Dialog,
     DialogContent,
@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import DateTimePicker from "@/components/utils/DateTimePicker";
 import { Select } from "@radix-ui/react-select";
 import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CrmPaymentMethod, CrmPaymentMethodType, CrmProjectPriorityType } from "@/constants/crm.constant";
+import { CrmPaymentMethod, CrmPaymentMethodType } from "@/constants/crm.constant";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";

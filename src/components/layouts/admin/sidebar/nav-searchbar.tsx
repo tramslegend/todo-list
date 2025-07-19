@@ -35,6 +35,7 @@ export default function CsSearchbar({ ...props }: React.ComponentProps<"div">) {
     useEffect(() => {
         dispatch(GlobalSlice.actions.setSearchQuery(''))
         setValue('')
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pathName])
 
     return (

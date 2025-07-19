@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/popover"
 import { Button } from '@/components/ui/button';
 import { TypographyP, TypographySmall } from '@/components/ui/typography';
-import ClientSlice from '@/cs-redux/slices/app/crm/client.slice';
 import SearchInput from '@/components/utils/SearchInput';
 
 

@@ -3,7 +3,7 @@
 import { useCsDispatch, useCsSelector } from "@/cs-redux";
 import { InvoiceThunk } from "@/cs-redux/thunks/app/crm/invoice.thunk";
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import InvoiceAction from "../InvoiceAction";
 import { TypographyH2, TypographyH3, TypographyH4, TypographyP, TypographySmall } from "@/components/ui/typography";
 import InvoiceSlice from "@/cs-redux/slices/app/crm/invoice.slice";
@@ -52,7 +52,7 @@ export default function page() {
         <Container className="py-3">
 
             <div className="border rounded-lg px-3 py-5">
-                <PaymentForm invoice={invoice} />
+                <Suspense> <PaymentForm invoice={invoice} /></Suspense>
                 <TypographyH2 className="flex items-center justify-between">
                     <span>
                         <span>{invoice?.title} <InvoiceStatus status={invoice.status} /></span>
