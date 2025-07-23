@@ -23,6 +23,7 @@ import SpinLoader from "@/components/utils/SpinLoader";
 import { TypographyP } from "@/components/ui/typography";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import ApiManager from "@/configs/api.config";
 
 export default function InvoiceAction({ invoice }: { invoice: IInvoiceModel, }) {
     const router = useRouter();
@@ -91,6 +92,43 @@ export default function InvoiceAction({ invoice }: { invoice: IInvoiceModel, }) 
         dispatch(InvoiceThunk.getCascadeData({ id: invoice._id }));
     }
 
+
+
+    const handleDownload = async () => {
+        try {
+            const response = await ApiManager.get('/app/crm/invoice/download', {
+                params: {
+                    invoice: invoice._id,
+                    client: invoice.clientId,
+                },
+                responseType: 'blob', // 👈 This is essential
+            });
+
+            // Create a blob URL from the response data
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+
+            // Create a temporary <a> tag to trigger the download
+            const link = document.createElement('a');
+            link.href = url;
+
+            // Optional: Use a filename from headers if provided
+            const disposition = response.headers['content-disposition'];
+            const match = disposition?.match(/filename="?(.+)"?/);
+            const filename = match?.[1] || `invoice_${invoice.invoiceNumber}.pdf`;
+
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+
+            // Clean up
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Download failed:', error);
+        }
+    };
+
+
     const dropdownItemClassName = 'cursor-pointer px-3 py-0.5 hover:bg-accent rounded'
     return (
         <div>
@@ -101,6 +139,7 @@ export default function InvoiceAction({ invoice }: { invoice: IInvoiceModel, }) 
                 <DropdownMenuContent align="end" className=" space-y-1 py-2">
                     <DropdownMenuItem disabled={invoice.isSent || invoice.amountPaid !== 0} className={dropdownItemClassName} onClick={() => router.push(`/invoices/new?id=${invoice?._id}`)}>Edit</DropdownMenuItem>
                     <DropdownMenuItem className={dropdownItemClassName} onClick={send}>{invoice.isSent ? "Resend Invoice" : "Send Invoice"}</DropdownMenuItem>
+                    <DropdownMenuItem className={dropdownItemClassName} onClick={handleDownload}>Download Invoice</DropdownMenuItem>
                     <DropdownMenuItem disabled={invoice && (invoice.totalAmount === invoice.amountPaid)} className={dropdownItemClassName} onClick={() => router.push(`/invoices/${invoice?._id}?payment=true`)}>Make Payment</DropdownMenuItem>
                     <DropdownMenuItem className={dropdownItemClassName} onClick={invoice?.isArchived ? onRestore : onArchive}>{invoice?.isArchived ? "Restore" : "Archive"}</DropdownMenuItem>
                     <DropdownMenuItem className={dropdownItemClassName} onClick={getCascade}><span className={`text-destructive hover:text-destructive`}>Delete</span></DropdownMenuItem>
