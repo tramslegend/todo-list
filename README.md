@@ -1,31 +1,66 @@
-# Node Todo App
+# node-todo
 
-A Node app built with MongoDB and Angular. For demonstration purposes and a tutorial.
+A simple single-page todo app built with **Node.js**, **Express**, **MongoDB** and **AngularJS**.
 
-Node provides the RESTful API. Angular provides the frontend and accesses the API. MongoDB stores like a hoarder.
+- Node/Express serves a small REST API
+- MongoDB (through Mongoose) stores the todos
+- AngularJS runs the frontend and calls the API
 
 ## Requirements
 
-- [Node and npm](http://nodejs.org)
-- MongoDB: Make sure you have your own local or remote MongoDB database URI configured in `config/database.js`
+- [Node.js and npm](https://nodejs.org)
+- MongoDB running locally, or a MongoDB connection string for a remote database
 
-## Installation
+## Getting started
 
-1. Clone the repository: `git clone git@github.com:scotch-io/node-todo`
-2. Install the application: `npm install`
-3. Place your own MongoDB URI in `config/database.js`
-3. Start the server: `node server.js`
-4. View in browser at `http://localhost:8080`
+```bash
+git clone https://github.com/tramslegend/node-todo.git
+cd node-todo
+npm install
+node server.js
+```
 
-## Tutorial Series
+Then open <http://localhost:8080> in your browser.
 
-This repo corresponds to the Node Todo Tutorial Series on [scotch.io](http://scotch.io)
+The app connects to `mongodb://localhost/meanstacktutorials` by default. To use a different database, edit `localUrl` in [`config/database.js`](config/database.js).
 
-Each branch represents a certain tutorial.
-- tut1-starter: [Creating a Single Page Todo App with Node and Angular](https://scotch.io/tutorials/creating-a-single-page-todo-app-with-node-and-angular)
-- tut2-organization: [Application Organization and Structure](https://scotch.io/tutorials/node-and-angular-to-do-app-application-organization-and-structure)
-- tut3-services: [Controllers and Services](https://scotch.io/tutorials/node-and-angular-to-do-app-controllers-and-services)
+To run on a different port, set the `PORT` environment variable:
 
-Happy Todo-ing!
+```bash
+PORT=3000 node server.js          # macOS / Linux / Git Bash
+```
 
-![Todo-aholic](http://i.imgur.com/ikyqgrn.png)
+```powershell
+$env:PORT=3000; node server.js    # Windows PowerShell
+```
+
+## API
+
+| Method | Endpoint          | Description                          |
+| ------ | ----------------- | ------------------------------------ |
+| GET    | `/api/todos`      | List all todos                       |
+| POST   | `/api/todos`      | Create a todo (body: `{ "text": "..." }`), returns all todos |
+| DELETE | `/api/todos/:id`  | Delete a todo, returns all todos     |
+
+## Project structure
+
+```
+node-todo/
+├── app/
+│   ├── models/todo.js       # Mongoose model
+│   └── routes.js            # API routes
+├── config/
+│   └── database.js          # MongoDB connection strings
+├── public/
+│   ├── index.html           # Single-page frontend
+│   └── js/                  # Angular app, controller and service
+└── server.js                # App entry point
+```
+
+## Credits
+
+Based on [scotch-io/node-todo](https://github.com/scotch-io/node-todo) by Chris Sevilleja and contributors, from the scotch.io Node and Angular todo tutorial series. A Spanish version of the original README is in [README_es.md](README_es.md).
+
+## License
+
+[MIT](license)
